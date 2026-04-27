@@ -3,7 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>MTG Market Pulse</title>
+
+<!-- Primary SEO -->
+<title>MTG Market Pulse — Magic: The Gathering Card Price Tracker</title>
+<meta name="description" content="Track Magic: The Gathering card price spikes in real time. See the biggest movers across Commander, Modern, Legacy, and Standard. Buy cards at the best price on TCGPlayer.">
+<meta name="keywords" content="MTG price tracker, Magic The Gathering card prices, Commander card prices, MTG price spikes, Modern MTG prices, Legacy card prices, MTG market, TCGPlayer prices, MTG price alert, Magic card investment, MTG card value, Standard MTG prices, Pioneer card prices, MTG price history, buy Magic cards, MTG market pulse, card price spike, Magic the Gathering market">
+<meta name="author" content="MTG Market Pulse">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://skyweezydeezy.github.io/mtg-market-pulse/">
+
+<!-- Open Graph — Facebook, Discord, Reddit previews -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://skyweezydeezy.github.io/mtg-market-pulse/">
+<meta property="og:title" content="MTG Market Pulse — Magic Card Price Tracker">
+<meta property="og:description" content="Real-time Magic: The Gathering price tracker. Spot card spikes before they happen. Commander, Modern, Legacy, Standard — all in one bubble chart. Buy on TCGPlayer.">
+<meta property="og:image" content="https://skyweezydeezy.github.io/mtg-market-pulse/preview.png">
+<meta property="og:site_name" content="MTG Market Pulse">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://skyweezydeezy.github.io/mtg-market-pulse/">
+<meta name="twitter:title" content="MTG Market Pulse — Magic Card Price Tracker">
+<meta name="twitter:description" content="Real-time MTG price tracker. See the biggest card price movers across Commander, Modern, Legacy and Standard. Powered by TCGPlayer market data.">
+<meta name="twitter:image" content="https://skyweezydeezy.github.io/mtg-market-pulse/preview.png">
+
+<!-- Structured Data — helps Google understand the app -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "MTG Market Pulse",
+  "url": "https://skyweezydeezy.github.io/mtg-market-pulse/",
+  "description": "Real-time Magic: The Gathering card price tracker showing the biggest movers across Commander, Modern, Legacy, and Standard formats.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "keywords": "MTG prices, Magic The Gathering, card price tracker, Commander, Modern, Legacy, Standard, TCGPlayer"
+}
+</script>
+
+<title>MTG Market Pulse — Magic: The Gathering Card Price Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -259,6 +302,17 @@ body.light .overlay{background:rgba(240,240,248,.97)}
       <div id="rar-row" style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto"></div>
     </div>
 
+    <!-- Price tier toggle -->
+    <div class="sheet-row" style="align-items:center;gap:6px;flex-wrap:nowrap">
+      <span class="sheet-label">PRICE</span>
+      <button class="price-tier-btn" data-tier="all" onclick="setPriceFilter('all')"
+        style="padding:3px 12px;border-radius:20px;border:1px solid #00e676;background:#00e67618;color:#00e676;font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">ALL</button>
+      <button class="price-tier-btn" data-tier="over5" onclick="setPriceFilter('over5')"
+        style="padding:3px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">$5+ MARKET</button>
+      <button class="price-tier-btn" data-tier="under5" onclick="setPriceFilter('under5')"
+        style="padding:3px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">UNDER $5</button>
+    </div>
+
     <!-- Color legend -->
     <div class="sheet-row" style="flex-wrap:wrap;gap:8px">
       <span class="sheet-label">COLOR</span>
@@ -413,18 +467,19 @@ async function loadLiveData(){
       NSM[(c.name.toLowerCase()+"|"+(c.set||"").toLowerCase())]=c;
       return c;
     });
-    if(hs)hs.textContent="TCGPlayer · 7D · Live Data · "+CARDS.length+" cards";
+    isLive=true; if(hs)hs.innerHTML="TCGPlayer &middot; 7D &middot; <span id='live-dot'></span>"; updateLiveDot();
     return true;
   }catch(e){
     console.error("Live data failed:",e.message);
     CARDS=FALLBACK.map(c=>{NM[c.name.toLowerCase()]=c;return c;});
-    if(hs)hs.textContent="TCGPlayer · 7D · Demo Mode";
+    isLive=false; if(hs)hs.innerHTML="TCGPlayer &middot; 7D &middot; <span id='live-dot'></span>"; updateLiveDot();
     return false;
   }
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50;
+let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50, priceFilter="all", colorFilter="All", isLive=false;
+function updateLiveDot(){var d=document.getElementById("live-dot");if(!d)return;d.innerHTML=isLive?'<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#00e676;box-shadow:0 0 6px #00e676;display:inline-block"></span><span style="color:#00e676;font-weight:700">LIVE</span></span>':'<span style="color:var(--text3)">Demo Mode</span>';}
 let collection=[], watchlist=[], currentCard=null;
 let parsedImport=[];
 // Load watchlist
@@ -454,7 +509,7 @@ function parseList(text){
 
 function getActiveCards(){
   let src=mode==="collection"?collection.map(c=>({...CARDS.find(x=>x.id===c.id),...c})).filter(x=>x?.id):mode==="watchlist"?watchlist.map(c=>({...CARDS.find(x=>x.id===c.id),...c,qty:1})).filter(x=>x?.id):CARDS;
-  return src.filter(c=>fmt==="All"||c.formats.includes(fmt)).filter(c=>rar==="All"||c.rarity===rar).sort((a,b)=>b.absPct-a.absPct).slice(0,cardLimit);
+  return src.filter(c=>fmt==="All"||c.formats.includes(fmt)).filter(c=>rar==="All"||c.rarity===rar).filter(c=>priceFilter==="all"||(priceFilter==="under5"?c.price<5:c.price>=5)).filter(c=>colorFilter==="All"||(colorFilter==="Multi"?c.colors.length>1:c.colors.includes(colorFilter))).sort((a,b)=>b.absPct-a.absPct).slice(0,cardLimit);
 }
 
 // ── Physics ───────────────────────────────────────────────────────────────────
@@ -552,21 +607,144 @@ function initPhysics(cards){
 function renderBubbles(nodes){
   const svg=document.getElementById("bubble-svg");
   const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||460;
-  const defs=`<defs><pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="var(--dot)"/></pattern>${Object.entries(MC).map(([k,{f}])=>`<radialGradient id="g-${k}" cx="38%" cy="32%" r="65%" fx="38%" fy="32%"><stop offset="0%" stop-color="#fff" stop-opacity=".45"/><stop offset="40%" stop-color="${f}" stop-opacity=".95"/><stop offset="100%" stop-color="${f}" stop-opacity="1"/></radialGradient>`).join("")}<radialGradient id="gs" cx="38%" cy="25%" r="48%" fx="38%" fy="25%"><stop offset="0%" stop-color="#fff" stop-opacity=".55"/><stop offset="60%" stop-color="#fff" stop-opacity=".08"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient><radialGradient id="gr" cx="50%" cy="88%" r="50%"><stop offset="0%" stop-color="#fff" stop-opacity=".18"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
-  const bg=`<rect width="${W}" height="${H}" fill="var(--svg-bg)"/><rect width="${W}" height="${H}" fill="url(#dots)" opacity="${isDark?1:0}"/>`;
-  const bubbles=nodes.map(n=>{
-    const pc=n.pct>=0?UP:DN,st=bStroke(n.colors),gw=bGlow(n.colors),big=n.absPct>20,isM=n.colors.length>1;
-    const sn=n.r>27,ss=n.r>40,nf=Math.max(6,Math.min(n.r*.25,11)),pf=Math.max(7,Math.min(n.r*.295,13));
-    const ny=sn?-(pf*.72):0,py=sn?(pf*.72):(pf*.38),sy=py+nf*1.2;
-    const inW=watchlist.some(w=>w.id===n.id),ds=n.requestedSet||n.set;
-    let slices=n.colors.length===1?`<circle r="${n.r}" fill="url(#g-${n.colors[0]})"/>`:'';
-    if(n.colors.length>1)n.colors.forEach((c,i)=>{const nc=n.colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2,x1=Math.cos(sa)*n.r,y1=Math.sin(sa)*n.r,x2=Math.cos(ea)*n.r,y2=Math.sin(ea)*n.r;slices+=`<path d="M0 0L${x1.toFixed(1)} ${y1.toFixed(1)}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}Z" fill="${(MC[c]||MC.C).f}"/>`;});
-    const halos=big?`<circle class="pulse" r="${n.r+9}" fill="none" stroke="${gw}" stroke-width="1" opacity=".4"/><circle class="pulse2" r="${n.r+18}" fill="none" stroke="${gw}" stroke-width=".5" opacity=".18"/>`:'';
-    const star=inW?`<text x="${-n.r*.65}" y="${-n.r*.65}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.22)}" fill="#ffd700" style="pointer-events:none;user-select:none">★</text>`:'';
-    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny}" font-size="${nf}" font-weight="700" fill="#fff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 2px #000)">${n.name.length>13?n.name.slice(0,12)+"…":n.name}</text>`:'';
-    const setT=ss?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.8).toFixed(1)}" fill="rgba(255,255,255,.55)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>`:'';
-    return `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">${halos}${star}<circle r="${n.r}" fill="#111126"/>${slices}<circle r="${n.r}" fill="url(#gs)"/><circle r="${n.r}" fill="url(#gr)"/><circle r="${n.r}" fill="none" stroke="${st}" stroke-width="${big?2:1.4}" opacity=".9"/>${isM?`<circle r="${n.r-2}" fill="none" stroke="${GG}" stroke-width=".6" opacity=".35"/>`:''}<text text-anchor="middle" dominant-baseline="middle" y="${py}" font-size="${pf}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px #000)">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>${nameT}${setT}</g>`;
+
+  // Per-color light/dark variants for 3D sphere effect
+  const MCL={W:"#fffbe8",U:"#66aaee",B:"#cc88ff",R:"#ff7777",G:"#66cc66",C:"#ccdde8"};
+  const MCD={W:"#7a6e20",U:"#071830",B:"#1a0535",R:"#300505",G:"#051505",C:"#0e1820"};
+
+  // Build per-color sphere gradients — deep 3D look
+  const colorGrads=Object.entries(MC).map(([k,{f}])=>{
+    const fl=MCL[k]||"#ffffff", fd=MCD[k]||"#050510";
+    return [
+      `<radialGradient id="g-${k}" cx="36%" cy="28%" r="75%" fx="34%" fy="24%">`,
+      `<stop offset="0%" stop-color="${fl}" stop-opacity=".92"/>`,
+      `<stop offset="18%" stop-color="${f}" stop-opacity="1"/>`,
+      `<stop offset="55%" stop-color="${f}" stop-opacity="1"/>`,
+      `<stop offset="82%" stop-color="${fd}" stop-opacity="1"/>`,
+      `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
+      `</radialGradient>`,
+      // Per-color glow gradient for outer ring
+      `<radialGradient id="gw-${k}" cx="50%" cy="50%" r="50%">`,
+      `<stop offset="60%" stop-color="${f}" stop-opacity="0"/>`,
+      `<stop offset="100%" stop-color="${f}" stop-opacity=".55"/>`,
+      `</radialGradient>`
+    ].join("");
   }).join("");
+
+  // Multi-color sphere gradient
+  const multiGrad=[
+    `<radialGradient id="g-Multi" cx="36%" cy="28%" r="75%" fx="34%" fy="24%">`,
+    `<stop offset="0%" stop-color="#fffbe0" stop-opacity=".9"/>`,
+    `<stop offset="20%" stop-color="${GG}" stop-opacity="1"/>`,
+    `<stop offset="60%" stop-color="${GG}" stop-opacity="1"/>`,
+    `<stop offset="85%" stop-color="#3a2800" stop-opacity="1"/>`,
+    `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
+    `</radialGradient>`
+  ].join("");
+
+  // Specular highlight — bright white spot upper-left
+  const specGrad=[
+    `<radialGradient id="gs" cx="32%" cy="22%" r="44%" fx="28%" fy="16%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".92"/>`,
+    `<stop offset="35%" stop-color="#ffffff" stop-opacity=".38"/>`,
+    `<stop offset="70%" stop-color="#ffffff" stop-opacity=".06"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`
+  ].join("");
+
+  // Rim light bottom — subtle warm glow
+  const rimGrad=[
+    `<radialGradient id="gr" cx="50%" cy="92%" r="48%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".22"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`
+  ].join("");
+
+  // Glow blur filter
+  const glowFilter=[
+    `<filter id="glow" x="-60%" y="-60%" width="220%" height="220%">`,
+    `<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>`,
+    `<feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge>`,
+    `</filter>`
+  ].join("");
+
+  const defs=`<defs><pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="var(--dot)"/></pattern>${colorGrads}${multiGrad}${specGrad}${rimGrad}${glowFilter}</defs>`;
+  const bg=`<rect width="${W}" height="${H}" fill="var(--svg-bg)"/><rect width="${W}" height="${H}" fill="url(#dots)" opacity="${isDark?1:0}"/>`;
+
+  const bubbles=nodes.map(n=>{
+    const pc=n.pct>=0?UP:DN;
+    const st=bStroke(n.colors), gw=bGlow(n.colors);
+    const isM=n.colors.length>1, big=n.absPct>15;
+    const gradId=isM?"Multi":n.colors[0];
+
+    // Text sizing
+    const sn=n.r>26, ss=n.r>42, sl=n.r>55;
+    const nf=Math.max(6,Math.min(n.r*.24,12));
+    const pf=Math.max(7,Math.min(n.r*.3,15));
+    const ny=sn?-(pf*.75):0, py=sn?(pf*.72):(pf*.38), sy=py+nf*1.25;
+
+    const inW=watchlist.some(w=>w.id===n.id);
+    const ds=n.requestedSet||n.set;
+
+    // Outer glow — large blurred circle
+    const outerGlow=`<circle r="${n.r*1.55}" fill="none" stroke="${gw}" stroke-width="${n.r*.55}" opacity="${big?.28:.16}" style="filter:blur(${(n.r*.4).toFixed(0)}px)"/>`;
+
+    // Pulse rings for big movers
+    const halos=big
+      ?`<circle class="pulse" r="${n.r+10}" fill="none" stroke="${gw}" stroke-width="1.2" opacity=".45"/><circle class="pulse2" r="${n.r+22}" fill="none" stroke="${gw}" stroke-width=".7" opacity=".2"/>`
+      :``;
+
+    // Multi-color pie slices as base before gradient overlay
+    let sliceBase=``;
+    if(isM){
+      n.colors.forEach((c,i)=>{
+        const nc=n.colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
+        const x1=(Math.cos(sa)*n.r).toFixed(1),y1=(Math.sin(sa)*n.r).toFixed(1);
+        const x2=(Math.cos(ea)*n.r).toFixed(1),y2=(Math.sin(ea)*n.r).toFixed(1);
+        sliceBase+=`<path d="M0 0L${x1} ${y1}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2} ${y2}Z" fill="${(MC[c]||MC.C).f}" opacity=".7"/>`;
+      });
+    }
+
+    // Watchlist star
+    const star=inW?`<text x="${n.r*.58}" y="${-n.r*.58}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.2)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">★</text>`:``;
+
+    // Price change % text
+    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py}" font-size="${pf}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.9))">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
+
+    // Card name
+    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny}" font-size="${nf}" font-weight="700" fill="#ffffff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9))">${n.name.length>14?n.name.slice(0,13)+"…":n.name}</text>`:
+      `<title>${n.name}</title>`;
+
+    // Price text for large bubbles
+    const priceT=sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.82).toFixed(1)}" fill="rgba(255,255,255,.75)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))">$${n.price.toFixed(2)}</text>`:``;
+
+    // Set badge for medium+ bubbles
+    const setT=ss&&!sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.75).toFixed(1)}" fill="rgba(255,255,255,.5)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>`:``;
+
+    return [
+      `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">`,
+      outerGlow,
+      halos,
+      // Deep dark base
+      `<circle r="${n.r}" fill="#04040e"/>`,
+      // Color pie slices for multi
+      sliceBase,
+      // Main 3D sphere gradient
+      `<circle r="${n.r}" fill="url(#g-${gradId})"/>`,
+      // Rim light bottom
+      `<circle r="${n.r}" fill="url(#gr)"/>`,
+      // Specular highlight top-left
+      `<circle r="${n.r}" fill="url(#gs)"/>`,
+      // Colored border stroke
+      `<circle r="${n.r}" fill="none" stroke="${st}" stroke-width="${big?2.2:1.5}" opacity=".95"/>`,
+      // Gold inner ring for multi
+      isM?`<circle r="${n.r-2.5}" fill="none" stroke="${GG}" stroke-width=".7" opacity=".4"/>`:``,
+      // Text layers
+      pctT, nameT, priceT, setT, star,
+      `</g>`
+    ].join("");
+  }).join("");
+
   svg.innerHTML=defs+bg+bubbles;
 }
 
@@ -578,8 +756,14 @@ function buildFilters(){
   const rarRow=document.getElementById("rar-row");
   if(rarRow)rarRow.innerHTML=RARS.map(r=>`<button class="pill${rar===r?` active-${rarMap[r]||'g'}`:''}" onclick="setRar('${r}')">${r}</button>`).join("");
   const cRow=document.getElementById("color-row");
-  if(cRow)cRow.innerHTML=Object.entries(MC).map(([k,{f,l}])=>`<div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="${f}"/></svg><span style="font-size:10px;color:var(--text5);font-family:'Barlow Condensed',sans-serif">${l}</span></div>`).join("")+
-    `<div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="${GG}"/></svg><span style="font-size:10px;color:var(--text5);font-family:'Barlow Condensed',sans-serif">Multi</span></div>`;
+  if(cRow){
+    const colorBtns=[["All","#aaaacc","#aaaacc"],["W","#e8d48a","#c4a030"],["U","#2e6db0","#1a4f8a"],["B","#9060c0","#6030a0"],["R","#c03030","#8a1818"],["G","#2a7a2a","#185018"],["C","#7a8e9e","#4a5e6e"],["Multi",GG,GS]];
+    cRow.innerHTML=colorBtns.map(([k,fill,stroke])=>{
+      const isActive=colorFilter===k;
+      const label=k==="All"?"ALL":k==="Multi"?"GOLD":k==="C"?"CLESS":k==="W"?"WHITE":k==="U"?"BLUE":k==="B"?"BLACK":k==="R"?"RED":"GREEN";
+      return `<button onclick="setColorFilter('${k}')" style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:16px;border:1.5px solid ${isActive?stroke:"var(--border2)"};background:${isActive?fill+"22":"transparent"};cursor:pointer;transition:all .15s;flex-shrink:0"><svg width="9" height="9"><circle cx="4.5" cy="4.5" r="4.5" fill="${fill}"/></svg><span style="font-size:10px;font-weight:${isActive?"700":"500"};color:${isActive?fill:"var(--text4)"};font-family:'Barlow Condensed',sans-serif">${label}</span></button>`;
+    }).join("");
+  }
 }
 
 function updateStats(){
@@ -608,7 +792,7 @@ function updateStats(){
   const fm=document.getElementById("fab-mode");
   if(fm)fm.textContent=modeShort[mode]||"MKT";
   const hs=document.getElementById("hdr-sub");
-  if(hs)hs.textContent=`TCGPlayer · ${tf} · Mock Data`;
+  if(hs)hs.innerHTML=`TCGPlayer &middot; ${tf} &middot; <span id='live-dot' style='display:inline-flex;align-items:center;gap:4px'></span>`; updateLiveDot();
 }
 
 function updateEmptyState(){
@@ -632,6 +816,18 @@ function setMode(m){mode=m;closeDetail();if(sheetOpen)toggleSheet();refresh();}
 function collClick(){if(!collection.length)showOverlay("import-overlay");else setMode("collection");}
 function setFmt(f){fmt=f;refresh();}
 function setCardLimit(v){cardLimit=parseInt(v);document.getElementById("card-limit-lbl").textContent=v+" cards";refresh();}
+function setColorFilter(v){colorFilter=v;buildFilters();initPhysics(getActiveCards());}
+function setPriceFilter(v){
+  priceFilter=v;
+  var btns=document.querySelectorAll(".price-tier-btn");
+  btns.forEach(function(b){
+    var active=b.dataset.tier===v;
+    b.style.borderColor=active?"#00e676":"var(--border2)";
+    b.style.background=active?"#00e67618":"transparent";
+    b.style.color=active?"#00e676":"var(--text3)";
+  });
+  refresh();
+}
 function setRar(r){rar=r;refresh();}
 function setTf(btn,t){tf=t;document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("act"));btn.classList.add("act");updateStats();}
 
