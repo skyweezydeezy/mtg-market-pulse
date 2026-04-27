@@ -3,7 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>MTG Market Pulse</title>
+
+<!-- Primary SEO -->
+<title>MTG Market Pulse — Magic: The Gathering Card Price Tracker</title>
+<meta name="description" content="Track Magic: The Gathering card price spikes in real time. See the biggest movers across Commander, Modern, Legacy, and Standard. Buy cards at the best price on TCGPlayer.">
+<meta name="keywords" content="MTG price tracker, Magic The Gathering card prices, Commander card prices, MTG price spikes, Modern MTG prices, Legacy card prices, MTG market, TCGPlayer prices, MTG price alert, Magic card investment, MTG card value, Standard MTG prices, Pioneer card prices, MTG price history, buy Magic cards, MTG market pulse, card price spike, Magic the Gathering market">
+<meta name="author" content="MTG Market Pulse">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://skyweezydeezy.github.io/mtg-market-pulse/">
+
+<!-- Open Graph — Facebook, Discord, Reddit previews -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://skyweezydeezy.github.io/mtg-market-pulse/">
+<meta property="og:title" content="MTG Market Pulse — Magic Card Price Tracker">
+<meta property="og:description" content="Real-time Magic: The Gathering price tracker. Spot card spikes before they happen. Commander, Modern, Legacy, Standard — all in one bubble chart. Buy on TCGPlayer.">
+<meta property="og:image" content="https://skyweezydeezy.github.io/mtg-market-pulse/preview.png">
+<meta property="og:site_name" content="MTG Market Pulse">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://skyweezydeezy.github.io/mtg-market-pulse/">
+<meta name="twitter:title" content="MTG Market Pulse — Magic Card Price Tracker">
+<meta name="twitter:description" content="Real-time MTG price tracker. See the biggest card price movers across Commander, Modern, Legacy and Standard. Powered by TCGPlayer market data.">
+<meta name="twitter:image" content="https://skyweezydeezy.github.io/mtg-market-pulse/preview.png">
+
+<!-- Structured Data — helps Google understand the app -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "MTG Market Pulse",
+  "url": "https://skyweezydeezy.github.io/mtg-market-pulse/",
+  "description": "Real-time Magic: The Gathering card price tracker showing the biggest movers across Commander, Modern, Legacy, and Standard formats.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "keywords": "MTG prices, Magic The Gathering, card price tracker, Commander, Modern, Legacy, Standard, TCGPlayer"
+}
+</script>
+
+<title>MTG Market Pulse — Magic: The Gathering Card Price Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -174,7 +217,21 @@ body.light .overlay{background:rgba(240,240,248,.97)}
 .empty-icon{font-size:32px;opacity:.2}
 .empty-text{font-size:14px;color:var(--text3);letter-spacing:1px}
 .empty-btn{padding:10px 24px;border-radius:20px;font-size:13px;font-weight:700;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px}
+@keyframes orb{0%,100%{transform:scale(1) translate(0,0);}50%{transform:scale(1.15) translate(12px,-12px);}}
+@keyframes pulse-ring{0%{transform:scale(.92);opacity:.7;}100%{transform:scale(1.08);opacity:.2;}}
 </style>
+
+<!-- Google Analytics 4 — replace G-1V6XRZM84Q with your Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1V6XRZM84Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-1V6XRZM84Q", { send_page_view: true });
+  function gaEvent(name, params) {
+    try { if(typeof gtag !== "undefined") gtag("event", name, params || {}); } catch(e) {}
+  }
+</script>
 </head>
 <body>
 
@@ -198,8 +255,34 @@ body.light .overlay{background:rgba(240,240,248,.97)}
       SETTINGS
     </button>
     <div class="fab-divider"></div>
-    <!-- Quick mode indicator -->
-    <span id="fab-mode" style="font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--fab-color)" class="mono">MKT</span>
+    <!-- Search button -->
+    <button class="fab-btn" onclick="event.stopPropagation();openSearch()" style="gap:4px">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      SEARCH
+    </button>
+    <div class="fab-divider"></div>
+    <!-- Mode tabs — tap to cycle -->
+    <button id="fab-mode" onclick="event.stopPropagation();cycleMode()"
+      style="font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--fab-color);background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:12px;font-family:'JetBrains Mono',monospace;transition:all .15s"
+      class="mono">MKT</button>
+  </div>
+</div>
+
+<!-- ── SEARCH OVERLAY ─────────────────────────────────────────────────────── -->
+<div id="search-overlay" style="display:none;position:absolute;inset:0;z-index:180;background:var(--sheet-bg);backdrop-filter:blur(16px);flex-direction:column" onclick="event.stopPropagation()">
+  <div style="padding:12px 16px 8px;flex-shrink:0;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search-input" type="text" placeholder="Search any card name..." autocomplete="off" autocorrect="off" spellcheck="false"
+        oninput="doSearch(this.value)"
+        style="flex:1;background:transparent;border:none;color:var(--title);font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.5px;outline:none">
+      <button onclick="closeSearch()" style="background:none;border:none;color:var(--text3);font-size:22px;line-height:1;padding:0">×</button>
+    </div>
+  </div>
+  <div id="search-results" style="flex:1;overflow-y:auto;padding:8px 0"></div>
+  <div id="search-empty" style="display:none;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+    <div style="font-size:28px;opacity:.2">◈</div>
+    <div style="font-size:13px;color:var(--text3);letter-spacing:1px" class="mono">NO CARDS FOUND</div>
   </div>
 </div>
 
@@ -241,8 +324,8 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <!-- Import / edit -->
     <div class="sheet-row" style="padding-top:2px;padding-bottom:6px">
       <span class="sheet-label"></span>
-      <button onclick="showOverlay('import-overlay')" style="padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:11px" class="mono">+ IMPORT</button>
-      <button onclick="showOverlay('watch-overlay')" style="padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:#888840;font-size:11px" class="mono">★ EDIT WATCH</button>
+      <button onclick="showOverlay('import-overlay')" style="padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:11px" class="mono">+ IMPORT COLLECTION</button>
+      <button onclick="clearCollection()" style="padding:4px 11px;border-radius:20px;border:1px solid #ff174444;background:transparent;color:#ff4444;font-size:11px" class="mono">✕ CLEAR</button>
     </div>
 
     <div class="sheet-divider"></div>
@@ -257,6 +340,17 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <div class="sheet-row">
       <span class="sheet-label">RARITY</span>
       <div id="rar-row" style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto"></div>
+    </div>
+
+    <!-- Price tier toggle -->
+    <div class="sheet-row" style="align-items:center;gap:6px;flex-wrap:nowrap">
+      <span class="sheet-label">PRICE</span>
+      <button class="price-tier-btn" data-tier="all" onclick="setPriceFilter('all')"
+        style="padding:3px 12px;border-radius:20px;border:1px solid #00e676;background:#00e67618;color:#00e676;font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">ALL</button>
+      <button class="price-tier-btn" data-tier="over5" onclick="setPriceFilter('over5')"
+        style="padding:3px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">$5+ MARKET</button>
+      <button class="price-tier-btn" data-tier="under5" onclick="setPriceFilter('under5')"
+        style="padding:3px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">UNDER $5</button>
     </div>
 
     <!-- Color legend -->
@@ -292,18 +386,46 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <!-- Affiliate bar inside sheet -->
     <div id="aff-bar" style="background:transparent;border-top:none;padding:6px 16px">
       <span style="font-size:9px;color:var(--text4)" class="mono">⚠ Buy links are affiliate links. Purchases support this app.</span>
-      <button onclick="showDisc()" style="background:none;border:none;color:var(--text4);font-size:9px;text-decoration:underline" class="mono">DISCLOSURE ›</button>
+      
     </div>
   </div>
 </div>
 
 <!-- AFFILIATE DISCLOSURE overlay -->
-<div id="disc-overlay" style="position:absolute;inset:0;background:rgba(0,0,0,.85);z-index:300;display:flex;align-items:flex-end">
-  <div style="width:100%;background:var(--bg3);border-top:1px solid var(--border3);padding:20px 18px 28px">
-    <div style="font-size:16px;font-weight:700;color:var(--title);letter-spacing:1px;margin-bottom:12px">📋 AFFILIATE DISCLOSURE</div>
-    <div class="disc-box"><span style="color:#ffd700;font-weight:600">AFFILIATE NOTICE: </span>MTG Market Pulse contains affiliate links to TCGPlayer. When you tap "Buy on TCGPlayer" and complete a purchase, we may earn a commission at no extra cost to you. This funds app development. We do not receive compensation for featuring specific cards. All prices come from TCGPlayer market data.</div>
-    <div style="font-size:11px;color:var(--text5);line-height:1.7;margin-bottom:16px">Prices are for informational purposes only. Always verify on TCGPlayer before purchasing. Past price movements do not guarantee future performance.</div>
-    <button onclick="hideDisc()" style="width:100%;padding:13px;border-radius:8px;border:none;background:linear-gradient(135deg,#7a3abf,#4a1a8f);color:#fff;font-weight:700;font-size:15px;letter-spacing:1.5px">I UNDERSTAND — CONTINUE</button>
+<div id="disc-overlay" style="position:absolute;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer" onclick="hideDisc()">
+  <!-- Animated background -->
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%, #1a0535 0%, #070715 50%, #000 100%)"></div>
+  <!-- Floating color orbs -->
+  <div style="position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,#2e6db044,transparent 70%);top:-60px;right:-80px;animation:orb 8s ease-in-out infinite"></div>
+  <div style="position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,#c0303044,transparent 70%);bottom:-40px;left:-60px;animation:orb 10s ease-in-out infinite reverse"></div>
+  <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,#2a7a2a33,transparent 70%);bottom:20%;right:10%;animation:orb 12s ease-in-out infinite"></div>
+
+  <!-- Content -->
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:28px 24px;text-align:center;max-width:420px;width:100%">
+    <!-- Logo -->
+    <div style="font-size:42px;margin-bottom:8px;filter:drop-shadow(0 0 18px #c084fc88)">◈</div>
+    <div style="font-size:28px;font-weight:900;letter-spacing:3px;color:#fff;font-family:'Barlow Condensed',sans-serif;line-height:1">MTG MARKET PULSE</div>
+    <div style="font-size:11px;color:#6060a0;letter-spacing:3px;margin-top:4px;font-family:'JetBrains Mono',monospace">REAL-TIME PRICE TRACKER</div>
+    <!-- Divider -->
+    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#c084fc,transparent);margin:20px auto"></div>
+    <!-- Feature pills -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px">
+      <span style="padding:3px 10px;border-radius:20px;border:1px solid #00e67644;background:#00e67611;color:#00e676;font-size:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">LIVE PRICES</span>
+      <span style="padding:3px 10px;border-radius:20px;border:1px solid #2e6db044;background:#2e6db011;color:#66aaee;font-size:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">ALL FORMATS</span>
+      <span style="padding:3px 10px;border-radius:20px;border:1px solid #c084fc44;background:#c084fc11;color:#c084fc;font-size:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">BUBBLE CHART</span>
+      <span style="padding:3px 10px;border-radius:20px;border:1px solid #ffd70044;background:#ffd70011;color:#ffd700;font-size:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">WATCHLIST</span>
+    </div>
+    <!-- CTA button -->
+    <div style="position:relative;width:100%;margin-bottom:14px">
+      <div style="position:absolute;inset:0;border-radius:12px;background:linear-gradient(135deg,#7a3abf,#4a1a8f);filter:blur(12px);opacity:.7;animation:pulse-ring 2s ease-in-out infinite alternate"></div>
+      <button onclick="hideDisc()" style="position:relative;width:100%;padding:15px;border-radius:12px;border:none;background:linear-gradient(135deg,#9a4adf,#5a1aaf);color:#fff;font-weight:900;font-size:16px;letter-spacing:2px;font-family:'Barlow Condensed',sans-serif;cursor:pointer;touch-action:manipulation">
+        ENTER THE MARKET
+      </button>
+    </div>
+    <!-- Disclosure fine print — tap anywhere agrees -->
+    <div style="font-size:9px;color:#2e2e4e;line-height:1.8;font-family:'JetBrains Mono',monospace;max-width:320px">
+      By continuing you acknowledge that buy links are affiliate links to TCGPlayer. Purchases may earn us a commission at no extra cost to you. Prices are for informational purposes only and do not constitute financial advice.
+    </div>
   </div>
 </div>
 
@@ -335,7 +457,7 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <div class="stat-tile"><div class="stat-lbl">DELTA</div><div class="stat-val" id="st-delta"></div></div>
     <div class="stat-tile"><div class="stat-lbl">RARITY</div><div class="stat-val" id="st-rar"></div></div>
   </div>
-  <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer" class="buy-btn" onclick="event.stopPropagation()">
+  <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer" class="buy-btn" onclick="event.stopPropagation();trackBuyClick()">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
     BUY ON TCGPLAYER · AFFILIATE LINK
   </a>
@@ -413,18 +535,19 @@ async function loadLiveData(){
       NSM[(c.name.toLowerCase()+"|"+(c.set||"").toLowerCase())]=c;
       return c;
     });
-    if(hs)hs.textContent="TCGPlayer · 7D · Live Data · "+CARDS.length+" cards";
+    gaEvent("data_loaded",{card_count:CARDS.length,source:"live"}); isLive=true; if(hs)hs.innerHTML="TCGPlayer &middot; 7D &middot; <span id='live-dot'></span>"; updateLiveDot();
     return true;
   }catch(e){
     console.error("Live data failed:",e.message);
     CARDS=FALLBACK.map(c=>{NM[c.name.toLowerCase()]=c;return c;});
-    if(hs)hs.textContent="TCGPlayer · 7D · Demo Mode";
+    isLive=false; if(hs)hs.innerHTML="TCGPlayer &middot; 7D &middot; <span id='live-dot'></span>"; updateLiveDot();
     return false;
   }
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50;
+let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50, priceFilter="all", colorFilter="All", isLive=false;
+function updateLiveDot(){var d=document.getElementById("live-dot");if(!d)return;d.innerHTML=isLive?'<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#00e676;box-shadow:0 0 6px #00e676;display:inline-block"></span><span style="color:#00e676;font-weight:700">LIVE</span></span>':'<span style="color:var(--text3)">Demo Mode</span>';}
 let collection=[], watchlist=[], currentCard=null;
 let parsedImport=[];
 // Load watchlist
@@ -433,8 +556,8 @@ try{const s=localStorage.getItem("mtgwl");if(s)watchlist=JSON.parse(s);}catch{}
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function saveWl(){try{localStorage.setItem("mtgwl",JSON.stringify(watchlist));}catch{}}
 function matchCard(name,set){const n=name.toLowerCase().trim(),s=set?.toLowerCase().trim();if(s){const e=NSM[`${n}|${s}`];if(e)return e;}return NM[n]||null;}
-function bGlow(c){return c.length>1?GG:(MC[c[0]]||MC.C).f;}
-function bStroke(c){return c.length>1?GS:(MC[c[0]]||MC.C).s;}
+function bGlow(c){if(!c||!c.length)return MC.C.f;return c.length>1?GG:(MC[c[0]]||MC.C).f;}
+function bStroke(c){if(!c||!c.length)return MC.C.s;return c.length>1?GS:(MC[c[0]]||MC.C).s;}
 
 function parseList(text){
   const seen={},out=[];
@@ -447,14 +570,18 @@ function parseList(text){
     else{const m=line.match(/^(\d+)[xX]?\s+(.+)$/);if(!m)return;qty=parseInt(m[1])||1;const raw=m[2].trim();const ms=raw.match(/^(.*?)\s*[\[\(\{]([A-Za-z0-9]{2,6})[\]\)\}]\s*$/);if(ms){name=ms[1].trim();set=ms[2].toUpperCase();}else{const tr=raw.match(/^(.+?)\s+([A-Z0-9]{2,5})$/);if(tr&&/^[A-Z][A-Z0-9]{1,4}$/.test(tr[2])&&!/^(THE|OF|A|AN)$/i.test(tr[2])){name=tr[1].trim();set=tr[2];}else name=raw;}}
     if(!name)return;
     const card=matchCard(name,set);if(!card)return;
-    if(seen[card.id]){seen[card.id].qty+=qty;}else{const e={...card,qty,requestedSet:set};seen[card.id]=e;out.push(e);}
+    if(seen[card.id]){seen[card.id].qty+=qty;}else{const e={...card,qty,requestedSet:set||card.set};seen[card.id]=e;out.push(e);}
   });
   return out;
 }
 
 function getActiveCards(){
-  let src=mode==="collection"?collection.map(c=>({...CARDS.find(x=>x.id===c.id),...c})).filter(x=>x?.id):mode==="watchlist"?watchlist.map(c=>({...CARDS.find(x=>x.id===c.id),...c,qty:1})).filter(x=>x?.id):CARDS;
-  return src.filter(c=>fmt==="All"||c.formats.includes(fmt)).filter(c=>rar==="All"||c.rarity===rar).sort((a,b)=>b.absPct-a.absPct).slice(0,cardLimit);
+  // Collection/watchlist use stored card data — not dependent on live CARDS array
+  let src;
+  if(mode==="collection") src=collection.filter(x=>x?.id);
+  else if(mode==="watchlist") src=watchlist.map(c=>({...c,qty:1})).filter(x=>x?.id);
+  else src=CARDS;
+  return src.filter(c=>fmt==="All"||(c.formats&&c.formats.includes(fmt))).filter(c=>rar==="All"||c.rarity===rar).filter(c=>priceFilter==="all"||(priceFilter==="under5"?c.price<5:c.price>=5)).filter(c=>colorFilter==="All"||(colorFilter==="Multi"?c.colors&&c.colors.length>1:c.colors&&c.colors.includes(colorFilter))).sort((a,b)=>b.absPct-a.absPct).slice(0,cardLimit);
 }
 
 // ── Physics ───────────────────────────────────────────────────────────────────
@@ -552,21 +679,145 @@ function initPhysics(cards){
 function renderBubbles(nodes){
   const svg=document.getElementById("bubble-svg");
   const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||460;
-  const defs=`<defs><pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="var(--dot)"/></pattern>${Object.entries(MC).map(([k,{f}])=>`<radialGradient id="g-${k}" cx="38%" cy="32%" r="65%" fx="38%" fy="32%"><stop offset="0%" stop-color="#fff" stop-opacity=".45"/><stop offset="40%" stop-color="${f}" stop-opacity=".95"/><stop offset="100%" stop-color="${f}" stop-opacity="1"/></radialGradient>`).join("")}<radialGradient id="gs" cx="38%" cy="25%" r="48%" fx="38%" fy="25%"><stop offset="0%" stop-color="#fff" stop-opacity=".55"/><stop offset="60%" stop-color="#fff" stop-opacity=".08"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient><radialGradient id="gr" cx="50%" cy="88%" r="50%"><stop offset="0%" stop-color="#fff" stop-opacity=".18"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
-  const bg=`<rect width="${W}" height="${H}" fill="var(--svg-bg)"/><rect width="${W}" height="${H}" fill="url(#dots)" opacity="${isDark?1:0}"/>`;
-  const bubbles=nodes.map(n=>{
-    const pc=n.pct>=0?UP:DN,st=bStroke(n.colors),gw=bGlow(n.colors),big=n.absPct>20,isM=n.colors.length>1;
-    const sn=n.r>27,ss=n.r>40,nf=Math.max(6,Math.min(n.r*.25,11)),pf=Math.max(7,Math.min(n.r*.295,13));
-    const ny=sn?-(pf*.72):0,py=sn?(pf*.72):(pf*.38),sy=py+nf*1.2;
-    const inW=watchlist.some(w=>w.id===n.id),ds=n.requestedSet||n.set;
-    let slices=n.colors.length===1?`<circle r="${n.r}" fill="url(#g-${n.colors[0]})"/>`:'';
-    if(n.colors.length>1)n.colors.forEach((c,i)=>{const nc=n.colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2,x1=Math.cos(sa)*n.r,y1=Math.sin(sa)*n.r,x2=Math.cos(ea)*n.r,y2=Math.sin(ea)*n.r;slices+=`<path d="M0 0L${x1.toFixed(1)} ${y1.toFixed(1)}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}Z" fill="${(MC[c]||MC.C).f}"/>`;});
-    const halos=big?`<circle class="pulse" r="${n.r+9}" fill="none" stroke="${gw}" stroke-width="1" opacity=".4"/><circle class="pulse2" r="${n.r+18}" fill="none" stroke="${gw}" stroke-width=".5" opacity=".18"/>`:'';
-    const star=inW?`<text x="${-n.r*.65}" y="${-n.r*.65}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.22)}" fill="#ffd700" style="pointer-events:none;user-select:none">★</text>`:'';
-    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny}" font-size="${nf}" font-weight="700" fill="#fff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 2px #000)">${n.name.length>13?n.name.slice(0,12)+"…":n.name}</text>`:'';
-    const setT=ss?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.8).toFixed(1)}" fill="rgba(255,255,255,.55)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>`:'';
-    return `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">${halos}${star}<circle r="${n.r}" fill="#111126"/>${slices}<circle r="${n.r}" fill="url(#gs)"/><circle r="${n.r}" fill="url(#gr)"/><circle r="${n.r}" fill="none" stroke="${st}" stroke-width="${big?2:1.4}" opacity=".9"/>${isM?`<circle r="${n.r-2}" fill="none" stroke="${GG}" stroke-width=".6" opacity=".35"/>`:''}<text text-anchor="middle" dominant-baseline="middle" y="${py}" font-size="${pf}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px #000)">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>${nameT}${setT}</g>`;
+
+  // Per-color light/dark variants for 3D sphere effect
+  const MCL={W:"#fffbe8",U:"#66aaee",B:"#cc88ff",R:"#ff7777",G:"#66cc66",C:"#ccdde8"};
+  const MCD={W:"#7a6e20",U:"#071830",B:"#1a0535",R:"#300505",G:"#051505",C:"#0e1820"};
+
+  // Build per-color sphere gradients — deep 3D look
+  const colorGrads=Object.entries(MC).map(([k,{f}])=>{
+    const fl=MCL[k]||"#ffffff", fd=MCD[k]||"#050510";
+    return [
+      `<radialGradient id="g-${k}" cx="36%" cy="28%" r="75%" fx="34%" fy="24%">`,
+      `<stop offset="0%" stop-color="${fl}" stop-opacity=".92"/>`,
+      `<stop offset="18%" stop-color="${f}" stop-opacity="1"/>`,
+      `<stop offset="55%" stop-color="${f}" stop-opacity="1"/>`,
+      `<stop offset="82%" stop-color="${fd}" stop-opacity="1"/>`,
+      `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
+      `</radialGradient>`,
+      // Per-color glow gradient for outer ring
+      `<radialGradient id="gw-${k}" cx="50%" cy="50%" r="50%">`,
+      `<stop offset="60%" stop-color="${f}" stop-opacity="0"/>`,
+      `<stop offset="100%" stop-color="${f}" stop-opacity=".55"/>`,
+      `</radialGradient>`
+    ].join("");
   }).join("");
+
+  // Multi-color sphere gradient
+  const multiGrad=[
+    `<radialGradient id="g-Multi" cx="36%" cy="28%" r="75%" fx="34%" fy="24%">`,
+    `<stop offset="0%" stop-color="#fffbe0" stop-opacity=".9"/>`,
+    `<stop offset="20%" stop-color="${GG}" stop-opacity="1"/>`,
+    `<stop offset="60%" stop-color="${GG}" stop-opacity="1"/>`,
+    `<stop offset="85%" stop-color="#3a2800" stop-opacity="1"/>`,
+    `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
+    `</radialGradient>`
+  ].join("");
+
+  // Specular highlight — bright white spot upper-left
+  const specGrad=[
+    `<radialGradient id="gs" cx="32%" cy="22%" r="44%" fx="28%" fy="16%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".92"/>`,
+    `<stop offset="35%" stop-color="#ffffff" stop-opacity=".38"/>`,
+    `<stop offset="70%" stop-color="#ffffff" stop-opacity=".06"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`
+  ].join("");
+
+  // Rim light bottom — subtle warm glow
+  const rimGrad=[
+    `<radialGradient id="gr" cx="50%" cy="92%" r="48%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".22"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`
+  ].join("");
+
+  // Glow blur filter
+  const glowFilter=[
+    `<filter id="glow" x="-60%" y="-60%" width="220%" height="220%">`,
+    `<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>`,
+    `<feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge>`,
+    `</filter>`
+  ].join("");
+
+  const defs=`<defs><pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="var(--dot)"/></pattern>${colorGrads}${multiGrad}${specGrad}${rimGrad}${glowFilter}</defs>`;
+  const bg=`<rect width="${W}" height="${H}" fill="var(--svg-bg)"/><rect width="${W}" height="${H}" fill="url(#dots)" opacity="${isDark?1:0}"/>`;
+
+  const bubbles=nodes.map(n=>{
+    const pc=n.pct>=0?UP:DN;
+    const colors=n.colors&&n.colors.length?n.colors:["C"];
+    const st=bStroke(colors), gw=bGlow(colors);
+    const isM=colors.length>1, big=n.absPct>15;
+    const gradId=isM?"Multi":(MC[colors[0]]?colors[0]:"C");
+
+    // Text sizing
+    const sn=n.r>26, ss=n.r>42, sl=n.r>55;
+    const nf=Math.max(6,Math.min(n.r*.24,12));
+    const pf=Math.max(7,Math.min(n.r*.3,15));
+    const ny=sn?-(pf*.75):0, py=sn?(pf*.72):(pf*.38), sy=py+nf*1.25;
+
+    const inW=watchlist.some(w=>w.id===n.id);
+    const ds=n.requestedSet||n.set;
+
+    // Outer glow — large blurred circle
+    const outerGlow=`<circle r="${n.r*1.55}" fill="none" stroke="${gw}" stroke-width="${n.r*.55}" opacity="${big?.28:.16}" style="filter:blur(${(n.r*.4).toFixed(0)}px)"/>`;
+
+    // Pulse rings for big movers
+    const halos=big
+      ?`<circle class="pulse" r="${n.r+10}" fill="none" stroke="${gw}" stroke-width="1.2" opacity=".45"/><circle class="pulse2" r="${n.r+22}" fill="none" stroke="${gw}" stroke-width=".7" opacity=".2"/>`
+      :``;
+
+    // Multi-color pie slices as base before gradient overlay
+    let sliceBase=``;
+    if(isM){
+      colors.forEach((c,i)=>{
+        const nc=n.colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
+        const x1=(Math.cos(sa)*n.r).toFixed(1),y1=(Math.sin(sa)*n.r).toFixed(1);
+        const x2=(Math.cos(ea)*n.r).toFixed(1),y2=(Math.sin(ea)*n.r).toFixed(1);
+        sliceBase+=`<path d="M0 0L${x1} ${y1}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2} ${y2}Z" fill="${(MC[c]||MC.C).f}" opacity=".7"/>`;
+      });
+    }
+
+    // Watchlist star
+    const star=inW?`<text x="${n.r*.58}" y="${-n.r*.58}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.2)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">★</text>`:``;
+
+    // Price change % text
+    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py}" font-size="${pf}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.9))">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
+
+    // Card name
+    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny}" font-size="${nf}" font-weight="700" fill="#ffffff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9))">${n.name.length>14?n.name.slice(0,13)+"…":n.name}</text>`:
+      `<title>${n.name}</title>`;
+
+    // Price text for large bubbles
+    const priceT=sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.82).toFixed(1)}" fill="rgba(255,255,255,.75)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))">$${n.price.toFixed(2)}</text>`:``;
+
+    // Set badge for medium+ bubbles
+    const setT=ss&&!sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.75).toFixed(1)}" fill="rgba(255,255,255,.5)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>`:``;
+
+    return [
+      `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">`,
+      outerGlow,
+      halos,
+      // Deep dark base
+      `<circle r="${n.r}" fill="#04040e"/>`,
+      // Color pie slices for multi
+      sliceBase,
+      // Main 3D sphere gradient
+      `<circle r="${n.r}" fill="url(#g-${gradId})"/>`,
+      // Rim light bottom
+      `<circle r="${n.r}" fill="url(#gr)"/>`,
+      // Specular highlight top-left
+      `<circle r="${n.r}" fill="url(#gs)"/>`,
+      // Colored border stroke
+      `<circle r="${n.r}" fill="none" stroke="${st}" stroke-width="${big?2.2:1.5}" opacity=".95"/>`,
+      // Gold inner ring for multi
+      isM?`<circle r="${n.r-2.5}" fill="none" stroke="${GG}" stroke-width=".7" opacity=".4"/>`:``,
+      // Text layers
+      pctT, nameT, priceT, setT, star,
+      `</g>`
+    ].join("");
+  }).join("");
+
   svg.innerHTML=defs+bg+bubbles;
 }
 
@@ -578,8 +829,14 @@ function buildFilters(){
   const rarRow=document.getElementById("rar-row");
   if(rarRow)rarRow.innerHTML=RARS.map(r=>`<button class="pill${rar===r?` active-${rarMap[r]||'g'}`:''}" onclick="setRar('${r}')">${r}</button>`).join("");
   const cRow=document.getElementById("color-row");
-  if(cRow)cRow.innerHTML=Object.entries(MC).map(([k,{f,l}])=>`<div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="${f}"/></svg><span style="font-size:10px;color:var(--text5);font-family:'Barlow Condensed',sans-serif">${l}</span></div>`).join("")+
-    `<div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="${GG}"/></svg><span style="font-size:10px;color:var(--text5);font-family:'Barlow Condensed',sans-serif">Multi</span></div>`;
+  if(cRow){
+    const colorBtns=[["All","#aaaacc","#aaaacc"],["W","#e8d48a","#c4a030"],["U","#2e6db0","#1a4f8a"],["B","#9060c0","#6030a0"],["R","#c03030","#8a1818"],["G","#2a7a2a","#185018"],["C","#7a8e9e","#4a5e6e"],["Multi",GG,GS]];
+    cRow.innerHTML=colorBtns.map(([k,fill,stroke])=>{
+      const isActive=colorFilter===k;
+      const label=k==="All"?"ALL":k==="Multi"?"GOLD":k==="C"?"CLESS":k==="W"?"WHITE":k==="U"?"BLUE":k==="B"?"BLACK":k==="R"?"RED":"GREEN";
+      return `<button onclick="setColorFilter('${k}')" style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:16px;border:1.5px solid ${isActive?stroke:"var(--border2)"};background:${isActive?fill+"22":"transparent"};cursor:pointer;transition:all .15s;flex-shrink:0"><svg width="9" height="9"><circle cx="4.5" cy="4.5" r="4.5" fill="${fill}"/></svg><span style="font-size:10px;font-weight:${isActive?"700":"500"};color:${isActive?fill:"var(--text4)"};font-family:'Barlow Condensed',sans-serif">${label}</span></button>`;
+    }).join("");
+  }
 }
 
 function updateStats(){
@@ -608,7 +865,7 @@ function updateStats(){
   const fm=document.getElementById("fab-mode");
   if(fm)fm.textContent=modeShort[mode]||"MKT";
   const hs=document.getElementById("hdr-sub");
-  if(hs)hs.textContent=`TCGPlayer · ${tf} · Mock Data`;
+  if(hs)hs.innerHTML=`TCGPlayer &middot; ${tf} &middot; <span id='live-dot' style='display:inline-flex;align-items:center;gap:4px'></span>`; updateLiveDot();
 }
 
 function updateEmptyState(){
@@ -628,21 +885,54 @@ function refresh(){
   initPhysics(ac);
 }
 
-function setMode(m){mode=m;closeDetail();if(sheetOpen)toggleSheet();refresh();}
-function collClick(){if(!collection.length)showOverlay("import-overlay");else setMode("collection");}
-function setFmt(f){fmt=f;refresh();}
+function setMode(m){
+  mode=m;
+  closeDetail();
+  if(sheetOpen)toggleSheet();
+  gaEvent("mode_switch",{mode:m});
+  const modeColors={market:"#00e676",collection:"#c084fc",watchlist:"#ffd700"};
+  const modeLabels={market:"MKT",collection:"COLL",watchlist:"WATCH"};
+  const fm=document.getElementById("fab-mode");
+  if(fm){fm.textContent=modeLabels[m]||"MKT";fm.style.color=modeColors[m]||"var(--fab-color)";}
+  refresh();
+}
+function clearCollection(){if(!collection.length)return;if(confirm("Clear your entire collection?")){collection=[];saveCol();setMode("market");}}
+function cycleMode(){
+  const modes=["market","collection","watchlist"];
+  const next=modes[(modes.indexOf(mode)+1)%modes.length];
+  setMode(next);
+}
+function collClick(){setMode("collection");}
+function setFmt(f){fmt=f;gaEvent("filter_format",{format:f});refresh();}
 function setCardLimit(v){cardLimit=parseInt(v);document.getElementById("card-limit-lbl").textContent=v+" cards";refresh();}
-function setRar(r){rar=r;refresh();}
+function setColorFilter(v){colorFilter=v;gaEvent("filter_color",{color:v});buildFilters();initPhysics(getActiveCards());}
+function setPriceFilter(v){gaEvent("filter_price",{tier:v});
+  priceFilter=v;
+  var btns=document.querySelectorAll(".price-tier-btn");
+  btns.forEach(function(b){
+    var active=b.dataset.tier===v;
+    b.style.borderColor=active?"#00e676":"var(--border2)";
+    b.style.background=active?"#00e67618":"transparent";
+    b.style.color=active?"#00e676":"var(--text3)";
+  });
+  refresh();
+}
+function setRar(r){rar=r;gaEvent("filter_rarity",{rarity:r});refresh();}
 function setTf(btn,t){tf=t;document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("act"));btn.classList.add("act");updateStats();}
 
 // ── Card Detail ───────────────────────────────────────────────────────────────
+function trackBuyClick(){
+  if(currentCard) gaEvent("buy_click",{card_name:currentCard.name,card_price:currentCard.price,card_pct:currentCard.pct,card_rarity:currentCard.rarity,value:currentCard.price});
+}
 function openCard(id){
+  const _c=CARDS.find(x=>x.id===id)||phyNodes.find(x=>x.id===id);
+  if(_c) gaEvent("card_view",{card_name:_c.name,card_price:_c.price,card_pct:_c.pct,card_set:_c.set,card_rarity:_c.rarity});
   const n=phyNodes.find(x=>x.id===id);if(!n)return;
   currentCard=n; valMode="single";
   const det=document.getElementById("detail");
   det.style.display="block";
-  det.style.borderTop=`2px solid ${bStroke(n.colors)}`;
-  det.style.boxShadow=`0 -24px 64px ${bGlow(n.colors)}22`;
+  det.style.borderTop=`2px solid ${bStroke(n.colors&&n.colors.length?n.colors:['C'])}`;
+  det.style.boxShadow=`0 -24px 64px ${bGlow(n.colors&&n.colors.length?n.colors:['C'])}22`;
   document.getElementById("det-name").textContent=n.name;
   document.getElementById("det-meta").innerHTML=`<span style="color:${RC[n.rarity]||'#c084fc'}">${n.rarity.toUpperCase()}</span> · <span style="color:var(--text2)">[${n.requestedSet||n.set}]</span> · ${n.formats.join(" · ")}`;
   const cc=document.getElementById("det-colors");
@@ -751,7 +1041,7 @@ function renderWatchList(){
     watchlist.map(c=>{const col=MC[c.colors[0]]||MC.C;return`<div class="wl-row"><svg width="10" height="10" style="flex-shrink:0"><circle cx="5" cy="5" r="5" fill="${col.f}"/></svg><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</div><div style="font-size:10px;color:#484866" class="mono">[${c.set}] · $${c.price.toFixed(2)} · <span style="color:${c.pct>=0?UP:DN}">${c.pct>=0?"+":""}${c.pct.toFixed(1)}%</span></div></div><button onclick="remWatch(${c.id})" style="padding:3px 9px;border-radius:16px;border:1px solid ${DN};background:${DN}18;color:${DN};font-size:11px;font-family:'Barlow Condensed',sans-serif">✕</button></div>`;}).join("");
 }
 
-function addWatch(id){const c=CARDS.find(x=>x.id===id);if(!c||watchlist.find(w=>w.id===id))return;watchlist.push(c);saveWl();updateStats();renderWatchList();updateWatchSearch();if(currentCard?.id===id)updateWatchBtn();renderBubbles(phyNodes);}
+function addWatch(id){const c=CARDS.find(x=>x.id===id)||phyNodes.find(x=>x.id===id);if(!c||watchlist.find(w=>w.id===id))return;watchlist.push({...c});saveWl();updateStats();renderWatchList();updateWatchSearch();if(currentCard?.id===id)updateWatchBtn();renderBubbles(phyNodes);}
 function remWatch(id){watchlist=watchlist.filter(w=>w.id!==id);saveWl();updateStats();renderWatchList();updateWatchSearch();if(currentCard?.id===id)updateWatchBtn();renderBubbles(phyNodes);}
 
 // ── Settings sheet toggle ─────────────────────────────────────────────────────
@@ -785,16 +1075,83 @@ function loadTheme(){
 }
 
 // ── Disclosure helpers ────────────────────────────────────────────────────────
-function showDisc(){document.getElementById("disc-overlay").style.display="flex";}
-function hideDisc(){document.getElementById("disc-overlay").style.display="none";refresh();}
+function showDisc(){try{
+  if(localStorage.getItem("mtgmp_agreed")==="1"){
+    document.getElementById("disc-overlay").style.display="none";
+  }
+}catch(e){}}
+function hideDisc(){
+  try{localStorage.setItem("mtgmp_agreed","1");}catch(e){}
+  document.getElementById("disc-overlay").style.display="none";
+  refresh();
+}
 
 // ── Resize ────────────────────────────────────────────────────────────────────
 let resizeTimer;
 window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>refresh(),200);});
 
+// ── Search ───────────────────────────────────────────────────────────────────
+function openSearch(){
+  const ov=document.getElementById("search-overlay");
+  ov.style.display="flex";
+  setTimeout(function(){document.getElementById("search-input").focus();},80);
+  doSearch("");
+}
+function closeSearch(){
+  document.getElementById("search-overlay").style.display="none";
+  document.getElementById("search-input").value="";
+}
+function doSearch(q){
+  const res=document.getElementById("search-results");
+  const emp=document.getElementById("search-empty");
+  const term=q.trim().toLowerCase();
+  const pool=CARDS.length?CARDS:phyNodes;
+  const matches=term.length<1
+    ?pool.slice().sort(function(a,b){return b.absPct-a.absPct;}).slice(0,30)
+    :pool.filter(function(c){return c.name&&c.name.toLowerCase().includes(term);}).slice(0,40);
+  if(!matches.length){res.style.display="none";emp.style.display="flex";return;}
+  res.style.display="block";emp.style.display="none";
+  res.innerHTML=matches.map(function(c){
+    var pc=c.pct>=0?"#00e676":"#ff1744";
+    var gw=bGlow(c.colors&&c.colors.length?c.colors:["C"]);
+    var inW=watchlist.some(function(w){return w.id===c.id;});
+    var starColor=inW?"#ffd700":"var(--text3)";
+    var html='';
+    html+='<div onclick="searchTapCard('+c.id+')" style="display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border)">';
+    html+='<div style="width:10px;height:10px;border-radius:50%;background:'+gw+';flex-shrink:0"></div>';
+    html+='<div style="flex:1;min-width:0">';
+    html+='<div style="font-size:14px;font-weight:700;color:var(--title);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+c.name+'</div>';
+    html+='<div style="font-size:10px;color:var(--text3);margin-top:1px">['+c.set+'] '+c.rarity+'</div>';
+    html+='</div>';
+    html+='<div style="text-align:right;flex-shrink:0">';
+    html+='<div style="font-size:13px;font-weight:700;color:var(--title)">$'+c.price.toFixed(2)+'</div>';
+    html+='<div style="font-size:11px;font-weight:700;color:'+pc+'">'+(c.pct>=0?"+":"")+c.pct.toFixed(1)+'%</div>';
+    html+='</div>';
+    html+='<button onclick="event.stopPropagation();searchToggleWatch('+c.id+')" style="background:none;border:1px solid var(--border2);border-radius:20px;padding:3px 7px;color:'+starColor+';font-size:12px;margin-left:4px;cursor:pointer;flex-shrink:0">&#9733;</button>';
+    html+='</div>';
+    return html;
+  }).join("");
+}
+function searchTapCard(id){
+  const _sc=CARDS.find(function(x){return x.id===id;})||phyNodes.find(function(x){return x.id===id;});
+  if(_sc) gaEvent("search_card_tap",{card_name:_sc.name,card_price:_sc.price});
+  closeSearch();
+  const c=CARDS.find(function(x){return x.id===id;})||phyNodes.find(function(x){return x.id===id;});
+  if(c)openCard(id);
+}
+function searchToggleWatch(id){
+  if(watchlist.some(function(w){return w.id===id;})){remWatch(id);}else{addWatch(id);}
+  doSearch(document.getElementById("search-input").value);
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────────
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeSearch();if(sheetOpen)toggleSheet();}});
 loadTheme();
-document.getElementById("disc-overlay").style.display="flex";
+try{
+  if(localStorage.getItem("mtgmp_agreed")==="1"){
+    document.getElementById("disc-overlay").style.display="none";
+  }
+}catch(e){}
 loadLiveData().then(function(){ refresh(); });
 </script>
 </body>
