@@ -52,39 +52,39 @@
 <style>
 /* ── CSS variables — dark (default) ──────────────────────────────────── */
 :root{
-  --bg:#080808;--bg2:#111111;--bg3:#141414;--bg4:#1a1a1a;--bg5:#0f0f0f;
-  --border:#1e1e1e;--border2:#282828;--border3:#333333;
-  --text:#ffffff;--text2:#cccccc;--text3:#888888;--text4:#555555;--text5:#666666;
-  --title:#ffffff;--sub:#555555;
-  --dot:#1a1a1a;
-  --svg-bg:#080808;
-  --panel-bg:#111111fa;
-  --pill-bg:transparent;--pill-border:#2a2a2a;--pill-color:#aaaaaa;
-  --sheet-bg:#111111f8;
-  --stat-bg:#1a1a1a;
-  --disc-bg:#141414;
-  --input-bg:#0f0f0f;--input-border:#333333;
-  --wl-bg:#0f0f0f;
-  --aff-bg:#0a0a0a;
-  --fab-bg:#111111dd;--fab-border:#2a2a2a;--fab-color:#cccccc;
+  --bg:#07070f;--bg2:#0c0c1e;--bg3:#0e0e22;--bg4:#13132a;--bg5:#0d0d20;
+  --border:#141424;--border2:#1e1e3a;--border3:#2a2a4a;
+  --text:#e0e0e0;--text2:#a0a0c0;--text3:#484866;--text4:#363654;--text5:#555574;
+  --title:#ffffff;--sub:#363654;
+  --dot:#161628;
+  --svg-bg:#07070f;
+  --panel-bg:#0c0c1efa;
+  --pill-bg:transparent;--pill-border:#181828;--pill-color:#484866;
+  --sheet-bg:#0c0c1ef8;
+  --stat-bg:#13132a;
+  --disc-bg:#141428;
+  --input-bg:#0d0d20;--input-border:#2a2a4a;
+  --wl-bg:#0d0d20;
+  --aff-bg:#0a0a18;
+  --fab-bg:#0e0e22dd;--fab-border:#2a2a4a;--fab-color:#aaaacc;
   --theme-icon:"🌙";
 }
 body.light{
-  --bg:#f0f0f0;--bg2:#ffffff;--bg3:#f8f8f8;--bg4:#e8e8e8;--bg5:#ebebeb;
-  --border:#d0d0d0;--border2:#b8b8b8;--border3:#999999;
-  --text:#000000;--text2:#222222;--text3:#555555;--text4:#777777;--text5:#888888;
-  --title:#000000;--sub:#555555;
+  --bg:#f2f2f8;--bg2:#ffffff;--bg3:#f8f8ff;--bg4:#e8e8f4;--bg5:#ededf8;
+  --border:#d0d0e8;--border2:#c0c0dc;--border3:#b0b0d0;
+  --text:#1a1a3a;--text2:#3a3a5a;--text3:#6060a0;--text4:#5050a0;--text5:#7070b0;
+  --title:#0a0a2a;--sub:#6060a0;
   --dot:transparent;
-  --svg-bg:#f0f0f0;
+  --svg-bg:#f2f2f8;
   --panel-bg:#fffffffa;
-  --pill-bg:#ffffff;--pill-border:#aaaaaa;--pill-color:#111111;
-  --sheet-bg:#f8f8f8f8;
-  --stat-bg:#e4e4e4;
-  --disc-bg:#eeeeee;
-  --input-bg:#f8f8f8;--input-border:#aaaaaa;
-  --wl-bg:#f8f8f8;
-  --aff-bg:#eeeeee;
-  --fab-bg:#fffffff0;--fab-border:#aaaaaa;--fab-color:#000000;
+  --pill-bg:transparent;--pill-border:#c0c0dc;--pill-color:#6060a0;
+  --sheet-bg:#f8f8fff8;
+  --stat-bg:#e8e8f4;
+  --disc-bg:#eeeef8;
+  --input-bg:#f8f8ff;--input-border:#c0c0dc;
+  --wl-bg:#f8f8ff;
+  --aff-bg:#eeeef8;
+  --fab-bg:#ffffffee;--fab-border:#c0c0dc;--fab-color:#5050a0;
   --theme-icon:"☀️";
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -115,15 +115,6 @@ input,textarea{outline:none;font-family:'JetBrains Mono',monospace}
   font-family:'Barlow Condensed',sans-serif;
 }
 .fab-btn:hover{background:rgba(128,128,200,.15)}
-body.light .fab-btn{color:#000000}
-body.light .sheet-close{color:#333333}
-body.light .sheet-title{color:#000000}
-body.light .ov-title{color:#000000}
-body.light .sheet-label{color:#444444}
-body.light #stat-bar span{color:#000000!important}
-body.light .mode-btn{color:#111111;border-color:#aaaaaa}
-body.light .tf-btn{color:#111111;border-color:#aaaaaa}
-body.light .tf-btn.act{border-color:#000000;background:rgba(0,0,0,.08);color:#000000}
 .fab-divider{width:1px;height:18px;background:var(--fab-border);flex-shrink:0}
 
 /* Theme node toggle */
@@ -170,23 +161,25 @@ body.light .tf-btn.act{border-color:#000000;background:rgba(0,0,0,.08);color:#00
 .sheet-body{overflow-y:auto;padding:10px 0 20px;flex:1}
 
 /* Rows inside sheet */
-.sheet-row{padding:6px 16px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;overflow-x:auto;justify-content:center}
+.sheet-row{padding:6px 16px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;overflow-x:auto}
 .sheet-label{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;letter-spacing:1px;flex-shrink:0;min-width:52px}
 .sheet-divider{height:1px;background:var(--border);margin:4px 0}
 
 /* Pills */
-.pill{padding:6px 14px;border-radius:20px;border:1.5px solid var(--pill-border);background:var(--pill-bg);color:var(--pill-color);font-size:12px;font-weight:700;white-space:nowrap;letter-spacing:.4px;font-family:'Barlow Condensed',sans-serif;transition:all .15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;min-height:36px}
-
-.pill.active-g,.pill.active-p,.pill.active-o,.pill.active-y,.pill.active-s,.pill.active-c{
-  border-color:var(--text);background:var(--text);color:var(--bg);
-}
+.pill{padding:3px 12px;border-radius:20px;border:1px solid var(--pill-border);background:var(--pill-bg);color:var(--pill-color);font-size:12px;font-weight:600;white-space:nowrap;letter-spacing:.4px;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
+.pill.active-g{border-color:#00e676;background:#00e67618;color:#00e676}
+.pill.active-p{border-color:#c084fc;background:#c084fc18;color:#c084fc}
+.pill.active-o{border-color:#ff6d00;background:#ff6d0018;color:#ff6d00}
+.pill.active-y{border-color:#ffd600;background:#ffd60018;color:#ffd600}
+.pill.active-s{border-color:#b0bec5;background:#b0bec518;color:#b0bec5}
+.pill.active-c{border-color:#90a4ae;background:#90a4ae18;color:#90a4ae}
 
 /* Mode buttons */
-.mode-btn{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border2);background:transparent;font-size:12px;font-weight:700;color:var(--text3);transition:all .15s;touch-action:manipulation;cursor:pointer;font-family:'Barlow Condensed',sans-serif}
+.mode-btn{padding:5px 13px;border-radius:20px;border:1px solid var(--border2);background:var(--pill-bg);font-size:12px;font-weight:700;color:var(--text3);transition:all .15s}
 
 /* TF buttons */
 .tf-btn{padding:2px 9px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:11px;font-family:'JetBrains Mono',monospace;border-radius:3px;transition:all .15s}
-.tf-btn.act{border-color:var(--text);background:var(--text);color:var(--bg)}
+.tf-btn.act{border-color:#6b4fa0;background:#6b4fa022;color:#c084fc}
 
 /* Stats bar inside sheet */
 #stat-bar{display:flex;gap:14px;padding:6px 16px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
@@ -209,25 +202,17 @@ body.light .overlay{background:rgba(240,240,248,.97)}
 @keyframes pg{0%,100%{opacity:.32}50%{opacity:.08}}
 .pulse{animation:pg 2.6s ease-in-out infinite}
 .pulse2{animation:pg 2.6s ease-in-out infinite;animation-delay:.55s}
-.buy-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:18px 14px;border-radius:12px;border:none;background:linear-gradient(135deg,#ffcc00,#e8a800,#c47a00);color:#1a0e00;font-weight:900;font-size:20px;text-decoration:none;margin-top:12px;letter-spacing:2px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;box-shadow:0 0 32px #e8a80066,0 4px 16px rgba(0,0,0,.4);position:relative;overflow:hidden;text-shadow:0 1px 2px rgba(255,255,255,.2)}
-.buy-btn::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.18) 0%,transparent 60%);pointer-events:none}
-.buy-btn:active{transform:scale(.97);box-shadow:0 0 16px #e8a80044}
+.buy-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:8px;border:none;background:linear-gradient(135deg,#e8a800,#c47a00);color:#1a0e00;font-weight:700;font-size:14px;text-decoration:none;margin-top:10px;letter-spacing:1px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
 .stat-tile{flex:1;background:var(--stat-bg);border-radius:7px;padding:7px 10px}
-body.light .stat-tile{background:#e4e4e4;border:1px solid #cccccc}
-body.light #det-name{color:#000000!important}
-body.light #det-meta{color:#555555!important}
-body.light #det-price{color:#000000!important}
-body.light #detail{background:#ffffff;border-top:1px solid #cccccc!important;box-shadow:0 -8px 40px rgba(0,0,0,.12)!important}
-body.light #settings-sheet,body.light #watch-overlay,body.light #search-overlay{background:#f8f8f8}
-.stat-lbl{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-align:center}
-.stat-val{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-top:3px;text-align:center}
+.stat-lbl{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+.stat-val{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-top:3px}
 .color-pip{display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px}
 .color-pip span{font-size:10px;font-weight:600;font-family:'Barlow Condensed',sans-serif}
 .chip{padding:2px 8px;border-radius:10px;font-size:10px;font-family:'Barlow Condensed',sans-serif;display:inline-flex;align-items:center;gap:4px}
 .wl-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wl-bg);border-radius:8px;border:1px solid var(--border2);margin-bottom:4px}
 .disc-box{background:var(--disc-bg);border-radius:8px;padding:10px 12px;border:1px solid var(--border3);font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:12px}
 .tog-btn{padding:3px 9px;border-radius:4px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;border:1px solid var(--border2);background:transparent;color:var(--text3)}
-.tog-btn.act{border-color:var(--text);background:var(--text);color:var(--bg)}
+.tog-btn.act{border-color:#c084fc;background:#c084fc22;color:#c084fc}
 .empty-state{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
 .empty-icon{font-size:32px;opacity:.2}
 .empty-text{font-size:14px;color:var(--text3);letter-spacing:1px}
@@ -307,7 +292,7 @@ body.light #settings-sheet,body.light #watch-overlay,body.light #search-overlay{
   <div class="sheet-handle" onclick="toggleSheet()"><div class="sheet-handle-bar"></div></div>
 
   <!-- Sheet header -->
-  <div class="sheet-hdr" style="justify-content:center;text-align:center;flex-direction:column;gap:4px;align-items:center">
+  <div class="sheet-hdr">
     <div>
       <div class="sheet-title">◈ MTG MARKET PULSE</div>
       <div style="font-size:10px;color:var(--text4);font-family:'JetBrains Mono',monospace;margin-top:2px" id="hdr-sub">Loading live data...</div>
@@ -332,25 +317,33 @@ body.light #settings-sheet,body.light #watch-overlay,body.light #search-overlay{
     <div class="sheet-row">
       <span class="sheet-label">VIEW</span>
       <button class="mode-btn" id="btn-market" onclick="setMode('market')">MARKET</button>
+      <button class="mode-btn" id="btn-collection" onclick="collClick()">MY CARDS</button>
       <button class="mode-btn" id="btn-watchlist" onclick="setMode('watchlist')">★ WATCH</button>
     </div>
 
-        <div class="sheet-divider"></div>
+    <!-- Import / edit -->
+    <div class="sheet-row" style="padding-top:2px;padding-bottom:6px">
+      <span class="sheet-label"></span>
+      <button onclick="showOverlay('import-overlay')" style="padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:11px" class="mono">+ IMPORT COLLECTION</button>
+      <button onclick="clearCollection()" style="padding:4px 11px;border-radius:20px;border:1px solid #ff174444;background:transparent;color:#ff4444;font-size:11px" class="mono">✕ CLEAR</button>
+    </div>
+
+    <div class="sheet-divider"></div>
 
     <!-- Format filter -->
     <div class="sheet-row" style="flex-wrap:wrap">
       <span class="sheet-label">FORMAT</span>
-      <div id="fmt-row" style="display:flex;gap:5px;flex-wrap:wrap;overflow-x:auto;justify-content:center"></div>
+      <div id="fmt-row" style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto"></div>
     </div>
 
     <!-- Rarity filter -->
     <div class="sheet-row">
       <span class="sheet-label">RARITY</span>
-      <div id="rar-row" style="display:flex;gap:5px;flex-wrap:wrap;overflow-x:auto;justify-content:center"></div>
+      <div id="rar-row" style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto"></div>
     </div>
 
     <!-- Price tier toggle -->
-    <div class="sheet-row" style="align-items:center;gap:6px;flex-wrap:wrap;justify-content:center">
+    <div class="sheet-row" style="align-items:center;gap:6px;flex-wrap:nowrap">
       <span class="sheet-label">PRICE</span>
       <button class="price-tier-btn" data-tier="all" onclick="setPriceFilter('all')"
         style="padding:3px 12px;border-radius:20px;border:1px solid #00e676;background:#00e67618;color:#00e676;font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">ALL</button>
@@ -363,13 +356,13 @@ body.light #settings-sheet,body.light #watch-overlay,body.light #search-overlay{
     <!-- Color legend -->
     <div class="sheet-row" style="flex-wrap:wrap;gap:8px">
       <span class="sheet-label">COLOR</span>
-      <div id="color-row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center"></div>
+      <div id="color-row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"></div>
     </div>
 
     <div class="sheet-divider"></div>
 
     <!-- Card count slider -->
-    <div class="sheet-row" style="align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+    <div class="sheet-row" style="align-items:center;gap:10px;flex-wrap:nowrap">
       <span class="sheet-label">SHOW</span>
       <input type="range" id="card-limit-slider" min="10" max="100" step="5" value="50"
         oninput="setCardLimit(this.value)"
@@ -380,7 +373,7 @@ body.light #settings-sheet,body.light #watch-overlay,body.light #search-overlay{
     <div class="sheet-divider"></div>
 
     <!-- Theme toggle row -->
-    <div class="sheet-row" style="align-items:center;gap:10px;justify-content:center">
+    <div class="sheet-row" style="align-items:center;gap:10px">
       <span class="sheet-label">THEME</span>
       <div id="theme-node-sheet" onclick="toggleTheme()" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--pill-bg)">
         <span id="theme-icon-sheet" style="font-size:16px">🌙</span>
@@ -437,91 +430,128 @@ body.light #settings-sheet,body.light #watch-overlay,body.light #search-overlay{
 </div>
 
 <!-- DETAIL PANEL -->
-<div id="detail" style="display:none;position:relative" onclick="event.stopPropagation()">
-  <!-- close / watch buttons — absolute top-right -->
-  <div style="position:absolute;top:12px;right:14px;display:flex;gap:5px;align-items:center">
-    <button id="det-watch-btn" onclick="toggleWatchCurrent()" style="background:none;border:1px solid var(--border2);border-radius:16px;padding:3px 8px;color:var(--text3);font-size:14px">&#9734;</button>
-    <button onclick="closeDetail()" style="background:none;border:none;color:var(--text3);font-size:26px;line-height:1">&times;</button>
-  </div>
-
-  <!-- Card name + meta -->
-  <div style="text-align:center;padding-right:72px">
-    <div id="det-name" style="font-size:20px;font-weight:700;color:var(--title);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
-    <div id="det-meta" style="font-size:10px;color:var(--text3);margin-top:2px" class="mono"></div>
-  </div>
-
-  <!-- Color identity -->
-  <div id="det-colors" style="display:flex;gap:5px;margin-top:6px;align-items:center;flex-wrap:wrap;justify-content:center"></div>
-
-  <!-- ── PRICE COMPARISON — always visible ─────────────────────────────── -->
-  <div style="display:flex;gap:6px;margin-top:10px">
-    <!-- TCGPlayer market -->
-    <div style="flex:1;background:rgba(46,109,176,.13);border:1.5px solid rgba(46,109,176,.40);border-radius:8px;padding:8px 10px;text-align:center">
-      <div style="font-size:9px;font-weight:700;color:#66aaee;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace">TCG MARKET</div>
-      <div id="det-price" style="font-size:22px;font-weight:900;color:var(--title);line-height:1.1;margin-top:3px" class="mono"></div>
-      <div id="det-pct" style="font-size:12px;font-weight:700;margin-top:2px" class="mono"></div>
+<div id="detail" style="display:none" onclick="event.stopPropagation()">
+  <!-- Header: name + watch + close -->
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div style="flex:1;min-width:0">
+      <div id="det-name" style="font-size:20px;font-weight:700;color:var(--title);line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+      <div id="det-meta" style="font-size:11px;color:var(--text3);margin-top:3px" class="mono"></div>
     </div>
-
-    <!-- Spread column -->
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex-shrink:0;min-width:44px">
-      <div id="spread-arrow" style="font-size:18px;line-height:1">&#8644;</div>
-      <div id="spread-pct" style="font-size:11px;font-weight:900;font-family:'JetBrains Mono',monospace;text-align:center"></div>
-      <div id="spread-signal" style="font-size:8px;font-weight:700;letter-spacing:.8px;font-family:'JetBrains Mono',monospace;text-align:center"></div>
-    </div>
-
-    <!-- CK Buylist -->
-    <div style="flex:1;background:rgba(0,160,80,.10);border:1.5px solid rgba(0,200,100,.30);border-radius:8px;padding:8px 10px;text-align:center">
-      <div style="font-size:9px;font-weight:700;color:#00c864;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace">CK BUYLIST</div>
-      <div id="ck-price" style="font-size:22px;font-weight:900;color:#00c864;line-height:1.1;margin-top:3px" class="mono"></div>
-      <div style="font-size:9px;color:var(--text3);margin-top:2px;font-family:'JetBrains Mono',monospace">what CK pays you</div>
+    <div style="display:flex;gap:5px;align-items:center;padding-left:8px">
+      <button id="det-watch-btn" onclick="toggleWatchCurrent()" style="background:none;border:1px solid #2a2a2a;border-radius:16px;padding:3px 8px;color:#484848;font-size:13px">☆</button>
+      <button onclick="closeDetail()" style="background:none;border:none;color:#363654;font-size:26px;line-height:1">×</button>
     </div>
   </div>
+  <!-- Color identity + collection qty toggle -->
+  <div id="det-colors" style="display:flex;gap:5px;margin-top:7px;align-items:center;flex-wrap:wrap"></div>
+  <div id="det-val-toggle" style="display:none;gap:6px;margin-top:6px;align-items:center">
+    <span style="font-size:9px;color:#363654" class="mono">SHOW:</span>
+    <button class="tog-btn act" id="tog-single" onclick="setValMode('single')"></button>
+    <button class="tog-btn" id="tog-total" onclick="setValMode('total')"></button>
+  </div>
 
-  <!-- Spread verdict -->
-  <div id="spread-verdict" style="margin-top:6px;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.8px;text-align:center;font-family:'JetBrains Mono',monospace;display:none"></div>
+  <!-- ── DUAL PRICE PANEL ── -->
+  <div style="display:flex;margin-top:10px;background:var(--bg5);border-radius:10px;border:1px solid var(--border2);overflow:hidden">
 
-  <!-- Sparkline + prev price row -->
-  <div style="display:flex;gap:12px;margin-top:8px;align-items:center;justify-content:center">
-    <div>
-      <div id="det-pct-lbl" style="font-size:9px;color:var(--text3)" class="mono"></div>
-      <div style="display:flex;gap:10px;align-items:baseline">
-        <div><div style="font-size:9px;color:var(--text4)" class="mono">PREV</div><div id="st-prev" style="font-size:12px;font-weight:700;color:var(--text2)" class="mono"></div></div>
-        <div><div style="font-size:9px;color:var(--text4)" class="mono">DELTA</div><div id="st-delta" style="font-size:12px;font-weight:700" class="mono"></div></div>
-        <div><div style="font-size:9px;color:var(--text4)" class="mono">RARITY</div><div id="st-rar" style="font-size:12px;font-weight:700" class="mono"></div></div>
+    <!-- TCGPlayer side -->
+    <div style="flex:1;padding:9px 11px">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">
+        <div id="tcg-live-dot" style="width:6px;height:6px;border-radius:50%;background:#e8a800;flex-shrink:0"></div>
+        <span style="font-size:9px;color:#e8a800;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.8px">TCGPLAYER</span>
+        <span style="font-size:8px;color:var(--text4);font-family:'JetBrains Mono',monospace">MKT</span>
+      </div>
+      <div id="det-price" style="font-size:24px;font-weight:700;color:var(--title);line-height:1;font-family:'JetBrains Mono',monospace"></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+        <div id="det-pct" style="font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace"></div>
+        <div id="det-pct-lbl" style="font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace"></div>
+      </div>
+      <div style="margin-top:6px"><svg id="spark-svg" width="110" height="34" style="overflow:visible"></svg></div>
+      <div style="font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;margin-top:4px">
+        PREV <span id="st-prev" style="color:var(--text3)"></span>
+        &nbsp;· DELTA <span id="st-delta"></span>
       </div>
     </div>
-    <svg id="spark-svg" width="110" height="36" style="overflow:visible;flex-shrink:0"></svg>
+
+    <!-- VS divider -->
+    <div style="width:1px;background:linear-gradient(to bottom,transparent,var(--border3),var(--border3),transparent);position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <div style="position:absolute;background:var(--bg2);border:1px solid var(--border3);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text4);font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:-.5px">VS</div>
+    </div>
+
+    <!-- Card Kingdom side -->
+    <div style="flex:1;padding:9px 11px">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">
+        <div id="ck-live-dot" style="width:6px;height:6px;border-radius:50%;background:#4aa8e8;flex-shrink:0"></div>
+        <span style="font-size:9px;color:#4aa8e8;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.8px">CARD KINGDOM</span>
+        <span style="font-size:8px;color:var(--text4);font-family:'JetBrains Mono',monospace">BUY</span>
+      </div>
+      <!-- Cash / Credit toggle -->
+      <div style="display:flex;gap:4px;margin-bottom:5px">
+        <button id="ck-tog-cash" onclick="setCkValMode('cash')" style="padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;border:1px solid #1a7fc1;background:#1a7fc122;color:#4aa8e8;cursor:pointer;transition:all .15s">CASH</button>
+        <button id="ck-tog-credit" onclick="setCkValMode('credit')" style="padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;border:1px solid var(--border2);background:transparent;color:var(--text4);cursor:pointer;transition:all .15s">CREDIT</button>
+      </div>
+      <div id="ck-price" style="font-size:24px;font-weight:700;color:var(--title);line-height:1;font-family:'JetBrains Mono',monospace"></div>
+      <div id="ck-pct-mkt" style="font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-top:3px"></div>
+      <!-- CK retail comparison badge -->
+      <div id="ck-retail-row" style="margin-top:7px;display:flex;align-items:center;gap:6px">
+        <div style="background:#1a7fc115;border:1px solid #1a7fc144;border-radius:5px;padding:3px 7px;display:flex;gap:6px;align-items:center">
+          <span style="font-size:8px;color:var(--text4);font-family:'JetBrains Mono',monospace">CK RETAIL</span>
+          <span id="ck-retail-val" style="font-size:11px;font-weight:700;color:#4aa8e8;font-family:'JetBrains Mono',monospace"></span>
+        </div>
+        <span id="ck-not-buying" style="font-size:9px;color:#ff1744;font-family:'JetBrains Mono',monospace;display:none">NOT BUYING</span>
+      </div>
+      <div style="font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;margin-top:4px">
+        RARITY <span id="st-rar" style=""></span>
+      </div>
+    </div>
   </div>
 
-  <!-- hidden legacy ids so JS doesn't break -->
-  <span id="det-price-lbl" style="display:none"></span>
-  <span id="det-val-toggle" style="display:none"></span>
-  <span id="tog-single" style="display:none"></span>
-  <span id="tog-total" style="display:none"></span>
-  <span id="ck-spread-row" style="display:none"></span>
-  <span id="ck-tcg-val" style="display:none"></span>
-  <span id="ck-buylist-val" style="display:none"></span>
-  <span id="ck-spread-pct" style="display:none"></span>
-  <span id="ck-spread-summary" style="display:none"></span>
+  <!-- ── SPLIT ACTION BUTTONS ── -->
+  <div style="display:flex;margin-top:10px;border-radius:9px;overflow:hidden;border:1px solid var(--border2)">
+    <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer"
+      onclick="event.stopPropagation();trackBuyClick('tcg')"
+      style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:11px 8px;background:linear-gradient(135deg,#c47a00,#e8a800);color:#1a0e00;font-weight:700;font-size:11px;letter-spacing:1px;text-decoration:none;border-right:1px solid var(--border2);transition:filter .15s">
+      <div style="display:flex;align-items:center;gap:4px">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        BUY
+      </div>
+      <div style="font-size:8px;opacity:.75;letter-spacing:.5px">TCGPLAYER</div>
+      <div id="btn-tcg-price" style="font-size:13px;font-weight:900"></div>
+    </a>
+    <a id="ck-sell-link" href="#" target="_blank" rel="noopener noreferrer"
+      onclick="event.stopPropagation();trackBuyClick('ck')"
+      style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:11px 8px;background:linear-gradient(135deg,#0e4f7a,#1a7fc1);color:#e0f0ff;font-weight:700;font-size:11px;letter-spacing:1px;text-decoration:none;transition:filter .15s">
+      <div style="display:flex;align-items:center;gap:4px">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        SELL
+      </div>
+      <div style="font-size:8px;opacity:.75;letter-spacing:.5px">CARD KINGDOM</div>
+      <div id="btn-ck-price" style="font-size:13px;font-weight:900"></div>
+    </a>
+  </div>
 
-  <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer" class="buy-btn" onclick="event.stopPropagation();trackBuyClick()" style="flex-direction:column;gap:2px">
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span>BUY ON TCGPLAYER</span>
-    </div>
-    <div style="font-size:10px;font-weight:700;letter-spacing:2px;opacity:.60">AFFILIATE &nbsp;&middot;&nbsp; BEST PRICE</div>
-  </a>
-  <div id="buy-instruction" style="font-size:11px;color:var(--text3);text-align:center;margin-top:5px;line-height:1.7;font-weight:700;letter-spacing:.4px" class="mono"></div>
-  <script>
-    (function(){
-      var isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      var el=document.getElementById("buy-instruction");
-      if(el)el.textContent=isMobile?"Tap & hold to open in browser":"Click to open TCGPlayer in a new tab";
-    })();
-  </script>
+  <!-- Affiliate note -->
+  <div style="font-size:9px;color:var(--text4);text-align:center;margin-top:5px;line-height:1.7;font-family:'JetBrains Mono',monospace">
+    ⚠ Both links are affiliate links · Purchases support MTG Market Pulse
+  </div>
 </div>
 
-<!-- WATCHLIST OVERLAY -->
+<!-- IMPORT OVERLAY -->
+<div id="import-overlay" class="overlay" style="display:none">
+  <div class="ov-header"><div><div class="ov-title">◈ IMPORT COLLECTION</div><div class="ov-sub">One bubble per card · duplicates merged</div></div><button class="ov-close" onclick="hideOverlay('import-overlay')">×</button></div>
+  <div style="padding:7px 16px;background:#0a0a1a;border-bottom:1px solid #1e1e3a;flex-shrink:0"><div style="font-size:10px;color:#555574;line-height:1.9" class="mono">CSV: qty,name,set | Bare: 4x Rhystic Study [PCY] | 1 Sol Ring M13</div></div>
+  <div class="ov-body">
+    <div onclick="document.getElementById('file-in').click()" style="border:1px dashed #2a2a4a;border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:#0d0d20">
+      <div style="font-size:24px;opacity:.5;margin-bottom:4px">📁</div>
+      <div style="font-size:13px;font-weight:600;color:#888">TAP TO UPLOAD FILE</div>
+      <div style="font-size:10px;color:#363654;margin-top:2px" class="mono">.csv · .txt · .tsv</div>
+      <input id="file-in" type="file" accept=".csv,.txt,.tsv" style="display:none" onchange="handleFile(event)">
+    </div>
+    <div style="font-size:11px;color:#363654;text-align:center" class="mono">— OR PASTE / TYPE BELOW —</div>
+    <textarea id="import-txt" rows="7" placeholder="Quantity,Name,Set&#10;1,Rhystic Study,PCY&#10;4x Sol Ring [M13]&#10;1 Dockside Extortionist C21" oninput="updateImportPreview()" style="width:100%;background:#0d0d20;border:1px solid #1e1e3a;border-radius:6px;color:#c0c0d8;font-size:12px;padding:8px;resize:none;line-height:1.8"></textarea>
+    <div id="import-preview" style="display:none;background:#0d0d20;border-radius:8px;padding:10px 12px;border:1px solid #1e1e3a"></div>
+    <button id="import-load-btn" onclick="loadCollection()" disabled style="padding:12px;border-radius:8px;border:none;background:#1e1e3a;color:#484866;font-weight:700;font-size:14px;letter-spacing:1px">PROVIDE CARDS ABOVE FIRST</button>
+  </div>
+</div>
 
 <!-- WATCHLIST OVERLAY -->
 <div id="watch-overlay" class="overlay" style="display:none">
@@ -580,14 +610,16 @@ async function loadLiveData(){
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50, priceFilter="all", colorFilter="All", isLive=false;
+let mode="market", fmt="All", rar="All", tf="7D", valMode="single", ckValMode="cash", cardLimit=50, priceFilter="all", colorFilter="All", isLive=false;
 function updateLiveDot(){var d=document.getElementById("live-dot");if(!d)return;d.innerHTML=isLive?'<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#00e676;box-shadow:0 0 6px #00e676;display:inline-block"></span><span style="color:#00e676;font-weight:700">LIVE</span></span>':'<span style="color:var(--text3)">Demo Mode</span>';}
-let watchlist=[], currentCard=null;
+let collection=[], watchlist=[], currentCard=null;
+let parsedImport=[];
 // Load watchlist
 try{const s=localStorage.getItem("mtgwl");if(s)watchlist=JSON.parse(s);}catch{}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function saveWl(){try{localStorage.setItem("mtgwl",JSON.stringify(watchlist));}catch{}}
+function matchCard(name,set){const n=name.toLowerCase().trim(),s=set?.toLowerCase().trim();if(s){const e=NSM[`${n}|${s}`];if(e)return e;}return NM[n]||null;}
 function bGlow(c){if(!c||!c.length)return MC.C.f;return c.length>1?GG:(MC[c[0]]||MC.C).f;}
 function bStroke(c){if(!c||!c.length)return MC.C.s;return c.length>1?GS:(MC[c[0]]||MC.C).s;}
 
@@ -610,14 +642,14 @@ function parseList(text){
 function getActiveCards(){
   // Collection/watchlist use stored card data — not dependent on live CARDS array
   let src;
-  if(mode==="watchlist") src=watchlist.map(c=>({...c,qty:1})).filter(x=>x?.id);
+  if(mode==="collection") src=collection.filter(x=>x?.id);
+  else if(mode==="watchlist") src=watchlist.map(c=>({...c,qty:1})).filter(x=>x?.id);
   else src=CARDS;
   return src.filter(c=>fmt==="All"||(c.formats&&c.formats.includes(fmt))).filter(c=>rar==="All"||c.rarity===rar).filter(c=>priceFilter==="all"||(priceFilter==="under5"?c.price<5:c.price>=5)).filter(c=>colorFilter==="All"||(colorFilter==="Multi"?c.colors&&c.colors.length>1:c.colors&&c.colors.includes(colorFilter))).sort((a,b)=>b.absPct-a.absPct).slice(0,cardLimit);
 }
 
 // ── Physics ───────────────────────────────────────────────────────────────────
 let phyNodes=[], raf=null;
-let windAngle=Math.random()*Math.PI*2, windGust=0, windTarget=Math.random()*Math.PI*2, windNext=0;
 
 function initPhysics(cards){
   if(raf)cancelAnimationFrame(raf);
@@ -626,102 +658,79 @@ function initPhysics(cards){
   const svg=document.getElementById("bubble-svg");
   svg.setAttribute("width",W); svg.setAttribute("height",H);
   if(!cards.length){renderBubbles([]);updateEmptyState();return;}
-
   const maxAbs=Math.max(...cards.map(c=>c.absPct),1);
+  // Linear scale anchored at 0 — 0% change = smallest bubble, biggest mover = largest.
   const MIN_R=8, MAX_R=Math.min(W,H)*.14;
   const rs=d3.scaleLinear().domain([0,maxAbs]).range([MIN_R,MAX_R]).clamp(true);
-
-  // Spawn at random positions across the full screen
-  phyNodes=cards.map(c=>{
-    const r=Math.max(rs(c.absPct),MIN_R);
-    const nd={
-      ...c, r,
-      x: r + Math.random()*(W-r*2),
-      y: r + Math.random()*(H-r*2),
-      vx: (Math.random()-.5)*0.6,
-      vy: (Math.random()-.5)*0.6
-    };
-    nd.mass=nd.r*nd.r;
-    return nd;
+  phyNodes=cards.map((c,i)=>{
+    const a=(i/cards.length)*Math.PI*2,sp=Math.min(W,H)*.26;
+    const nd={...c,r:Math.max(rs(c.absPct),MIN_R),x:W/2+Math.cos(a)*sp,y:H/2+Math.sin(a)*sp,vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5};
+    nd.mass=nd.r*nd.r; return nd;
   });
-
   renderBubbles(phyNodes);
   updateEmptyState();
-
-  // ── Wind physics constants ─────────────────────────────────────────────
-  const GAP    = 2;     // breathing room between bubbles
-  const DAMP   = 0.978; // very light drag — floaty
-  const WIND_F = 0.055; // base wind push per frame
-  const TURB   = 0.018; // per-bubble turbulence
-  const MAX_V  = 1.4;   // max speed
-  const REPEL  = 0.12;  // soft collision impulse
-  const WALL_K = 0.055; // wall spring — gentle bounce
+  // Physics: edges touch, zero overlap
+  // GAP=1 gives a hair of visual breathing room without visible space
+  const GAP   = 1;     // 1px visual gap — edges appear to touch
+  const DAMP  = 0.88;  // strong drag — settles fast
+  const GRAV  = 0.006; // stronger gravity packs bubbles toward centre
+  const MAX_V = 1.0;   // slow drift
+  const NOISE = 0.012; // micro-jitter
+  const REPEL = 0.28;  // firm push — resolves overlaps decisively
+  const WALL_K= 0.10;  // wall spring
 
   function tick(){
     const W2=area.clientWidth||W, H2=area.clientHeight||H;
 
-    // Randomized wind direction timer
-    const now=Date.now();
-    if(!windNext||now>=windNext){
-      windTarget=Math.random()*Math.PI*2;
-      windNext=now+1800+Math.random()*2200; // shift every 1.8–4s
-    }
-    // Smoothly steer toward target angle (shortest arc)
-    let da=windTarget-windAngle;
-    if(da>Math.PI)da-=Math.PI*2; if(da<-Math.PI)da+=Math.PI*2;
-    windAngle+=da*0.028;
-    windGust=windGust*0.94+(Math.random()<0.015?Math.random()*0.22:0);
-    const wStr=WIND_F+windGust;
-    const wx=Math.cos(windAngle)*wStr;
-    const wy=Math.sin(windAngle)*wStr*0.72;
-
+    // ── Integrate each bubble ─────────────────────────────────────────────
     for(const n of phyNodes){
-      // Wind + per-bubble turbulence
-      n.vx += wx + (Math.random()-.5)*TURB;
-      n.vy += wy + (Math.random()-.5)*TURB;
-      // Damping
-      n.vx *= DAMP; n.vy *= DAMP;
-      // Speed cap
+      n.vx+=(Math.random()-.5)*NOISE;
+      n.vy+=(Math.random()-.5)*NOISE;
+      n.vx+=(W2/2-n.x)*GRAV;
+      n.vy+=(H2/2-n.y)*GRAV;
+      n.vx*=DAMP; n.vy*=DAMP;
       const sp=Math.hypot(n.vx,n.vy);
-      if(sp>MAX_V){n.vx=n.vx/sp*MAX_V; n.vy=n.vy/sp*MAX_V;}
+      if(sp>MAX_V){n.vx=n.vx/sp*MAX_V;n.vy=n.vy/sp*MAX_V;}
       n.x+=n.vx; n.y+=n.vy;
-      // Soft wall springs — bounce gently
+      // Soft wall springs
       const pad=n.r+GAP;
-      if(n.x<pad)      {n.vx+=(pad-n.x)*WALL_K; n.vx*=-0.35;}
-      if(n.x>W2-pad)   {n.vx-=(n.x-(W2-pad))*WALL_K; n.vx*=-0.35;}
-      if(n.y<pad)      {n.vy+=(pad-n.y)*WALL_K; n.vy*=-0.35;}
-      if(n.y>H2-pad)   {n.vy-=(n.y-(H2-pad))*WALL_K; n.vy*=-0.35;}
-      // Hard clamp
+      if(n.x<pad)      n.vx+=(pad-n.x)*WALL_K;
+      if(n.x>W2-pad)   n.vx-=(n.x-(W2-pad))*WALL_K;
+      if(n.y<pad)      n.vy+=(pad-n.y)*WALL_K;
+      if(n.y>H2-pad)   n.vy-=(n.y-(H2-pad))*WALL_K;
+      // Hard clamp — never exit screen
       n.x=Math.max(n.r+1,Math.min(W2-n.r-1,n.x));
       n.y=Math.max(n.r+1,Math.min(H2-n.r-1,n.y));
     }
 
-    // ── Soft bubble-bubble separation — 3 iterations, light touch ─────────
-    for(let iter=0;iter<3;iter++){
+    // ── Bubble-bubble separation — 6 iterations guarantees full resolution ──
+    for(let iter=0;iter<6;iter++){
       for(let i=0;i<phyNodes.length;i++){
         for(let j=i+1;j<phyNodes.length;j++){
           const a=phyNodes[i],b=phyNodes[j];
           const dx=b.x-a.x, dy=b.y-a.y;
           const dist2=dx*dx+dy*dy;
+          // Target distance = sum of radii + gap
           const target=a.r+b.r+GAP;
-          if(dist2>=target*target*1.02||dist2<0.001) continue;
+          if(dist2>=target*target||dist2<0.0001) continue;
           const dist=Math.sqrt(dist2);
           const nx=dx/dist, ny=dy/dist;
           const overlap=target-dist;
           const tm=a.mass+b.mass;
-          // Partial positional correction — leave a tiny bit of give
-          const ca=overlap*0.4*(b.mass/tm);
-          const cb=overlap*0.4*(a.mass/tm);
+          // FULL positional correction — push apart completely this frame
+          const ca=overlap*(b.mass/tm);
+          const cb=overlap*(a.mass/tm);
           a.x-=nx*ca; a.y-=ny*ca;
           b.x+=nx*cb; b.y+=ny*cb;
-          // Gentle velocity nudge
+          // Apply a gentle velocity push proportional to overlap
           const force=REPEL*(overlap/target);
-          a.vx-=nx*force*(b.mass/tm); a.vy-=ny*force*(b.mass/tm);
-          b.vx+=nx*force*(a.mass/tm); b.vy+=ny*force*(a.mass/tm);
+          a.vx-=nx*force*(b.mass/tm);
+          a.vy-=ny*force*(b.mass/tm);
+          b.vx+=nx*force*(a.mass/tm);
+          b.vy+=ny*force*(a.mass/tm);
         }
       }
     }
-
     for(const n of phyNodes){
       const g=document.querySelector(`[data-id="b${n.id}"]`);
       if(g)g.setAttribute("transform",`translate(${n.x.toFixed(1)},${n.y.toFixed(1)})`);
@@ -735,117 +744,139 @@ function renderBubbles(nodes){
   const svg=document.getElementById("bubble-svg");
   const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||460;
 
-  const TINT={W:"#ffe87a",U:"#4a9fef",B:"#b06aff",R:"#ff6a6a",G:"#4adc6a",C:"#aaccdd"};
-  const IRID=["#ff6ec7","#6ec7ff","#a0ff6e","#ffe06e","#c06eff"];
+  // Per-color light/dark variants for 3D sphere effect
+  const MCL={W:"#fffbe8",U:"#66aaee",B:"#cc88ff",R:"#ff7777",G:"#66cc66",C:"#ccdde8"};
+  const MCD={W:"#7a6e20",U:"#071830",B:"#1a0535",R:"#300505",G:"#051505",C:"#0e1820"};
 
-  function darkText(colors){
-    if(!colors||!colors.length)return false;
-    if(colors.length>1)return true;
-    return colors[0]==="W";
-  }
+  // Build per-color sphere gradients — deep 3D look
+  const colorGrads=Object.entries(MC).map(([k,{f}])=>{
+    const fl=MCL[k]||"#ffffff", fd=MCD[k]||"#050510";
+    return [
+      `<radialGradient id="g-${k}" cx="36%" cy="28%" r="75%" fx="34%" fy="24%">`,
+      `<stop offset="0%" stop-color="${fl}" stop-opacity=".92"/>`,
+      `<stop offset="18%" stop-color="${f}" stop-opacity="1"/>`,
+      `<stop offset="55%" stop-color="${f}" stop-opacity="1"/>`,
+      `<stop offset="82%" stop-color="${fd}" stop-opacity="1"/>`,
+      `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
+      `</radialGradient>`,
+      // Per-color glow gradient for outer ring
+      `<radialGradient id="gw-${k}" cx="50%" cy="50%" r="50%">`,
+      `<stop offset="60%" stop-color="${f}" stop-opacity="0"/>`,
+      `<stop offset="100%" stop-color="${f}" stop-opacity=".55"/>`,
+      `</radialGradient>`
+    ].join("");
+  }).join("");
 
-  const staticDefs=[
-    `<filter id="blur6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>`,
-    `<radialGradient id="gs" cx="30%" cy="22%" r="52%" fx="26%" fy="16%">`,
-    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".90"/>`,
-    `<stop offset="28%" stop-color="#ffffff" stop-opacity=".35"/>`,
-    `<stop offset="60%" stop-color="#ffffff" stop-opacity=".06"/>`,
-    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
-    `</radialGradient>`,
-    `<radialGradient id="gs2" cx="72%" cy="74%" r="26%">`,
-    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".30"/>`,
-    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
-    `</radialGradient>`,
-    ...(isDark ? [
-      `<radialGradient id="soap-base" cx="50%" cy="50%" r="50%">`,
-      `<stop offset="0%" stop-color="#000" stop-opacity="0"/>`,
-      `<stop offset="58%" stop-color="#000" stop-opacity="0"/>`,
-      `<stop offset="80%" stop-color="#06061a" stop-opacity=".14"/>`,
-      `<stop offset="100%" stop-color="#04041a" stop-opacity=".30"/>`,
-      `</radialGradient>`
-    ]:[
-      `<radialGradient id="soap-base" cx="50%" cy="50%" r="50%">`,
-      `<stop offset="0%" stop-color="#ffffff" stop-opacity=".06"/>`,
-      `<stop offset="52%" stop-color="#f0f0f0" stop-opacity=".04"/>`,
-      `<stop offset="80%" stop-color="#aaaaaa" stop-opacity=".16"/>`,
-      `<stop offset="100%" stop-color="#666666" stop-opacity=".30"/>`,
-      `</radialGradient>`
-    ])
+  // Multi-color sphere gradient
+  const multiGrad=[
+    `<radialGradient id="g-Multi" cx="36%" cy="28%" r="75%" fx="34%" fy="24%">`,
+    `<stop offset="0%" stop-color="#fffbe0" stop-opacity=".9"/>`,
+    `<stop offset="20%" stop-color="${GG}" stop-opacity="1"/>`,
+    `<stop offset="60%" stop-color="${GG}" stop-opacity="1"/>`,
+    `<stop offset="85%" stop-color="#3a2800" stop-opacity="1"/>`,
+    `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
+    `</radialGradient>`
   ].join("");
 
-  const seen={};
-  let rimDefs="";
-  nodes.forEach(n=>{
-    const colors=n.colors&&n.colors.length?n.colors:["C"];
-    const key=colors.length>1?"Multi":colors[0];
-    if(seen[key])return; seen[key]=1;
-    const tint=key==="Multi"?GG:(TINT[key]||TINT.C);
-    rimDefs+=[
-      `<radialGradient id="rim-${key}" cx="50%" cy="50%" r="50%">`,
-      `<stop offset="0%" stop-color="${tint}" stop-opacity="0"/>`,
-      `<stop offset="52%" stop-color="${tint}" stop-opacity="0"/>`,
-      `<stop offset="74%" stop-color="${tint}" stop-opacity=".07"/>`,
-      `<stop offset="87%" stop-color="${tint}" stop-opacity=".20"/>`,
-      `<stop offset="94%" stop-color="${tint}" stop-opacity=".38"/>`,
-      `<stop offset="100%" stop-color="#ffffff" stop-opacity=".15"/>`,
-      `</radialGradient>`,
-      `<linearGradient id="irid-${key}" x1="0%" y1="0%" x2="100%" y2="100%">`,
-      `<stop offset="0%" stop-color="${IRID[0]}" stop-opacity=".07"/>`,
-      `<stop offset="25%" stop-color="${IRID[1]}" stop-opacity=".09"/>`,
-      `<stop offset="50%" stop-color="${IRID[2]}" stop-opacity=".07"/>`,
-      `<stop offset="75%" stop-color="${IRID[3]}" stop-opacity=".06"/>`,
-      `<stop offset="100%" stop-color="${IRID[4]}" stop-opacity=".08"/>`,
-      `</linearGradient>`
-    ].join("");
-  });
+  // Specular highlight — bright white spot upper-left
+  const specGrad=[
+    `<radialGradient id="gs" cx="32%" cy="22%" r="44%" fx="28%" fy="16%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".92"/>`,
+    `<stop offset="35%" stop-color="#ffffff" stop-opacity=".38"/>`,
+    `<stop offset="70%" stop-color="#ffffff" stop-opacity=".06"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`
+  ].join("");
 
-  const defs=`<defs>${staticDefs}${rimDefs}</defs>`;
-  const bg=`<rect width="${W}" height="${H}" fill="var(--svg-bg)"/>`;
+  // Rim light bottom — subtle warm glow
+  const rimGrad=[
+    `<radialGradient id="gr" cx="50%" cy="92%" r="48%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".22"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`
+  ].join("");
+
+  // Glow blur filter
+  const glowFilter=[
+    `<filter id="glow" x="-60%" y="-60%" width="220%" height="220%">`,
+    `<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>`,
+    `<feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge>`,
+    `</filter>`
+  ].join("");
+
+  const defs=`<defs><pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="var(--dot)"/></pattern>${colorGrads}${multiGrad}${specGrad}${rimGrad}${glowFilter}</defs>`;
+  const bg=`<rect width="${W}" height="${H}" fill="var(--svg-bg)"/><rect width="${W}" height="${H}" fill="url(#dots)" opacity="${isDark?1:0}"/>`;
 
   const bubbles=nodes.map(n=>{
+    const pc=n.pct>=0?UP:DN;
     const colors=n.colors&&n.colors.length?n.colors:["C"];
-    const isM=colors.length>1;
-    const key=isM?"Multi":colors[0];
-    const tint=isM?GG:(TINT[colors[0]]||TINT.C);
-    const big=n.absPct>15;
-    const inW=watchlist.some(w=>w.id===n.id);
-    const useDark=darkText(colors);
+    const st=bStroke(colors), gw=bGlow(colors);
+    const isM=colors.length>1, big=n.absPct>15;
+    const gradId=isM?"Multi":(MC[colors[0]]?colors[0]:"C");
 
-    // In light mode background is pale — all bubbles need dark text
-    const forceDark = !isDark; // light mode = dark text on all; dark mode = always white
-    const textMain  = forceDark ? "#120800" : "#ffffff";
-    const textSub   = forceDark ? "rgba(18,8,0,.62)"  : "rgba(255,255,255,.72)";
-    const pctColor  = n.pct>=0
-      ? (forceDark ? "#005520" : UP)
-      : (forceDark ? "#880000" : DN);
-
-    const sn=n.r>26,ss=n.r>42,sl=n.r>55;
+    // Text sizing
+    const sn=n.r>26, ss=n.r>42, sl=n.r>55;
     const nf=Math.max(6,Math.min(n.r*.24,12));
     const pf=Math.max(7,Math.min(n.r*.3,15));
-    const ny=sn?-(pf*.75):0,py=sn?(pf*.72):(pf*.38),sy=py+nf*1.35;
+    const ny=sn?-(pf*.75):0, py=sn?(pf*.72):(pf*.38), sy=py+nf*1.25;
 
-    const halo=big?`<circle class="pulse" r="${n.r+7}" fill="none" stroke="${tint}" stroke-width=".9" opacity=".28"/>`:` `;
+    const inW=watchlist.some(w=>w.id===n.id);
+    const ds=n.requestedSet||n.set;
 
-    const star=inW?`<text x="${(n.r*.54).toFixed(1)}" y="${(-n.r*.54).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.2)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))">&#9733;</text>`:``;
+    // Outer glow — large blurred circle
+    const outerGlow=`<circle r="${n.r*1.55}" fill="none" stroke="${gw}" stroke-width="${n.r*.55}" opacity="${big?.28:.16}" style="filter:blur(${(n.r*.4).toFixed(0)}px)"/>`;
 
-    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py.toFixed(1)}" font-size="${pf.toFixed(1)}" font-weight="700" fill="${pctColor}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.45))">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
+    // Pulse rings for big movers
+    const halos=big
+      ?`<circle class="pulse" r="${n.r+10}" fill="none" stroke="${gw}" stroke-width="1.2" opacity=".45"/><circle class="pulse2" r="${n.r+22}" fill="none" stroke="${gw}" stroke-width=".7" opacity=".2"/>`
+      :``;
 
-    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny.toFixed(1)}" font-size="${nf.toFixed(1)}" font-weight="700" fill="${textMain}" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))">${n.name.length>14?n.name.slice(0,13)+"\u2026":n.name}</text>`:`<title>${n.name}</title>`;
+    // Multi-color pie slices as base before gradient overlay
+    let sliceBase=``;
+    if(isM){
+      colors.forEach((c,i)=>{
+        const nc=n.colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
+        const x1=(Math.cos(sa)*n.r).toFixed(1),y1=(Math.sin(sa)*n.r).toFixed(1);
+        const x2=(Math.cos(ea)*n.r).toFixed(1),y2=(Math.sin(ea)*n.r).toFixed(1);
+        sliceBase+=`<path d="M0 0L${x1} ${y1}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2} ${y2}Z" fill="${(MC[c]||MC.C).f}" opacity=".7"/>`;
+      });
+    }
 
-    const priceT=sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy.toFixed(1)}" font-size="${(nf*.82).toFixed(1)}" fill="${textSub}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">$${n.price.toFixed(2)}</text>`:``;
+    // Watchlist star
+    const star=inW?`<text x="${n.r*.58}" y="${-n.r*.58}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.2)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">★</text>`:``;
 
-    const setT=ss&&!sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy.toFixed(1)}" font-size="${(nf*.75).toFixed(1)}" fill="${textSub}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${n.requestedSet||n.set}]</text>`:``;
+    // Price change % text
+    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py}" font-size="${pf}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.9))">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
+
+    // Card name
+    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny}" font-size="${nf}" font-weight="700" fill="#ffffff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9))">${n.name.length>14?n.name.slice(0,13)+"…":n.name}</text>`:
+      `<title>${n.name}</title>`;
+
+    // Price text for large bubbles
+    const priceT=sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.82).toFixed(1)}" fill="rgba(255,255,255,.75)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))">$${n.price.toFixed(2)}</text>`:``;
+
+    // Set badge for medium+ bubbles
+    const setT=ss&&!sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.75).toFixed(1)}" fill="rgba(255,255,255,.5)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>`:``;
 
     return [
       `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">`,
-      halo,
-      `<circle r="${n.r}" fill="url(#soap-base)"/>`,
-      `<circle r="${n.r}" fill="url(#rim-${key})"/>`,
-      `<circle r="${n.r}" fill="url(#irid-${key})"/>`,
+      outerGlow,
+      halos,
+      // Deep dark base
+      `<circle r="${n.r}" fill="#04040e"/>`,
+      // Color pie slices for multi
+      sliceBase,
+      // Main 3D sphere gradient
+      `<circle r="${n.r}" fill="url(#g-${gradId})"/>`,
+      // Rim light bottom
+      `<circle r="${n.r}" fill="url(#gr)"/>`,
+      // Specular highlight top-left
       `<circle r="${n.r}" fill="url(#gs)"/>`,
-      `<circle r="${n.r}" fill="url(#gs2)"/>`,
-      `<circle r="${n.r}" fill="none" stroke="${tint}" stroke-width="${big?1.8:1.1}" opacity="${big?.60:.38}"/>`,
-      `<circle r="${n.r-.9}" fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".8"/>`,
+      // Colored border stroke
+      `<circle r="${n.r}" fill="none" stroke="${st}" stroke-width="${big?2.2:1.5}" opacity=".95"/>`,
+      // Gold inner ring for multi
+      isM?`<circle r="${n.r-2.5}" fill="none" stroke="${GG}" stroke-width=".7" opacity=".4"/>`:``,
+      // Text layers
       pctT, nameT, priceT, setT, star,
       `</g>`
     ].join("");
@@ -854,11 +885,10 @@ function renderBubbles(nodes){
   svg.innerHTML=defs+bg+bubbles;
 }
 
-
 // ── UI ────────────────────────────────────────────────────────────────────────
 function buildFilters(){
   const fmtRow=document.getElementById("fmt-row");
-  if(fmtRow)fmtRow.innerHTML=FMTS.map(f=>`<button class="pill${fmt===f?' active-g':''}" onclick="setFmt('${f}')" style="touch-action:manipulation;min-height:36px;padding:6px 14px">${f}</button>`).join("");
+  if(fmtRow)fmtRow.innerHTML=FMTS.map(f=>`<button class="pill${fmt===f?' active-g':''}" onclick="setFmt('${f}')">${f}</button>`).join("");
   const rarMap={All:"g",Mythic:"o",Rare:"y",Uncommon:"s",Common:"c"};
   const rarRow=document.getElementById("rar-row");
   if(rarRow)rarRow.innerHTML=RARS.map(r=>`<button class="pill${rar===r?` active-${rarMap[r]||'g'}`:''}" onclick="setRar('${r}')">${r}</button>`).join("");
@@ -868,7 +898,7 @@ function buildFilters(){
     cRow.innerHTML=colorBtns.map(([k,fill,stroke])=>{
       const isActive=colorFilter===k;
       const label=k==="All"?"ALL":k==="Multi"?"GOLD":k==="C"?"CLESS":k==="W"?"WHITE":k==="U"?"BLUE":k==="B"?"BLACK":k==="R"?"RED":"GREEN";
-      return `<button onclick="setColorFilter('${k}')" style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:16px;border:1.5px solid ${isActive?stroke:"var(--border2)"};background:${isActive?fill+"22":"transparent"};cursor:pointer;transition:all .15s;flex-shrink:0;touch-action:manipulation;min-height:36px"><svg width="9" height="9"><circle cx="4.5" cy="4.5" r="4.5" fill="${fill}"/></svg><span style="font-size:10px;font-weight:${isActive?"700":"500"};color:${isActive?fill:"var(--text4)"};font-family:'Barlow Condensed',sans-serif">${label}</span></button>`;
+      return `<button onclick="setColorFilter('${k}')" style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:16px;border:1.5px solid ${isActive?stroke:"var(--border2)"};background:${isActive?fill+"22":"transparent"};cursor:pointer;transition:all .15s;flex-shrink:0"><svg width="9" height="9"><circle cx="4.5" cy="4.5" r="4.5" fill="${fill}"/></svg><span style="font-size:10px;font-weight:${isActive?"700":"500"};color:${isActive?fill:"var(--text4)"};font-family:'Barlow Condensed',sans-serif">${label}</span></button>`;
     }).join("");
   }
 }
@@ -877,18 +907,24 @@ function updateStats(){
   const ac=getActiveCards();
   const g=ac.filter(c=>c.pct>=0).length,l=ac.filter(c=>c.pct<0).length;
   const avg=ac.length?(ac.reduce((s,c)=>s+c.pct,0)/ac.length).toFixed(1):"0.0";
-  document.getElementById("stat-gl").innerHTML=`<span style="color:${UP}">&#9650;${g}</span><span style="color:var(--text4)"> / </span><span style="color:${DN}">&#9660;${l}</span>`;
-  document.getElementById("stat-avg").innerHTML=`<span style="color:var(--text3)">AVG </span><span style="color:${+avg>=0?UP:DN}">${+avg>=0?"+":""}${avg}%</span>`;
+  document.getElementById("stat-gl").innerHTML=`<span style="color:${UP}">▲${g}</span><span style="color:var(--border3)">/</span><span style="color:${DN}">▼${l}</span>`;
+  document.getElementById("stat-avg").innerHTML=`<span style="color:var(--text5)">AVG </span><span style="color:${+avg>=0?UP:DN}">${+avg>=0?"+":""}${avg}%</span>`;
   const sv=document.getElementById("stat-val");
-  sv.style.display="none";
-  const mc={"market":"MARKET","watchlist":watchlist.length?`★ WATCH (${watchlist.length})`:"WATCH"};
-  const modeShort={"market":"MKT","watchlist":"WATCH"};
+  if(mode==="collection"&&collection.length){
+    const pv=collection.reduce((s,c)=>{const x=CARDS.find(d=>d.id===c.id);return s+(x?x.price*c.qty:0);},0);
+    const pd=collection.reduce((s,c)=>{const x=CARDS.find(d=>d.id===c.id);return s+(x?(x.price-x.prev)*c.qty:0);},0);
+    sv.innerHTML=`<span style="color:var(--text5)">VAL </span><span style="color:var(--title)">$${pv.toFixed(0)}</span><span style="color:${pd>=0?UP:DN};margin-left:3px">${pd>=0?"+":""}${pd.toFixed(0)}</span>`;
+    sv.style.display="";
+  } else sv.style.display="none";
+  const mc={"market":"MARKET","collection":collection.length?`MY CARDS (${collection.length})`:"MY CARDS","watchlist":watchlist.length?`★ WATCH (${watchlist.length})`:"★ WATCH"};
+  const modeShort={"market":"MKT","collection":"COLL","watchlist":"WATCH"};
   Object.entries(mc).forEach(([id,lbl])=>{
     const b=document.getElementById(`btn-${id}`);if(!b)return;
     b.textContent=lbl;
-    b.style.borderColor=mode===id?"var(--text)":"var(--border2)";
-    b.style.background=mode===id?"var(--text)":"transparent";
-    b.style.color=mode===id?"var(--bg)":"var(--text3)";
+    const cols={market:UP,collection:"#c084fc",watchlist:"#ffd700"};
+    b.style.borderColor=mode===id?cols[id]:`${cols[id]}44`;
+    b.style.background=mode===id?`${cols[id]}18`:"transparent";
+    b.style.color=mode===id?cols[id]:`${cols[id]}88`;
   });
   const fm=document.getElementById("fab-mode");
   if(fm)fm.textContent=modeShort[mode]||"MKT";
@@ -901,7 +937,8 @@ function updateEmptyState(){
   if(ac.length){es.style.display="none";return;}
   es.style.display="flex";
   const txt=document.getElementById("empty-text"),btn=document.getElementById("empty-btn");
-  if(mode==="watchlist"){txt.textContent="WATCHLIST EMPTY";btn.style.display="";btn.textContent="★ ADD CARDS";btn.style.color="#ffd700";btn.style.borderColor="#88840040";btn.style.background="#ffd70010";btn.onclick=()=>showOverlay("watch-overlay");}
+  if(mode==="collection"){txt.textContent="NO COLLECTION LOADED";btn.style.display="";btn.textContent="+ IMPORT";btn.style.color="#c084fc";btn.style.borderColor="#6b4fa0";btn.style.background="#6b4fa022";btn.onclick=()=>showOverlay("import-overlay");}
+  else if(mode==="watchlist"){txt.textContent="WATCHLIST EMPTY";btn.style.display="";btn.textContent="★ ADD CARDS";btn.style.color="#ffd700";btn.style.borderColor="#88840040";btn.style.background="#ffd70010";btn.onclick=()=>showOverlay("watch-overlay");}
   else{txt.textContent="NO CARDS MATCH FILTER";btn.style.display="none";}
 }
 
@@ -917,17 +954,19 @@ function setMode(m){
   closeDetail();
   if(sheetOpen)toggleSheet();
   gaEvent("mode_switch",{mode:m});
-  const modeLabels={market:"MKT",watchlist:"WATCH"};
+  const modeColors={market:"#00e676",collection:"#c084fc",watchlist:"#ffd700"};
+  const modeLabels={market:"MKT",collection:"COLL",watchlist:"WATCH"};
   const fm=document.getElementById("fab-mode");
-  if(fm){fm.textContent=modeLabels[m]||"MKT";fm.style.color="var(--fab-color)";}
+  if(fm){fm.textContent=modeLabels[m]||"MKT";fm.style.color=modeColors[m]||"var(--fab-color)";}
   refresh();
 }
 function clearCollection(){if(!collection.length)return;if(confirm("Clear your entire collection?")){collection=[];saveCol();setMode("market");}}
 function cycleMode(){
-  const modes=["market","watchlist"];
+  const modes=["market","collection","watchlist"];
   const next=modes[(modes.indexOf(mode)+1)%modes.length];
   setMode(next);
 }
+function collClick(){setMode("collection");}
 function setFmt(f){fmt=f;gaEvent("filter_format",{format:f});refresh();}
 function setCardLimit(v){cardLimit=parseInt(v);document.getElementById("card-limit-lbl").textContent=v+" cards";refresh();}
 function setColorFilter(v){colorFilter=v;gaEvent("filter_color",{color:v});buildFilters();initPhysics(getActiveCards());}
@@ -946,99 +985,100 @@ function setRar(r){rar=r;gaEvent("filter_rarity",{rarity:r});refresh();}
 function setTf(btn,t){tf=t;document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("act"));btn.classList.add("act");updateStats();}
 
 // ── Card Detail ───────────────────────────────────────────────────────────────
-function trackBuyClick(){
-  if(currentCard) gaEvent("buy_click",{card_name:currentCard.name,card_price:currentCard.price,card_pct:currentCard.pct,card_rarity:currentCard.rarity,value:currentCard.price});
-}
 function openCard(id){
   const _c=CARDS.find(x=>x.id===id)||phyNodes.find(x=>x.id===id);
   if(_c) gaEvent("card_view",{card_name:_c.name,card_price:_c.price,card_pct:_c.pct,card_set:_c.set,card_rarity:_c.rarity});
   const n=phyNodes.find(x=>x.id===id);if(!n)return;
-  currentCard=n; valMode="single";
+  currentCard=n; valMode="single"; ckValMode="cash";
   const det=document.getElementById("detail");
   det.style.display="block";
-  det.style.borderTop="1px solid var(--border2)";
-  det.style.boxShadow="0 -8px 40px rgba(0,0,0,.4)";
+  det.style.borderTop=`2px solid ${bStroke(n.colors&&n.colors.length?n.colors:['C'])}`;
+  det.style.boxShadow=`0 -24px 64px ${bGlow(n.colors&&n.colors.length?n.colors:['C'])}22`;
   document.getElementById("det-name").textContent=n.name;
-  document.getElementById("det-meta").innerHTML=`<span style="color:var(--text3)">${n.rarity.toUpperCase()}&nbsp;·&nbsp;[${n.requestedSet||n.set}]&nbsp;·&nbsp;${n.formats.slice(0,3).join(" · ")}</span>`;
+  document.getElementById("det-meta").innerHTML=`<span style="color:${RC[n.rarity]||'#c084fc'}">${n.rarity.toUpperCase()}</span> · <span style="color:var(--text2)">[${n.requestedSet||n.set}]</span> · ${n.formats.join(" · ")}`;
   const cc=document.getElementById("det-colors");
-  cc.innerHTML=n.colors.map(c=>`<div class="color-pip" style="background:${(MC[c]||MC.C).f}28;border:1px solid ${(MC[c]||MC.C).f}66"><svg width="8" height="8"><circle cx="4" cy="4" r="4" fill="${(MC[c]||MC.C).f}"/></svg><span style="color:var(--text2);font-size:10px">${(MC[c]||MC.C).l}</span></div>`).join("");
-  document.getElementById("det-val-toggle").style.display="none";
+  cc.innerHTML=`<span style="font-size:9px;color:var(--text4)" class="mono">IDENTITY:</span>`+
+    n.colors.map(c=>`<div class="color-pip" style="background:${(MC[c]||MC.C).f}22;border:1px solid ${(MC[c]||MC.C).s}"><svg width="7" height="7"><circle cx="3.5" cy="3.5" r="3.5" fill="${(MC[c]||MC.C).f}"/></svg><span style="color:${(MC[c]||MC.C).f}">${(MC[c]||MC.C).l}</span></div>`).join("")+
+    (n.qty>1?`<span style="font-size:10px;color:#c084fc" class="mono">×${n.qty} owned</span>`:"");
+  const tv=document.getElementById("det-val-toggle");
+  if(mode==="collection"&&(n.qty||1)>1){tv.style.display="flex";document.getElementById("tog-single").textContent=`1 COPY ($${n.price.toFixed(2)})`;document.getElementById("tog-total").textContent=`ALL ×${n.qty} ($${(n.price*n.qty).toFixed(2)})`;}
+  else tv.style.display="none";
   updateWatchBtn();
   renderDetail();
 }
 
+function trackBuyClick(src){
+  if(!currentCard)return;
+  gaEvent("buy_click",{source:src||"tcg",card_name:currentCard.name,card_price:currentCard.price,card_pct:currentCard.pct,card_rarity:currentCard.rarity,value:currentCard.price});
+}
+
 function renderDetail(){
   if(!currentCard)return;
-  const n=currentCard;
-  const dp=n.price, dpr=n.prev;
-  // TCG price + change
-  document.getElementById("det-price").textContent="$"+dp.toFixed(2);
-  const pc=n.pct>=0?UP:DN;
-  document.getElementById("det-pct").textContent=(n.pct>=0?"+":"")+n.pct.toFixed(2)+"%";
-  document.getElementById("det-pct").style.color=pc;
-  document.getElementById("det-pct-lbl").textContent=tf+" CHANGE";
-  // Prev / delta / rarity
-  document.getElementById("st-prev").textContent="$"+dpr.toFixed(2);
-  document.getElementById("st-delta").textContent=(n.pct>=0?"+":"-")+"$"+Math.abs(dp-dpr).toFixed(2);
-  document.getElementById("st-delta").style.color=pc;
-  document.getElementById("st-rar").textContent=n.rarity;
-  document.getElementById("st-rar").style.color="var(--text)";
-  // Buy link
+  const n=currentCard,isTotal=valMode==="total"&&(n.qty||1)>1;
+  const dp=isTotal?n.price*n.qty:n.price, dpr=isTotal?n.prev*n.qty:n.prev;
+  const pctColor=n.pct>=0?UP:DN;
+  const delta=dp-dpr;
+
+  // TCGPlayer side
+  document.getElementById("det-price").textContent=`$${dp.toFixed(2)}`;
+  document.getElementById("det-pct").textContent=`${n.pct>=0?"+":""}${n.pct.toFixed(2)}%`;
+  document.getElementById("det-pct").style.color=pctColor;
+  document.getElementById("det-pct-lbl").textContent=`${tf} CHG`;
+  document.getElementById("st-prev").textContent=`$${dpr.toFixed(2)}`;
+  document.getElementById("st-delta").textContent=`${delta>=0?"+":"-"}$${Math.abs(delta).toFixed(2)}`;
+  document.getElementById("st-delta").style.color=pctColor;
+  document.getElementById("btn-tcg-price").textContent=`$${dp.toFixed(2)}`;
   document.getElementById("buy-link").href=tcgUrl(n.name);
-  // Sparkline
-  drawSparkline(n.hist,n.pct>=0?UP:DN);
+  drawSparkline(n.hist,pctColor);
 
-  // ── CK Buylist + Spread ────────────────────────────────────────────────
-  const ckEl=document.getElementById("ck-price");
-  const spreadPctEl=document.getElementById("spread-pct");
-  const spreadSignalEl=document.getElementById("spread-signal");
-  const spreadArrowEl=document.getElementById("spread-arrow");
-  const verdictEl=document.getElementById("spread-verdict");
+  // CK side
+  const ckCash=n.ck_buy_cash, ckCredit=n.ck_buy_credit, ckRetail=n.ck_retail;
+  const hasCK=ckCash!=null&&ckCash>0;
+  const ckVal=ckValMode==="credit"?(ckCredit||ckCash*1.3):ckCash;
 
-  if(n.ckBuylist!=null&&n.ckBuylist>0){
-    ckEl.textContent="$"+n.ckBuylist.toFixed(2);
-    // Spread = TCG - CK (positive = TCG higher = normal/sell, small/negative = shortage/buy)
-    const spreadAmt=dp-n.ckBuylist;
-    const spreadPct=dp>0?(spreadAmt/dp*100):0;
-    spreadPctEl.textContent=(spreadPct>=0?"+":"")+spreadPct.toFixed(0)+"%";
-
-    let sigColor, sigLabel, verdictText, verdictBg, verdictBorder;
-    if(spreadPct<10){
-      sigColor="#ff6d00"; sigLabel="BUY";
-      verdictText="Small spread — CK near market price. Possible shortage or high demand.";
-      verdictBg="rgba(255,109,0,.12)"; verdictBorder="rgba(255,109,0,.35)";
-    } else if(spreadPct<25){
-      sigColor="#ffd600"; sigLabel="WATCH";
-      verdictText="Moderate spread — healthy market. Monitor for movement.";
-      verdictBg="rgba(255,214,0,.10)"; verdictBorder="rgba(255,214,0,.30)";
-    } else if(spreadPct<50){
-      sigColor="#00e676"; sigLabel="SELL";
-      verdictText="Wide spread — TCG market price significantly above CK buylist.";
-      verdictBg="rgba(0,230,118,.10)"; verdictBorder="rgba(0,230,118,.30)";
-    } else {
-      sigColor="#00e676"; sigLabel="SELL";
-      verdictText="Large gap — strong sell signal on TCGPlayer. CK buyout rate low.";
-      verdictBg="rgba(0,230,118,.12)"; verdictBorder="rgba(0,230,118,.32)";
-    }
-    spreadPctEl.style.color=sigColor;
-    spreadSignalEl.textContent=sigLabel;
-    spreadSignalEl.style.color=sigColor;
-    spreadArrowEl.style.color=sigColor;
-    verdictEl.style.display="block";
-    verdictEl.style.background=verdictBg;
-    verdictEl.style.border="1px solid "+verdictBorder;
-    verdictEl.style.color=sigColor;
-    verdictEl.textContent="$"+spreadAmt.toFixed(2)+" SPREAD  ·  "+verdictText;
+  if(hasCK){
+    document.getElementById("ck-price").textContent=`$${(ckVal||0).toFixed(2)}`;
+    const spreadPct=dp>0?Math.round((ckVal/dp)*100):0;
+    const spreadColor=spreadPct>=75?"#00e676":spreadPct>=55?"#ffd600":"#ff6d00";
+    document.getElementById("ck-pct-mkt").textContent=`${spreadPct}% OF MKT`;
+    document.getElementById("ck-pct-mkt").style.color=spreadColor;
+    document.getElementById("ck-retail-val").textContent=ckRetail?`$${ckRetail.toFixed(2)}`:"—";
+    document.getElementById("ck-retail-row").style.display="flex";
+    document.getElementById("ck-not-buying").style.display=n.ck_buying===false?"":"none";
+    document.getElementById("btn-ck-price").textContent=`$${(ckVal||0).toFixed(2)}`;
+    document.getElementById("ck-sell-link").href=`https://www.cardkingdom.com/catalog/buylist?search=${encodeURIComponent(n.name)}&utm_source=mtgmarketpulse&utm_medium=affiliate`;
+    document.getElementById("ck-sell-link").style.opacity="1";
+    document.getElementById("ck-sell-link").style.pointerEvents="";
   } else {
-    ckEl.textContent="—";
-    ckEl.style.color="var(--text3)";
-    spreadPctEl.textContent="N/A";
-    spreadPctEl.style.color="var(--text4)";
-    spreadSignalEl.textContent="";
-    spreadArrowEl.style.color="var(--text4)";
-    verdictEl.style.display="none";
+    document.getElementById("ck-price").textContent="N/A";
+    document.getElementById("ck-pct-mkt").textContent="NOT LISTED";
+    document.getElementById("ck-pct-mkt").style.color="var(--text4)";
+    document.getElementById("ck-retail-row").style.display="none";
+    document.getElementById("ck-not-buying").style.display="none";
+    document.getElementById("btn-ck-price").textContent="N/A";
+    document.getElementById("ck-sell-link").style.opacity=".4";
+    document.getElementById("ck-sell-link").style.pointerEvents="none";
+    document.getElementById("ck-sell-link").removeAttribute("href");
   }
+
+  // CK toggle button states
+  document.getElementById("ck-tog-cash").style.borderColor=ckValMode==="cash"?"#1a7fc1":"var(--border2)";
+  document.getElementById("ck-tog-cash").style.background=ckValMode==="cash"?"#1a7fc122":"transparent";
+  document.getElementById("ck-tog-cash").style.color=ckValMode==="cash"?"#4aa8e8":"var(--text4)";
+  document.getElementById("ck-tog-credit").style.borderColor=ckValMode==="credit"?"#1a7fc1":"var(--border2)";
+  document.getElementById("ck-tog-credit").style.background=ckValMode==="credit"?"#1a7fc122":"transparent";
+  document.getElementById("ck-tog-credit").style.color=ckValMode==="credit"?"#4aa8e8":"var(--text4)";
+
+  // Rarity
+  document.getElementById("st-rar").textContent=n.rarity;
+  document.getElementById("st-rar").style.color=RC[n.rarity]||"#c084fc";
+
+  // collection tog buttons
+  document.getElementById("tog-single").className="tog-btn"+(valMode==="single"?" act":"");
+  document.getElementById("tog-total").className="tog-btn"+(valMode==="total"?" act":"");
 }
+
+function setCkValMode(v){ckValMode=v;renderDetail();}
 function setValMode(v){valMode=v;renderDetail();}
 
 function drawSparkline(data,color){
@@ -1072,7 +1112,28 @@ function showOverlay(id){document.getElementById(id).style.display="flex";}
 function hideOverlay(id){document.getElementById(id).style.display="none";}
 
 // ── Import ────────────────────────────────────────────────────────────────────
+function handleFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{document.getElementById("import-txt").value=ev.target.result;updateImportPreview();};r.readAsText(f);}
 
+function updateImportPreview(){
+  const txt=document.getElementById("import-txt").value;
+  parsedImport=parseList(txt);
+  const prev=document.getElementById("import-preview"),btn=document.getElementById("import-load-btn");
+  if(!parsedImport.length){prev.style.display="none";btn.disabled=true;btn.style.background="#1e1e3a";btn.style.color="#484866";btn.textContent="PROVIDE CARDS ABOVE FIRST";return;}
+  prev.style.display="block";
+  const chips=parsedImport.slice(0,9).map(c=>{const cl=MC[c.colors[0]]||MC.C;return`<span class="chip" style="background:${cl.f}22;border:1px solid ${cl.s};color:${cl.f}">${c.name} <span style="opacity:.6;font-size:9px;font-family:'JetBrains Mono',monospace">[${c.requestedSet||c.set}]</span>${c.qty>1?` ×${c.qty}`:''}</span>`;}).join("")+(parsedImport.length>9?`<span style="font-size:10px;color:#484866">+${parsedImport.length-9} more</span>`:"");
+  prev.innerHTML=`<div style="font-size:13px;color:${UP};font-weight:600;margin-bottom:8px">✓ ${parsedImport.length} unique card${parsedImport.length!==1?"s":""} matched</div><div style="display:flex;flex-wrap:wrap;gap:4px">${chips}</div>`;
+  btn.disabled=false; btn.style.background="linear-gradient(135deg,#7a3abf,#4a1a8f)"; btn.style.color="#fff";
+  btn.textContent=`LOAD ${parsedImport.length} CARD${parsedImport.length!==1?"S":""} →`;
+}
+
+function loadCollection(){
+  if(!parsedImport.length)return;
+  collection=parsedImport; parsedImport=[];
+  document.getElementById("import-txt").value="";
+  document.getElementById("import-preview").style.display="none";
+  hideOverlay("import-overlay");
+  setMode("collection");
+}
 
 // ── Watchlist panel ───────────────────────────────────────────────────────────
 function updateWatchSearch(){
