@@ -52,39 +52,39 @@
 <style>
 /* ── CSS variables — dark (default) ──────────────────────────────────── */
 :root{
-  --bg:#07070f;--bg2:#0c0c1e;--bg3:#0e0e22;--bg4:#13132a;--bg5:#0d0d20;
-  --border:#141424;--border2:#1e1e3a;--border3:#2a2a4a;
-  --text:#e0e0e0;--text2:#a0a0c0;--text3:#484866;--text4:#363654;--text5:#555574;
-  --title:#ffffff;--sub:#363654;
-  --dot:#161628;
-  --svg-bg:#07070f;
-  --panel-bg:#0c0c1efa;
-  --pill-bg:transparent;--pill-border:#181828;--pill-color:#484866;
-  --sheet-bg:#0c0c1ef8;
-  --stat-bg:#13132a;
-  --disc-bg:#141428;
-  --input-bg:#0d0d20;--input-border:#2a2a4a;
-  --wl-bg:#0d0d20;
-  --aff-bg:#0a0a18;
-  --fab-bg:#0e0e22dd;--fab-border:#2a2a4a;--fab-color:#aaaacc;
+  --bg:#080808;--bg2:#111111;--bg3:#141414;--bg4:#1a1a1a;--bg5:#0f0f0f;
+  --border:#1e1e1e;--border2:#282828;--border3:#333333;
+  --text:#ffffff;--text2:#cccccc;--text3:#888888;--text4:#555555;--text5:#666666;
+  --title:#ffffff;--sub:#555555;
+  --dot:#1a1a1a;
+  --svg-bg:#080808;
+  --panel-bg:#111111fa;
+  --pill-bg:transparent;--pill-border:#2a2a2a;--pill-color:#aaaaaa;
+  --sheet-bg:#111111f8;
+  --stat-bg:#1a1a1a;
+  --disc-bg:#141414;
+  --input-bg:#0f0f0f;--input-border:#333333;
+  --wl-bg:#0f0f0f;
+  --aff-bg:#0a0a0a;
+  --fab-bg:#111111dd;--fab-border:#2a2a2a;--fab-color:#cccccc;
   --theme-icon:"🌙";
 }
 body.light{
-  --bg:#f2f2f8;--bg2:#ffffff;--bg3:#f8f8ff;--bg4:#e8e8f4;--bg5:#ededf8;
-  --border:#d0d0e8;--border2:#c0c0dc;--border3:#b0b0d0;
-  --text:#1a1a3a;--text2:#3a3a5a;--text3:#6060a0;--text4:#5050a0;--text5:#7070b0;
-  --title:#0a0a2a;--sub:#6060a0;
+  --bg:#f0f0f0;--bg2:#ffffff;--bg3:#f8f8f8;--bg4:#e8e8e8;--bg5:#ebebeb;
+  --border:#d0d0d0;--border2:#b8b8b8;--border3:#999999;
+  --text:#000000;--text2:#222222;--text3:#555555;--text4:#777777;--text5:#888888;
+  --title:#000000;--sub:#555555;
   --dot:transparent;
-  --svg-bg:#f2f2f8;
+  --svg-bg:#f0f0f0;
   --panel-bg:#fffffffa;
-  --pill-bg:transparent;--pill-border:#c0c0dc;--pill-color:#6060a0;
-  --sheet-bg:#f8f8fff8;
-  --stat-bg:#e8e8f4;
-  --disc-bg:#eeeef8;
-  --input-bg:#f8f8ff;--input-border:#c0c0dc;
-  --wl-bg:#f8f8ff;
-  --aff-bg:#eeeef8;
-  --fab-bg:#ffffffee;--fab-border:#c0c0dc;--fab-color:#5050a0;
+  --pill-bg:#ffffff;--pill-border:#aaaaaa;--pill-color:#111111;
+  --sheet-bg:#f8f8f8f8;
+  --stat-bg:#e4e4e4;
+  --disc-bg:#eeeeee;
+  --input-bg:#f8f8f8;--input-border:#aaaaaa;
+  --wl-bg:#f8f8f8;
+  --aff-bg:#eeeeee;
+  --fab-bg:#fffffff0;--fab-border:#aaaaaa;--fab-color:#000000;
   --theme-icon:"☀️";
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -115,6 +115,15 @@ input,textarea{outline:none;font-family:'JetBrains Mono',monospace}
   font-family:'Barlow Condensed',sans-serif;
 }
 .fab-btn:hover{background:rgba(128,128,200,.15)}
+body.light .fab-btn{color:#000000}
+body.light .sheet-close{color:#333333}
+body.light .sheet-title{color:#000000}
+body.light .ov-title{color:#000000}
+body.light .sheet-label{color:#444444}
+body.light #stat-bar span{color:#000000!important}
+body.light .mode-btn{color:#111111;border-color:#aaaaaa}
+body.light .tf-btn{color:#111111;border-color:#aaaaaa}
+body.light .tf-btn.act{border-color:#000000;background:rgba(0,0,0,.08);color:#000000}
 .fab-divider{width:1px;height:18px;background:var(--fab-border);flex-shrink:0}
 
 /* Theme node toggle */
@@ -161,25 +170,23 @@ input,textarea{outline:none;font-family:'JetBrains Mono',monospace}
 .sheet-body{overflow-y:auto;padding:10px 0 20px;flex:1}
 
 /* Rows inside sheet */
-.sheet-row{padding:6px 16px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;overflow-x:auto}
+.sheet-row{padding:6px 16px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;overflow-x:auto;justify-content:center}
 .sheet-label{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;letter-spacing:1px;flex-shrink:0;min-width:52px}
 .sheet-divider{height:1px;background:var(--border);margin:4px 0}
 
 /* Pills */
-.pill{padding:3px 12px;border-radius:20px;border:1px solid var(--pill-border);background:var(--pill-bg);color:var(--pill-color);font-size:12px;font-weight:600;white-space:nowrap;letter-spacing:.4px;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
-.pill.active-g{border-color:#00e676;background:#00e67618;color:#00e676}
-.pill.active-p{border-color:#c084fc;background:#c084fc18;color:#c084fc}
-.pill.active-o{border-color:#ff6d00;background:#ff6d0018;color:#ff6d00}
-.pill.active-y{border-color:#ffd600;background:#ffd60018;color:#ffd600}
-.pill.active-s{border-color:#b0bec5;background:#b0bec518;color:#b0bec5}
-.pill.active-c{border-color:#90a4ae;background:#90a4ae18;color:#90a4ae}
+.pill{padding:6px 14px;border-radius:20px;border:1.5px solid var(--pill-border);background:var(--pill-bg);color:var(--pill-color);font-size:12px;font-weight:700;white-space:nowrap;letter-spacing:.4px;font-family:'Barlow Condensed',sans-serif;transition:all .15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;min-height:36px}
+
+.pill.active-g,.pill.active-p,.pill.active-o,.pill.active-y,.pill.active-s,.pill.active-c{
+  border-color:var(--text);background:var(--text);color:var(--bg);
+}
 
 /* Mode buttons */
-.mode-btn{padding:5px 13px;border-radius:20px;border:1px solid var(--border2);background:var(--pill-bg);font-size:12px;font-weight:700;color:var(--text3);transition:all .15s}
+.mode-btn{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border2);background:transparent;font-size:12px;font-weight:700;color:var(--text3);transition:all .15s;touch-action:manipulation;cursor:pointer;font-family:'Barlow Condensed',sans-serif}
 
 /* TF buttons */
 .tf-btn{padding:2px 9px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:11px;font-family:'JetBrains Mono',monospace;border-radius:3px;transition:all .15s}
-.tf-btn.act{border-color:#6b4fa0;background:#6b4fa022;color:#c084fc}
+.tf-btn.act{border-color:var(--text);background:var(--text);color:var(--bg)}
 
 /* Stats bar inside sheet */
 #stat-bar{display:flex;gap:14px;padding:6px 16px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
@@ -202,66 +209,31 @@ body.light .overlay{background:rgba(240,240,248,.97)}
 @keyframes pg{0%,100%{opacity:.32}50%{opacity:.08}}
 .pulse{animation:pg 2.6s ease-in-out infinite}
 .pulse2{animation:pg 2.6s ease-in-out infinite;animation-delay:.55s}
-.buy-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:8px;border:none;background:linear-gradient(135deg,#e8a800,#c47a00);color:#1a0e00;font-weight:700;font-size:14px;text-decoration:none;margin-top:10px;letter-spacing:1px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.buy-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:18px 14px;border-radius:12px;border:none;background:linear-gradient(135deg,#ffcc00,#e8a800,#c47a00);color:#1a0e00;font-weight:900;font-size:20px;text-decoration:none;margin-top:12px;letter-spacing:2px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;box-shadow:0 0 32px #e8a80066,0 4px 16px rgba(0,0,0,.4);position:relative;overflow:hidden;text-shadow:0 1px 2px rgba(255,255,255,.2)}
+.buy-btn::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.18) 0%,transparent 60%);pointer-events:none}
+.buy-btn:active{transform:scale(.97);box-shadow:0 0 16px #e8a80044}
 .stat-tile{flex:1;background:var(--stat-bg);border-radius:7px;padding:7px 10px}
-.stat-lbl{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
-.stat-val{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-top:3px}
+body.light .stat-tile{background:#e4e4e4;border:1px solid #cccccc}
+body.light #det-name{color:#000000!important}
+body.light #det-meta{color:#555555!important}
+body.light #det-price{color:#000000!important}
+body.light #detail{background:#ffffff;border-top:1px solid #cccccc!important;box-shadow:0 -8px 40px rgba(0,0,0,.12)!important}
+body.light #settings-sheet,body.light #watch-overlay,body.light #search-overlay{background:#f8f8f8}
+.stat-lbl{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-align:center}
+.stat-val{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-top:3px;text-align:center}
 .color-pip{display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px}
 .color-pip span{font-size:10px;font-weight:600;font-family:'Barlow Condensed',sans-serif}
 .chip{padding:2px 8px;border-radius:10px;font-size:10px;font-family:'Barlow Condensed',sans-serif;display:inline-flex;align-items:center;gap:4px}
 .wl-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wl-bg);border-radius:8px;border:1px solid var(--border2);margin-bottom:4px}
 .disc-box{background:var(--disc-bg);border-radius:8px;padding:10px 12px;border:1px solid var(--border3);font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:12px}
 .tog-btn{padding:3px 9px;border-radius:4px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;border:1px solid var(--border2);background:transparent;color:var(--text3)}
-.tog-btn.act{border-color:#c084fc;background:#c084fc22;color:#c084fc}
+.tog-btn.act{border-color:var(--text);background:var(--text);color:var(--bg)}
 .empty-state{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
 .empty-icon{font-size:32px;opacity:.2}
 .empty-text{font-size:14px;color:var(--text3);letter-spacing:1px}
 .empty-btn{padding:10px 24px;border-radius:20px;font-size:13px;font-weight:700;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px}
 @keyframes orb{0%,100%{transform:scale(1) translate(0,0);}50%{transform:scale(1.15) translate(12px,-12px);}}
 @keyframes pulse-ring{0%{transform:scale(.92);opacity:.7;}100%{transform:scale(1.08);opacity:.2;}}
-
-/* ── Starfield ────────────────────────────────────────────────────────── */
-#starfield{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-.star{
-  position:absolute;
-  background:white;
-  clip-path:polygon(50% 0%,53% 44%,100% 50%,53% 56%,50% 100%,47% 56%,0% 50%,47% 44%);
-  animation:star-twinkle linear infinite;
-  transform-origin:center;
-}
-.star.gold{background:#ffd700}
-.star.blue{background:#88ccff}
-.star.white{background:#eeeeff}
-@keyframes star-twinkle{
-  0%,100%{opacity:0;transform:scale(.3) rotate(0deg)}
-  30%{opacity:0;transform:scale(.3) rotate(0deg)}
-  50%{opacity:.85;transform:scale(1) rotate(45deg)}
-  70%{opacity:0;transform:scale(.3) rotate(90deg)}
-}
-/* ── Quick Filters (top-right) ───────────────────────────────────────── */
-#quick-filters{
-  position:absolute;top:14px;right:14px;z-index:60;
-  display:flex;flex-direction:column;gap:5px;align-items:flex-end;
-}
-.qf-pill{
-  display:flex;gap:4px;align-items:center;
-  background:var(--fab-bg);border:1px solid var(--fab-border);
-  border-radius:20px;padding:5px 8px;backdrop-filter:blur(12px);
-  box-shadow:0 2px 12px rgba(0,0,0,.3);
-}
-.qf-btn{
-  width:22px;height:22px;border-radius:50%;
-  border:1.5px solid transparent;background:transparent;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .15s;flex-shrink:0;padding:0;
-}
-.qf-btn.active{transform:scale(1.15)}
-.qf-rar-btn{
-  padding:2px 7px;border-radius:10px;border:1px solid transparent;
-  background:transparent;cursor:pointer;font-size:10px;font-weight:700;
-  font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;
-  transition:all .15s;color:var(--text4);flex-shrink:0;
-}
 </style>
 
 <!-- Google Analytics 4 — replace G-1V6XRZM84Q with your Measurement ID from analytics.google.com -->
@@ -280,13 +252,7 @@ body.light .overlay{background:rgba(240,240,248,.97)}
 
 <!-- BUBBLE AREA — full screen canvas -->
 <div id="bubble-area" onclick="closeDetail()">
-  <div id="starfield"></div>
-  <svg id="bubble-svg" style="position:relative;z-index:1"></svg>
-  <!-- ── Quick Filters — top right ── -->
-  <div id="quick-filters" onclick="event.stopPropagation()">
-    <div class="qf-pill" id="qf-color-row"></div>
-    <div class="qf-pill" id="qf-rar-row"></div>
-  </div>
+  <svg id="bubble-svg"></svg>
   <div class="empty-state" id="empty-state" style="display:none">
     <div class="empty-icon">◈</div>
     <div class="empty-text" id="empty-text">NO CARDS MATCH</div>
@@ -341,7 +307,7 @@ body.light .overlay{background:rgba(240,240,248,.97)}
   <div class="sheet-handle" onclick="toggleSheet()"><div class="sheet-handle-bar"></div></div>
 
   <!-- Sheet header -->
-  <div class="sheet-hdr">
+  <div class="sheet-hdr" style="justify-content:center;text-align:center;flex-direction:column;gap:4px;align-items:center">
     <div>
       <div class="sheet-title">◈ MTG MARKET PULSE</div>
       <div style="font-size:10px;color:var(--text4);font-family:'JetBrains Mono',monospace;margin-top:2px" id="hdr-sub">Loading live data...</div>
@@ -369,29 +335,22 @@ body.light .overlay{background:rgba(240,240,248,.97)}
       <button class="mode-btn" id="btn-watchlist" onclick="setMode('watchlist')">★ WATCH</button>
     </div>
 
-    <!-- Import / edit -->
-    <div class="sheet-row" style="padding-top:2px;padding-bottom:6px">
-      <span class="sheet-label"></span>
-      <button onclick="showOverlay('import-overlay')" style="padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:11px" class="mono">+ IMPORT COLLECTION</button>
-      
-    </div>
-
-    <div class="sheet-divider"></div>
+        <div class="sheet-divider"></div>
 
     <!-- Format filter -->
     <div class="sheet-row" style="flex-wrap:wrap">
       <span class="sheet-label">FORMAT</span>
-      <div id="fmt-row" style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto"></div>
+      <div id="fmt-row" style="display:flex;gap:5px;flex-wrap:wrap;overflow-x:auto;justify-content:center"></div>
     </div>
 
     <!-- Rarity filter -->
     <div class="sheet-row">
       <span class="sheet-label">RARITY</span>
-      <div id="rar-row" style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto"></div>
+      <div id="rar-row" style="display:flex;gap:5px;flex-wrap:wrap;overflow-x:auto;justify-content:center"></div>
     </div>
 
     <!-- Price tier toggle -->
-    <div class="sheet-row" style="align-items:center;gap:6px;flex-wrap:nowrap">
+    <div class="sheet-row" style="align-items:center;gap:6px;flex-wrap:wrap;justify-content:center">
       <span class="sheet-label">PRICE</span>
       <button class="price-tier-btn" data-tier="all" onclick="setPriceFilter('all')"
         style="padding:3px 12px;border-radius:20px;border:1px solid #00e676;background:#00e67618;color:#00e676;font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;transition:all .15s">ALL</button>
@@ -404,13 +363,13 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <!-- Color legend -->
     <div class="sheet-row" style="flex-wrap:wrap;gap:8px">
       <span class="sheet-label">COLOR</span>
-      <div id="color-row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"></div>
+      <div id="color-row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center"></div>
     </div>
 
     <div class="sheet-divider"></div>
 
     <!-- Card count slider -->
-    <div class="sheet-row" style="align-items:center;gap:10px;flex-wrap:nowrap">
+    <div class="sheet-row" style="align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
       <span class="sheet-label">SHOW</span>
       <input type="range" id="card-limit-slider" min="10" max="100" step="5" value="50"
         oninput="setCardLimit(this.value)"
@@ -421,7 +380,7 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <div class="sheet-divider"></div>
 
     <!-- Theme toggle row -->
-    <div class="sheet-row" style="align-items:center;gap:10px">
+    <div class="sheet-row" style="align-items:center;gap:10px;justify-content:center">
       <span class="sheet-label">THEME</span>
       <div id="theme-node-sheet" onclick="toggleTheme()" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--pill-bg)">
         <span id="theme-icon-sheet" style="font-size:16px">🌙</span>
@@ -478,47 +437,91 @@ body.light .overlay{background:rgba(240,240,248,.97)}
 </div>
 
 <!-- DETAIL PANEL -->
-<div id="detail" style="display:none" onclick="event.stopPropagation()">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start">
-    <div style="flex:1;min-width:0">
-      <div id="det-name" style="font-size:20px;font-weight:700;color:var(--title);line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
-      <div id="det-meta" style="font-size:11px;color:var(--text3);margin-top:3px" class="mono"></div>
+<div id="detail" style="display:none;position:relative" onclick="event.stopPropagation()">
+  <!-- close / watch buttons — absolute top-right -->
+  <div style="position:absolute;top:12px;right:14px;display:flex;gap:5px;align-items:center">
+    <button id="det-watch-btn" onclick="toggleWatchCurrent()" style="background:none;border:1px solid var(--border2);border-radius:16px;padding:3px 8px;color:var(--text3);font-size:14px">&#9734;</button>
+    <button onclick="closeDetail()" style="background:none;border:none;color:var(--text3);font-size:26px;line-height:1">&times;</button>
+  </div>
+
+  <!-- Card name + meta -->
+  <div style="text-align:center;padding-right:72px">
+    <div id="det-name" style="font-size:20px;font-weight:700;color:var(--title);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+    <div id="det-meta" style="font-size:10px;color:var(--text3);margin-top:2px" class="mono"></div>
+  </div>
+
+  <!-- Color identity -->
+  <div id="det-colors" style="display:flex;gap:5px;margin-top:6px;align-items:center;flex-wrap:wrap;justify-content:center"></div>
+
+  <!-- ── PRICE COMPARISON — always visible ─────────────────────────────── -->
+  <div style="display:flex;gap:6px;margin-top:10px">
+    <!-- TCGPlayer market -->
+    <div style="flex:1;background:rgba(46,109,176,.13);border:1.5px solid rgba(46,109,176,.40);border-radius:8px;padding:8px 10px;text-align:center">
+      <div style="font-size:9px;font-weight:700;color:#66aaee;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace">TCG MARKET</div>
+      <div id="det-price" style="font-size:22px;font-weight:900;color:var(--title);line-height:1.1;margin-top:3px" class="mono"></div>
+      <div id="det-pct" style="font-size:12px;font-weight:700;margin-top:2px" class="mono"></div>
     </div>
-    <div style="display:flex;gap:5px;align-items:center;padding-left:8px">
-      <button id="det-watch-btn" onclick="toggleWatchCurrent()" style="background:none;border:1px solid #2a2a2a;border-radius:16px;padding:3px 8px;color:#484848;font-size:13px">☆</button>
-      <button onclick="closeDetail()" style="background:none;border:none;color:#363654;font-size:26px;line-height:1">×</button>
+
+    <!-- Spread column -->
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex-shrink:0;min-width:44px">
+      <div id="spread-arrow" style="font-size:18px;line-height:1">&#8644;</div>
+      <div id="spread-pct" style="font-size:11px;font-weight:900;font-family:'JetBrains Mono',monospace;text-align:center"></div>
+      <div id="spread-signal" style="font-size:8px;font-weight:700;letter-spacing:.8px;font-family:'JetBrains Mono',monospace;text-align:center"></div>
+    </div>
+
+    <!-- CK Buylist -->
+    <div style="flex:1;background:rgba(0,160,80,.10);border:1.5px solid rgba(0,200,100,.30);border-radius:8px;padding:8px 10px;text-align:center">
+      <div style="font-size:9px;font-weight:700;color:#00c864;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace">CK BUYLIST</div>
+      <div id="ck-price" style="font-size:22px;font-weight:900;color:#00c864;line-height:1.1;margin-top:3px" class="mono"></div>
+      <div style="font-size:9px;color:var(--text3);margin-top:2px;font-family:'JetBrains Mono',monospace">what CK pays you</div>
     </div>
   </div>
-  <div id="det-colors" style="display:flex;gap:5px;margin-top:7px;align-items:center;flex-wrap:wrap"></div>
-  <div id="det-val-toggle" style="display:none;gap:6px;margin-top:8px;align-items:center">
-    <span style="font-size:9px;color:#363654" class="mono">SHOW:</span>
-    <button class="tog-btn act" id="tog-single" onclick="setValMode('single')"></button>
-    <button class="tog-btn" id="tog-total" onclick="setValMode('total')"></button>
+
+  <!-- Spread verdict -->
+  <div id="spread-verdict" style="margin-top:6px;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.8px;text-align:center;font-family:'JetBrains Mono',monospace;display:none"></div>
+
+  <!-- Sparkline + prev price row -->
+  <div style="display:flex;gap:12px;margin-top:8px;align-items:center;justify-content:center">
+    <div>
+      <div id="det-pct-lbl" style="font-size:9px;color:var(--text3)" class="mono"></div>
+      <div style="display:flex;gap:10px;align-items:baseline">
+        <div><div style="font-size:9px;color:var(--text4)" class="mono">PREV</div><div id="st-prev" style="font-size:12px;font-weight:700;color:var(--text2)" class="mono"></div></div>
+        <div><div style="font-size:9px;color:var(--text4)" class="mono">DELTA</div><div id="st-delta" style="font-size:12px;font-weight:700" class="mono"></div></div>
+        <div><div style="font-size:9px;color:var(--text4)" class="mono">RARITY</div><div id="st-rar" style="font-size:12px;font-weight:700" class="mono"></div></div>
+      </div>
+    </div>
+    <svg id="spark-svg" width="110" height="36" style="overflow:visible;flex-shrink:0"></svg>
   </div>
-  <div style="display:flex;gap:20px;margin-top:10px;align-items:flex-end">
-    <div><div id="det-price-lbl" style="font-size:10px;color:var(--text3)" class="mono">CURRENT</div><div id="det-price" style="font-size:28px;font-weight:700;color:var(--title);line-height:1" class="mono"></div></div>
-    <div><div id="det-pct-lbl" style="font-size:10px;color:var(--text3)" class="mono"></div><div id="det-pct" style="font-size:22px;font-weight:700;line-height:1" class="mono"></div></div>
-    <div style="margin-left:auto"><svg id="spark-svg" width="120" height="40" style="overflow:visible"></svg></div>
-  </div>
-  <div style="display:flex;gap:8px;margin-top:10px">
-    <div class="stat-tile"><div class="stat-lbl">PREV</div><div class="stat-val" id="st-prev"></div></div>
-    <div class="stat-tile"><div class="stat-lbl">DELTA</div><div class="stat-val" id="st-delta"></div></div>
-    <div class="stat-tile"><div class="stat-lbl">RARITY</div><div class="stat-val" id="st-rar"></div></div>
-  </div>
-  <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer" class="buy-btn" onclick="event.stopPropagation();trackBuyClick()">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    BUY ON TCGPLAYER · AFFILIATE LINK
+
+  <!-- hidden legacy ids so JS doesn't break -->
+  <span id="det-price-lbl" style="display:none"></span>
+  <span id="det-val-toggle" style="display:none"></span>
+  <span id="tog-single" style="display:none"></span>
+  <span id="tog-total" style="display:none"></span>
+  <span id="ck-spread-row" style="display:none"></span>
+  <span id="ck-tcg-val" style="display:none"></span>
+  <span id="ck-buylist-val" style="display:none"></span>
+  <span id="ck-spread-pct" style="display:none"></span>
+  <span id="ck-spread-summary" style="display:none"></span>
+
+  <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer" class="buy-btn" onclick="event.stopPropagation();trackBuyClick()" style="flex-direction:column;gap:2px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span>BUY ON TCGPLAYER</span>
+    </div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;opacity:.60">AFFILIATE &nbsp;&middot;&nbsp; BEST PRICE</div>
   </a>
-  <div id="buy-instruction" style="font-size:11px;color:#ffffff;text-align:center;margin-top:5px;line-height:1.7;font-weight:700;letter-spacing:.4px" class="mono"></div>
+  <div id="buy-instruction" style="font-size:11px;color:var(--text3);text-align:center;margin-top:5px;line-height:1.7;font-weight:700;letter-spacing:.4px" class="mono"></div>
   <script>
     (function(){
       var isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       var el=document.getElementById("buy-instruction");
-      if(el)el.textContent=isMobile?"Tap & hold → Open in Browser · Purchases via this link support MTG Market Pulse":"Click the button to open TCGPlayer in a new tab · Purchases via this link support MTG Market Pulse";
+      if(el)el.textContent=isMobile?"Tap & hold to open in browser":"Click to open TCGPlayer in a new tab";
     })();
   </script>
 </div>
 
+<!-- WATCHLIST OVERLAY -->
 
 <!-- WATCHLIST OVERLAY -->
 <div id="watch-overlay" class="overlay" style="display:none">
@@ -540,7 +543,7 @@ const GG="#ffd700",GS="#c8a000",UP="#00e676",DN="#ff1744";
 const RC={Mythic:"#ff6d00",Rare:"#ffd600",Uncommon:"#b0bec5",Common:"#90a4ae"};
 const FMTS=["All","Commander","Modern","Standard","Pioneer","Legacy"];
 const RARS=["All","Mythic","Rare","Uncommon","Common"];
-const tcgUrl=(n,id)=>id?`https://www.tcgplayer.com/product/${id}?utm_source=mtgmarketpulse&utm_medium=affiliate`:`https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${encodeURIComponent(n)}&view=grid&utm_source=mtgmarketpulse&utm_medium=affiliate`;
+const tcgUrl=(n)=>`https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${encodeURIComponent(n)}&view=grid&utm_source=mtgmarketpulse&utm_medium=affiliate`;
 
 const API_URL="https://mtg-market-pulse-api-production.up.railway.app";
 let CARDS=[];
@@ -556,7 +559,7 @@ async function loadLiveData(){
   const hs=document.getElementById("hdr-sub");
   try{
     if(hs)hs.textContent="Loading live data...";
-    const r=await fetch(API_URL+"/api/movers?period=7d&limit=1000");
+    const r=await fetch(API_URL+"/api/movers?period=7d&limit=100");
     if(!r.ok)throw new Error("API "+r.status);
     const d=await r.json();
     const cards=d.cards||[];
@@ -566,77 +569,18 @@ async function loadLiveData(){
       NSM[(c.name.toLowerCase()+"|"+(c.set||"").toLowerCase())]=c;
       return c;
     });
-    poolSize=d.poolSize||CARDS.length;
-    gaEvent("data_loaded",{card_count:CARDS.length,pool_size:poolSize,source:"live"}); isLive=true; if(hs)hs.innerHTML="TCGPlayer &middot; 7D &middot; <span id='live-dot'></span>"; updateLiveDot();
+    gaEvent("data_loaded",{card_count:CARDS.length,source:"live"}); isLive=true; if(hs)hs.innerHTML="TCGPlayer &middot; 7D &middot; <span id='live-dot'></span>"; updateLiveDot();
     return true;
   }catch(e){
     console.error("Live data failed:",e.message);
     CARDS=FALLBACK.map(c=>{NM[c.name.toLowerCase()]=c;return c;});
-    poolSize=CARDS.length;
     isLive=false; if(hs)hs.innerHTML="TCGPlayer &middot; 7D &middot; <span id='live-dot'></span>"; updateLiveDot();
     return false;
   }
 }
 
-// ── Client-side Scryfall color enrichment ────────────────────────────────────
-// Runs after loadLiveData() when the server Scryfall enrichment failed silently
-// (detectable because >40% of cards come back as colorless ["C"]).
-async function clientEnrichColors(){
-  if(!CARDS.length) return;
-  const colorless=CARDS.filter(function(c){
-    return !c.colors||!c.colors.length||(c.colors.length===1&&c.colors[0]==="C");
-  }).length;
-  // Only enrich if a suspicious majority are colorless
-  if(colorless < CARDS.length*0.4) return;
-  console.log("[MTG] Client enriching colors: "+colorless+"/"+CARDS.length+" cards colorless");
-
-  var SF="https://api.scryfall.com";
-  var identifiers=CARDS.map(function(c){ return {name:c.name}; });
-  var chunks=[];
-  for(var i=0;i<identifiers.length;i+=75) chunks.push(identifiers.slice(i,i+75));
-
-  var enrichMap={};
-  for(var ci=0;ci<chunks.length;ci++){
-    try{
-      var r=await fetch(SF+"/cards/collection",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({identifiers:chunks[ci]})
-      });
-      if(!r.ok) continue;
-      var d=await r.json();
-      (d.data||[]).forEach(function(card){
-        var ci2=card.color_identity;
-        enrichMap[card.name.toLowerCase()]={
-          colors:(ci2&&ci2.length)?ci2:["C"],
-          edhrecRank:card.edhrec_rank||null,
-          tcgplayerId:card.tcgplayer_id?String(card.tcgplayer_id):null
-        };
-      });
-      // Be polite to Scryfall rate limits
-      if(ci<chunks.length-1) await new Promise(function(res){setTimeout(res,120);});
-    }catch(e){
-      console.error("[MTG] Scryfall client enrich chunk "+ci+" failed:",e.message);
-    }
-  }
-
-  if(!Object.keys(enrichMap).length) return;
-  // Patch CARDS array in place
-  CARDS=CARDS.map(function(c){
-    var enriched=enrichMap[c.name.toLowerCase()];
-    return enriched?Object.assign({},c,enriched):c;
-  });
-  // Rebuild name maps
-  CARDS.forEach(function(c){
-    NM[c.name.toLowerCase()]=c;
-    NSM[(c.name.toLowerCase()+"|"+(c.set||"").toLowerCase())]=c;
-  });
-  console.log("[MTG] Client enrichment done. Patched "+Object.keys(enrichMap).length+" cards.");
-}
-
 // ── State ─────────────────────────────────────────────────────────────────────
 let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50, priceFilter="all", colorFilter="All", isLive=false;
-let poolSize=0;
 function updateLiveDot(){var d=document.getElementById("live-dot");if(!d)return;d.innerHTML=isLive?'<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#00e676;box-shadow:0 0 6px #00e676;display:inline-block"></span><span style="color:#00e676;font-weight:700">LIVE</span></span>':'<span style="color:var(--text3)">Demo Mode</span>';}
 let watchlist=[], currentCard=null;
 // Load watchlist
@@ -644,9 +588,24 @@ try{const s=localStorage.getItem("mtgwl");if(s)watchlist=JSON.parse(s);}catch{}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function saveWl(){try{localStorage.setItem("mtgwl",JSON.stringify(watchlist));}catch{}}
-function matchCard(name,set){const n=name.toLowerCase().trim(),s=set?.toLowerCase().trim();if(s){const e=NSM[`${n}|${s}`];if(e)return e;}return NM[n]||null;}
 function bGlow(c){if(!c||!c.length)return MC.C.f;return c.length>1?GG:(MC[c[0]]||MC.C).f;}
 function bStroke(c){if(!c||!c.length)return MC.C.s;return c.length>1?GS:(MC[c[0]]||MC.C).s;}
+
+function parseList(text){
+  const seen={},out=[];
+  text.trim().split(/\r?\n/).forEach(line=>{
+    if(!line.trim()||line.startsWith("#"))return;
+    if(line.toLowerCase().includes("quantity")&&line.toLowerCase().includes("name"))return;
+    let qty=1,name="",set=null;
+    const csv=line.split(",").map(s=>s.trim().replace(/^"|"$/g,""));
+    if(csv.length>=2&&!isNaN(parseInt(csv[0]))){qty=parseInt(csv[0])||1;name=csv[1]||"";set=csv[2]?.toUpperCase()||null;}
+    else{const m=line.match(/^(\d+)[xX]?\s+(.+)$/);if(!m)return;qty=parseInt(m[1])||1;const raw=m[2].trim();const ms=raw.match(/^(.*?)\s*[\[\(\{]([A-Za-z0-9]{2,6})[\]\)\}]\s*$/);if(ms){name=ms[1].trim();set=ms[2].toUpperCase();}else{const tr=raw.match(/^(.+?)\s+([A-Z0-9]{2,5})$/);if(tr&&/^[A-Z][A-Z0-9]{1,4}$/.test(tr[2])&&!/^(THE|OF|A|AN)$/i.test(tr[2])){name=tr[1].trim();set=tr[2];}else name=raw;}}
+    if(!name)return;
+    const card=matchCard(name,set);if(!card)return;
+    if(seen[card.id]){seen[card.id].qty+=qty;}else{const e={...card,qty,requestedSet:set||card.set};seen[card.id]=e;out.push(e);}
+  });
+  return out;
+}
 
 function getActiveCards(){
   // Collection/watchlist use stored card data — not dependent on live CARDS array
@@ -658,82 +617,111 @@ function getActiveCards(){
 
 // ── Physics ───────────────────────────────────────────────────────────────────
 let phyNodes=[], raf=null;
+let windAngle=Math.random()*Math.PI*2, windGust=0, windTarget=Math.random()*Math.PI*2, windNext=0;
 
 function initPhysics(cards){
   if(raf)cancelAnimationFrame(raf);
   const area=document.getElementById("bubble-area");
-  const W=area.clientWidth||390, H=area.clientHeight||700;
+  const W=area.clientWidth||390, H=area.clientHeight||460;
   const svg=document.getElementById("bubble-svg");
   svg.setAttribute("width",W); svg.setAttribute("height",H);
   if(!cards.length){renderBubbles([]);updateEmptyState();return;}
 
-  // Score-based sqrt radius: most bubbles mid-size, top movers clearly larger
-  const maxScore=Math.max(...cards.map(c=>c.score||c.absPct),1);
-  const MIN_R=16, MAX_R=Math.min(W,H)*0.13;
-  phyNodes=cards.map((c,i)=>{
-    const t=Math.sqrt((c.score||c.absPct)/maxScore);
-    const r=Math.max(MIN_R, MIN_R+(MAX_R-MIN_R)*t);
-    // Spawn in a loose ring so bubbles drift inward naturally
-    const a=(i/cards.length)*Math.PI*2, sp=Math.min(W,H)*0.28;
-    return {...c, r,
-      x: W/2+Math.cos(a)*sp*(0.7+Math.random()*0.6),
-      y: H/2+Math.sin(a)*sp*(0.7+Math.random()*0.6),
-      vx:(Math.random()-.5)*0.8, vy:(Math.random()-.5)*0.8,
-      mass:r*r};
+  const maxAbs=Math.max(...cards.map(c=>c.absPct),1);
+  const MIN_R=8, MAX_R=Math.min(W,H)*.14;
+  const rs=d3.scaleLinear().domain([0,maxAbs]).range([MIN_R,MAX_R]).clamp(true);
+
+  // Spawn at random positions across the full screen
+  phyNodes=cards.map(c=>{
+    const r=Math.max(rs(c.absPct),MIN_R);
+    const nd={
+      ...c, r,
+      x: r + Math.random()*(W-r*2),
+      y: r + Math.random()*(H-r*2),
+      vx: (Math.random()-.5)*0.6,
+      vy: (Math.random()-.5)*0.6
+    };
+    nd.mass=nd.r*nd.r;
+    return nd;
   });
+
   renderBubbles(phyNodes);
   updateEmptyState();
 
-  // Buoyancy physics — float freely, never overlap
-  const GAP   = 6;     // visible breathing room between bubbles
-  const DAMP  = 0.94;  // high damping = slow, dreamy drift
-  const GRAV  = 0.0018;// gentle pull to centre
-  const MAX_V = 0.9;
-  const NOISE = 0.018; // random drift = buoyancy feel
-  const REPEL = 0.32;
-  const WALL_K= 0.07;
+  // ── Wind physics constants ─────────────────────────────────────────────
+  const GAP    = 2;     // breathing room between bubbles
+  const DAMP   = 0.978; // very light drag — floaty
+  const WIND_F = 0.055; // base wind push per frame
+  const TURB   = 0.018; // per-bubble turbulence
+  const MAX_V  = 1.4;   // max speed
+  const REPEL  = 0.12;  // soft collision impulse
+  const WALL_K = 0.055; // wall spring — gentle bounce
 
   function tick(){
     const W2=area.clientWidth||W, H2=area.clientHeight||H;
-    for(const n of phyNodes){
-      n.vx+=(Math.random()-.5)*NOISE;
-      n.vy+=(Math.random()-.5)*NOISE;
-      n.vx+=(W2/2-n.x)*GRAV;
-      n.vy+=(H2/2-n.y)*GRAV;
-      n.vx*=DAMP; n.vy*=DAMP;
-      const sp=Math.hypot(n.vx,n.vy);
-      if(sp>MAX_V){n.vx=n.vx/sp*MAX_V;n.vy=n.vy/sp*MAX_V;}
-      n.x+=n.vx; n.y+=n.vy;
-      const pad=n.r+GAP;
-      if(n.x<pad)    n.vx+=(pad-n.x)*WALL_K;
-      if(n.x>W2-pad) n.vx-=(n.x-(W2-pad))*WALL_K;
-      if(n.y<pad)    n.vy+=(pad-n.y)*WALL_K;
-      if(n.y>H2-pad) n.vy-=(n.y-(H2-pad))*WALL_K;
-      n.x=Math.max(n.r+2,Math.min(W2-n.r-2,n.x));
-      n.y=Math.max(n.r+2,Math.min(H2-n.r-2,n.y));
+
+    // Randomized wind direction timer
+    const now=Date.now();
+    if(!windNext||now>=windNext){
+      windTarget=Math.random()*Math.PI*2;
+      windNext=now+1800+Math.random()*2200; // shift every 1.8–4s
     }
-    // Full-resolution separation — 8 iterations for clean gaps
-    for(let iter=0;iter<8;iter++){
+    // Smoothly steer toward target angle (shortest arc)
+    let da=windTarget-windAngle;
+    if(da>Math.PI)da-=Math.PI*2; if(da<-Math.PI)da+=Math.PI*2;
+    windAngle+=da*0.028;
+    windGust=windGust*0.94+(Math.random()<0.015?Math.random()*0.22:0);
+    const wStr=WIND_F+windGust;
+    const wx=Math.cos(windAngle)*wStr;
+    const wy=Math.sin(windAngle)*wStr*0.72;
+
+    for(const n of phyNodes){
+      // Wind + per-bubble turbulence
+      n.vx += wx + (Math.random()-.5)*TURB;
+      n.vy += wy + (Math.random()-.5)*TURB;
+      // Damping
+      n.vx *= DAMP; n.vy *= DAMP;
+      // Speed cap
+      const sp=Math.hypot(n.vx,n.vy);
+      if(sp>MAX_V){n.vx=n.vx/sp*MAX_V; n.vy=n.vy/sp*MAX_V;}
+      n.x+=n.vx; n.y+=n.vy;
+      // Soft wall springs — bounce gently
+      const pad=n.r+GAP;
+      if(n.x<pad)      {n.vx+=(pad-n.x)*WALL_K; n.vx*=-0.35;}
+      if(n.x>W2-pad)   {n.vx-=(n.x-(W2-pad))*WALL_K; n.vx*=-0.35;}
+      if(n.y<pad)      {n.vy+=(pad-n.y)*WALL_K; n.vy*=-0.35;}
+      if(n.y>H2-pad)   {n.vy-=(n.y-(H2-pad))*WALL_K; n.vy*=-0.35;}
+      // Hard clamp
+      n.x=Math.max(n.r+1,Math.min(W2-n.r-1,n.x));
+      n.y=Math.max(n.r+1,Math.min(H2-n.r-1,n.y));
+    }
+
+    // ── Soft bubble-bubble separation — 3 iterations, light touch ─────────
+    for(let iter=0;iter<3;iter++){
       for(let i=0;i<phyNodes.length;i++){
         for(let j=i+1;j<phyNodes.length;j++){
           const a=phyNodes[i],b=phyNodes[j];
           const dx=b.x-a.x, dy=b.y-a.y;
           const dist2=dx*dx+dy*dy;
           const target=a.r+b.r+GAP;
-          if(dist2>=target*target||dist2<0.0001)continue;
+          if(dist2>=target*target*1.02||dist2<0.001) continue;
           const dist=Math.sqrt(dist2);
           const nx=dx/dist, ny=dy/dist;
           const overlap=target-dist;
           const tm=a.mass+b.mass;
-          const ca=overlap*(b.mass/tm), cb=overlap*(a.mass/tm);
+          // Partial positional correction — leave a tiny bit of give
+          const ca=overlap*0.4*(b.mass/tm);
+          const cb=overlap*0.4*(a.mass/tm);
           a.x-=nx*ca; a.y-=ny*ca;
           b.x+=nx*cb; b.y+=ny*cb;
+          // Gentle velocity nudge
           const force=REPEL*(overlap/target);
           a.vx-=nx*force*(b.mass/tm); a.vy-=ny*force*(b.mass/tm);
           b.vx+=nx*force*(a.mass/tm); b.vy+=ny*force*(a.mass/tm);
         }
       }
     }
+
     for(const n of phyNodes){
       const g=document.querySelector(`[data-id="b${n.id}"]`);
       if(g)g.setAttribute("transform",`translate(${n.x.toFixed(1)},${n.y.toFixed(1)})`);
@@ -745,225 +733,132 @@ function initPhysics(cards){
 
 function renderBubbles(nodes){
   const svg=document.getElementById("bubble-svg");
-  const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||700;
+  const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||460;
 
-  // Iridescent tint colors per MTG color identity
-  // Each color gets a primary tint and two iridescent shimmer colors
-  const BUBBLE={
-    W:{tint:"#e8d48a", iris1:"#aaddff", iris2:"#ffe8aa", stroke:"#d4b840"},
-    U:{tint:"#4488cc", iris1:"#cc88ff", iris2:"#44ffee", stroke:"#2266aa"},
-    B:{tint:"#9955cc", iris1:"#ff88cc", iris2:"#6644ff", stroke:"#6633aa"},
-    R:{tint:"#dd4444", iris1:"#ffaa44", iris2:"#ff44aa", stroke:"#aa2222"},
-    G:{tint:"#44aa55", iris1:"#44ffaa", iris2:"#aaff44", stroke:"#228833"},
-    C:{tint:"#88aabb", iris1:"#aaddff", iris2:"#ddeeff", stroke:"#6699aa"},
-    Multi:{tint:"#ddbb44", iris1:"#ff88aa", iris2:"#88ddff", stroke:"#bb9922"}
-  };
+  const TINT={W:"#ffe87a",U:"#4a9fef",B:"#b06aff",R:"#ff6a6a",G:"#4adc6a",C:"#aaccdd"};
+  const IRID=["#ff6ec7","#6ec7ff","#a0ff6e","#ffe06e","#c06eff"];
 
-  const bg=`<rect width="${W}" height="${H}" fill="${isDark?"#040408":"#eeeef8"}"/>`;
+  function darkText(colors){
+    if(!colors||!colors.length)return false;
+    if(colors.length>1)return true;
+    return colors[0]==="W";
+  }
 
-  // Subtle dot grid
-  const dotGrid=isDark
-    ?`<rect width="${W}" height="${H}" fill="url(#dots)"/>`
-    :``;
+  const staticDefs=[
+    `<filter id="blur6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>`,
+    `<radialGradient id="gs" cx="30%" cy="22%" r="52%" fx="26%" fy="16%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".90"/>`,
+    `<stop offset="28%" stop-color="#ffffff" stop-opacity=".35"/>`,
+    `<stop offset="60%" stop-color="#ffffff" stop-opacity=".06"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`,
+    `<radialGradient id="gs2" cx="72%" cy="74%" r="26%">`,
+    `<stop offset="0%" stop-color="#ffffff" stop-opacity=".30"/>`,
+    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
+    `</radialGradient>`,
+    ...(isDark ? [
+      `<radialGradient id="soap-base" cx="50%" cy="50%" r="50%">`,
+      `<stop offset="0%" stop-color="#000" stop-opacity="0"/>`,
+      `<stop offset="58%" stop-color="#000" stop-opacity="0"/>`,
+      `<stop offset="80%" stop-color="#06061a" stop-opacity=".14"/>`,
+      `<stop offset="100%" stop-color="#04041a" stop-opacity=".30"/>`,
+      `</radialGradient>`
+    ]:[
+      `<radialGradient id="soap-base" cx="50%" cy="50%" r="50%">`,
+      `<stop offset="0%" stop-color="#ffffff" stop-opacity=".06"/>`,
+      `<stop offset="52%" stop-color="#f0f0f0" stop-opacity=".04"/>`,
+      `<stop offset="80%" stop-color="#aaaaaa" stop-opacity=".16"/>`,
+      `<stop offset="100%" stop-color="#666666" stop-opacity=".30"/>`,
+      `</radialGradient>`
+    ])
+  ].join("");
 
-  const sharedDefs=`<defs>
-    <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
-      <circle cx="1" cy="1" r=".5" fill="#ffffff" opacity=".06"/>
-    </pattern>
-    <filter id="softglow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>`;
+  const seen={};
+  let rimDefs="";
+  nodes.forEach(n=>{
+    const colors=n.colors&&n.colors.length?n.colors:["C"];
+    const key=colors.length>1?"Multi":colors[0];
+    if(seen[key])return; seen[key]=1;
+    const tint=key==="Multi"?GG:(TINT[key]||TINT.C);
+    rimDefs+=[
+      `<radialGradient id="rim-${key}" cx="50%" cy="50%" r="50%">`,
+      `<stop offset="0%" stop-color="${tint}" stop-opacity="0"/>`,
+      `<stop offset="52%" stop-color="${tint}" stop-opacity="0"/>`,
+      `<stop offset="74%" stop-color="${tint}" stop-opacity=".07"/>`,
+      `<stop offset="87%" stop-color="${tint}" stop-opacity=".20"/>`,
+      `<stop offset="94%" stop-color="${tint}" stop-opacity=".38"/>`,
+      `<stop offset="100%" stop-color="#ffffff" stop-opacity=".15"/>`,
+      `</radialGradient>`,
+      `<linearGradient id="irid-${key}" x1="0%" y1="0%" x2="100%" y2="100%">`,
+      `<stop offset="0%" stop-color="${IRID[0]}" stop-opacity=".07"/>`,
+      `<stop offset="25%" stop-color="${IRID[1]}" stop-opacity=".09"/>`,
+      `<stop offset="50%" stop-color="${IRID[2]}" stop-opacity=".07"/>`,
+      `<stop offset="75%" stop-color="${IRID[3]}" stop-opacity=".06"/>`,
+      `<stop offset="100%" stop-color="${IRID[4]}" stop-opacity=".08"/>`,
+      `</linearGradient>`
+    ].join("");
+  });
+
+  const defs=`<defs>${staticDefs}${rimDefs}</defs>`;
+  const bg=`<rect width="${W}" height="${H}" fill="var(--svg-bg)"/>`;
 
   const bubbles=nodes.map(n=>{
-    const pc=n.pct>=0?UP:DN;
-    const pcshadow=n.pct>=0?"rgba(0,230,118,.6)":"rgba(255,23,68,.6)";
     const colors=n.colors&&n.colors.length?n.colors:["C"];
     const isM=colors.length>1;
-    const bk=isM?"Multi":(BUBBLE[colors[0]]?colors[0]:"C");
-    const {tint,iris1,iris2,stroke}=BUBBLE[bk]||BUBBLE.C;
+    const key=isM?"Multi":colors[0];
+    const tint=isM?GG:(TINT[colors[0]]||TINT.C);
+    const big=n.absPct>15;
     const inW=watchlist.some(w=>w.id===n.id);
-    const r=n.r;
+    const useDark=darkText(colors);
 
-    // Unique gradient IDs per bubble
-    const gid=`bg${n.id}`, rid=`ri${n.id}`, sid=`sp${n.id}`, s2=`s2${n.id}`, od=`og${n.id}`;
+    // In light mode background is pale — all bubbles need dark text
+    const forceDark = !isDark; // light mode = dark text on all; dark mode = always white
+    const textMain  = forceDark ? "#120800" : "#ffffff";
+    const textSub   = forceDark ? "rgba(18,8,0,.62)"  : "rgba(255,255,255,.72)";
+    const pctColor  = n.pct>=0
+      ? (forceDark ? "#005520" : UP)
+      : (forceDark ? "#880000" : DN);
 
-    // Inline defs — soap bubble look:
-    // 1. Very transparent tinted fill (inner)
-    // 2. Iridescent rim gradient (the "soap film" color shift)
-    // 3. Primary specular — large soft highlight upper-left
-    // 4. Secondary specular — tiny bright point
-    const inlineDefs=`<defs>
-      <radialGradient id="${gid}" cx="42%" cy="38%" r="72%" fx="38%" fy="30%">
-        <stop offset="0%"   stop-color="#ffffff" stop-opacity=".04"/>
-        <stop offset="40%"  stop-color="${tint}"  stop-opacity=".07"/>
-        <stop offset="75%"  stop-color="${iris1}" stop-opacity=".18"/>
-        <stop offset="90%"  stop-color="${iris2}" stop-opacity=".28"/>
-        <stop offset="100%" stop-color="${tint}"  stop-opacity=".45"/>
-      </radialGradient>
-      <radialGradient id="${rid}" cx="50%" cy="50%" r="50%">
-        <stop offset="55%"  stop-color="${tint}"  stop-opacity="0"/>
-        <stop offset="80%"  stop-color="${iris1}" stop-opacity=".22"/>
-        <stop offset="92%"  stop-color="${iris2}" stop-opacity=".35"/>
-        <stop offset="100%" stop-color="${stroke}" stop-opacity=".55"/>
-      </radialGradient>
-      <radialGradient id="${sid}" cx="34%" cy="26%" r="38%" fx="28%" fy="18%">
-        <stop offset="0%"   stop-color="#ffffff" stop-opacity=".82"/>
-        <stop offset="45%"  stop-color="#ffffff" stop-opacity=".22"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="${s2}" cx="62%" cy="72%" r="18%">
-        <stop offset="0%"   stop-color="#ffffff" stop-opacity=".35"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="${od}" cx="50%" cy="50%" r="50%">
-        <stop offset="60%"  stop-color="${tint}"  stop-opacity="0"/>
-        <stop offset="100%" stop-color="${tint}"  stop-opacity=".4"/>
-      </radialGradient>
-    </defs>`;
+    const sn=n.r>26,ss=n.r>42,sl=n.r>55;
+    const nf=Math.max(6,Math.min(n.r*.24,12));
+    const pf=Math.max(7,Math.min(n.r*.3,15));
+    const ny=sn?-(pf*.75):0,py=sn?(pf*.72):(pf*.38),sy=py+nf*1.35;
 
-    // Outer ambient glow — soft, large, no hard edges
-    const outerGlow=`<circle r="${(r*1.45).toFixed(1)}" fill="url(#${od})" opacity=".7"/>`;
+    const halo=big?`<circle class="pulse" r="${n.r+7}" fill="none" stroke="${tint}" stroke-width=".9" opacity=".28"/>`:` `;
 
-    // Multi-color identity — thin arc segments at rim only
-    let rimSlices=``;
-    if(isM){
-      colors.forEach((c,i)=>{
-        const nc=colors.length, sa=(i/nc)*2*Math.PI-Math.PI/2, ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
-        const ox=(Math.cos(sa)*r).toFixed(1), oy=(Math.sin(sa)*r).toFixed(1);
-        const ex=(Math.cos(ea)*r).toFixed(1), ey=(Math.sin(ea)*r).toFixed(1);
-        rimSlices+=`<path d="M${ox} ${oy}A${r} ${r} 0 ${ea-sa>Math.PI?1:0} 1 ${ex} ${ey}" fill="none" stroke="${(BUBBLE[c]||BUBBLE.C).tint}" stroke-width="3" opacity=".6"/>`;
-      });
-    }
+    const star=inW?`<text x="${(n.r*.54).toFixed(1)}" y="${(-n.r*.54).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.2)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))">&#9733;</text>`:``;
 
-    // Text sizing — generous since max 50 bubbles
-    const showName=r>22, showPrice=r>44;
-    const pf=Math.max(8, Math.min(r*0.28, 14));
-    const nf=Math.max(7, Math.min(r*0.22, 11));
-    const ny=showName?-(pf*0.72):0;
-    const py=showName?(pf*0.66):(pf*0.32);
-    const pry=py+nf*1.3;
+    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py.toFixed(1)}" font-size="${pf.toFixed(1)}" font-weight="700" fill="${pctColor}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.45))">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
 
-    // Text colors adapt to dark/light mode for guaranteed contrast on any bubble color.
-    // Strategy: use a strong outline-shadow that's always the opposite of the text color.
-    // In dark mode: white text + black shadow. In light mode: near-black text + white shadow.
-    const txtFill     = isDark ? "rgba(255,255,255,.97)" : "rgba(8,8,28,.92)";
-    const txtShadow   = isDark ? "drop-shadow(0 0 3px rgba(0,0,0,1)) drop-shadow(0 1px 4px rgba(0,0,0,.9))"
-                               : "drop-shadow(0 0 3px rgba(255,255,255,1)) drop-shadow(0 1px 3px rgba(255,255,255,.8))";
-    const priceFill   = isDark ? "rgba(255,255,255,.7)"  : "rgba(8,8,28,.65)";
-    // pct color stays green/red but gets a contrasting shadow
-    const pctShadow   = isDark ? `drop-shadow(0 0 4px rgba(0,0,0,.95)) drop-shadow(0 1px 5px ${pcshadow})`
-                               : `drop-shadow(0 0 3px rgba(255,255,255,.9)) drop-shadow(0 1px 3px rgba(0,0,0,.4))`;
+    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny.toFixed(1)}" font-size="${nf.toFixed(1)}" font-weight="700" fill="${textMain}" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))">${n.name.length>14?n.name.slice(0,13)+"\u2026":n.name}</text>`:`<title>${n.name}</title>`;
 
-    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py.toFixed(1)}" font-size="${pf.toFixed(1)}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:${pctShadow}">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
+    const priceT=sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy.toFixed(1)}" font-size="${(nf*.82).toFixed(1)}" fill="${textSub}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">$${n.price.toFixed(2)}</text>`:``;
 
-    const nameT=showName
-      ?`<text text-anchor="middle" dominant-baseline="middle" y="${ny.toFixed(1)}" font-size="${nf.toFixed(1)}" font-weight="700" fill="${txtFill}" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:${txtShadow}">${n.name.length>13?n.name.slice(0,12)+"\u2026":n.name}</text>`
-      :`<title>${n.name}</title>`;
-
-    const priceT=showPrice
-      ?`<text text-anchor="middle" dominant-baseline="middle" y="${pry.toFixed(1)}" font-size="${(nf*0.85).toFixed(1)}" fill="${priceFill}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:${txtShadow}">$${(n.displayPrice||n.price).toFixed(2)}</text>`
-      :``;
-
-    const star=inW
-      ?`<text x="${(r*0.54).toFixed(1)}" y="${(-r*0.54).toFixed(1)}" font-size="${Math.max(8,r*0.22).toFixed(1)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 0 4px #ffd700)">&#9733;</text>`
-      :``;
+    const setT=ss&&!sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy.toFixed(1)}" font-size="${(nf*.75).toFixed(1)}" fill="${textSub}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${n.requestedSet||n.set}]</text>`:``;
 
     return [
       `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">`,
-      inlineDefs,
-      outerGlow,
-      // Transparent base — lets background show through like real soap film
-      `<circle r="${r}" fill="url(#${gid})"/>`,
-      // Iridescent rim
-      `<circle r="${r}" fill="url(#${rid})"/>`,
-      // Rim arc slices for multi-color
-      rimSlices,
-      // Thin colored stroke — the "surface tension" edge
-      `<circle r="${r}" fill="none" stroke="${stroke}" stroke-width="1.2" opacity=".7"/>`,
-      // Primary specular highlight — large soft blob upper-left
-      `<circle r="${r}" fill="url(#${sid})"/>`,
-      // Secondary tiny specular — lower-right for depth
-      `<circle r="${r}" fill="url(#${s2})"/>`,
-      // Text
-      pctT, nameT, priceT, star,
+      halo,
+      `<circle r="${n.r}" fill="url(#soap-base)"/>`,
+      `<circle r="${n.r}" fill="url(#rim-${key})"/>`,
+      `<circle r="${n.r}" fill="url(#irid-${key})"/>`,
+      `<circle r="${n.r}" fill="url(#gs)"/>`,
+      `<circle r="${n.r}" fill="url(#gs2)"/>`,
+      `<circle r="${n.r}" fill="none" stroke="${tint}" stroke-width="${big?1.8:1.1}" opacity="${big?.60:.38}"/>`,
+      `<circle r="${n.r-.9}" fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".8"/>`,
+      pctT, nameT, priceT, setT, star,
       `</g>`
     ].join("");
   }).join("");
 
-  svg.innerHTML=sharedDefs+bg+dotGrid+bubbles;
+  svg.innerHTML=defs+bg+bubbles;
 }
 
-
-// ── Starfield ─────────────────────────────────────────────────────────────────
-function initStarfield() {
-  const container = document.getElementById("starfield");
-  if (!container) return;
-  container.innerHTML = "";
-  const W = window.innerWidth, H = window.innerHeight;
-  const COUNT = 90;
-  const COLORS = ["white","white","white","gold","gold","blue"];
-  for (let i = 0; i < COUNT; i++) {
-    const star = document.createElement("div");
-    star.className = "star " + COLORS[Math.floor(Math.random() * COLORS.length)];
-    const size = Math.random() * 5 + 2;
-    const x = Math.random() * W;
-    const y = Math.random() * H;
-    const delay = Math.random() * 8;
-    const dur = 2.5 + Math.random() * 5;
-    star.style.cssText = "left:"+x+"px;top:"+y+"px;width:"+size+"px;height:"+size+"px;animation-delay:"+delay+"s;animation-duration:"+dur+"s";
-    container.appendChild(star);
-  }
-}
-
-// ── Quick Filters (top-right corner) ─────────────────────────────────────────
-function buildQuickFilters() {
-  var colorDefs = [
-    ["All","#aaaacc","ALL"],
-    ["W","#e8d48a","W"],
-    ["U","#4488cc","U"],
-    ["B","#9055cc","B"],
-    ["R","#cc3333","R"],
-    ["G","#33aa44","G"],
-    ["C","#7a8e9e","C"],
-    ["Multi","#ffd700","*"]
-  ];
-  var cr = document.getElementById("qf-color-row");
-  if (cr) {
-    cr.innerHTML = colorDefs.map(function(d) {
-      var active = colorFilter === d[0];
-      var borderCol = active ? d[1] : "transparent";
-      var bgCol = active ? d[1] + "33" : "transparent";
-      var opacity = active ? 1 : 0.55;
-      return "<button class=\"qf-btn" + (active ? " active" : "") + "\" onclick=\"setColorFilter('" + d[0] + "')\" title=\"" + d[2] + "\" style=\"border-color:" + borderCol + ";background:" + bgCol + "\">"
-        + "<svg width=\"12\" height=\"12\"><circle cx=\"6\" cy=\"6\" r=\"5\" fill=\"" + d[1] + "\" opacity=\"" + opacity + "\"/></svg>"
-        + "</button>";
-    }).join("");
-  }
-  var rarDefs = [
-    ["All","#aaaacc","ALL"],
-    ["Mythic","#ff6d00","M"],
-    ["Rare","#ffd600","R"],
-    ["Uncommon","#b0bec5","U"],
-    ["Common","#90a4ae","C"]
-  ];
-  var rr = document.getElementById("qf-rar-row");
-  if (rr) {
-    rr.innerHTML = rarDefs.map(function(d) {
-      var active = rar === d[0];
-      var col = active ? d[1] : "var(--text4)";
-      var borderCol = active ? d[1] : "transparent";
-      var bgCol = active ? d[1] + "22" : "transparent";
-      return "<button class=\"qf-rar-btn\" onclick=\"setRar('" + d[0] + "')\" style=\"color:" + col + ";border-color:" + borderCol + ";background:" + bgCol + "\">" + d[2] + "</button>";
-    }).join("");
-  }
-}
 
 // ── UI ────────────────────────────────────────────────────────────────────────
 function buildFilters(){
   const fmtRow=document.getElementById("fmt-row");
-  if(fmtRow)fmtRow.innerHTML=FMTS.map(f=>`<button class="pill${fmt===f?' active-g':''}" onclick="setFmt('${f}')">${f}</button>`).join("");
+  if(fmtRow)fmtRow.innerHTML=FMTS.map(f=>`<button class="pill${fmt===f?' active-g':''}" onclick="setFmt('${f}')" style="touch-action:manipulation;min-height:36px;padding:6px 14px">${f}</button>`).join("");
   const rarMap={All:"g",Mythic:"o",Rare:"y",Uncommon:"s",Common:"c"};
   const rarRow=document.getElementById("rar-row");
   if(rarRow)rarRow.innerHTML=RARS.map(r=>`<button class="pill${rar===r?` active-${rarMap[r]||'g'}`:''}" onclick="setRar('${r}')">${r}</button>`).join("");
@@ -973,7 +868,7 @@ function buildFilters(){
     cRow.innerHTML=colorBtns.map(([k,fill,stroke])=>{
       const isActive=colorFilter===k;
       const label=k==="All"?"ALL":k==="Multi"?"GOLD":k==="C"?"CLESS":k==="W"?"WHITE":k==="U"?"BLUE":k==="B"?"BLACK":k==="R"?"RED":"GREEN";
-      return `<button onclick="setColorFilter('${k}')" style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:16px;border:1.5px solid ${isActive?stroke:"var(--border2)"};background:${isActive?fill+"22":"transparent"};cursor:pointer;transition:all .15s;flex-shrink:0"><svg width="9" height="9"><circle cx="4.5" cy="4.5" r="4.5" fill="${fill}"/></svg><span style="font-size:10px;font-weight:${isActive?"700":"500"};color:${isActive?fill:"var(--text4)"};font-family:'Barlow Condensed',sans-serif">${label}</span></button>`;
+      return `<button onclick="setColorFilter('${k}')" style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:16px;border:1.5px solid ${isActive?stroke:"var(--border2)"};background:${isActive?fill+"22":"transparent"};cursor:pointer;transition:all .15s;flex-shrink:0;touch-action:manipulation;min-height:36px"><svg width="9" height="9"><circle cx="4.5" cy="4.5" r="4.5" fill="${fill}"/></svg><span style="font-size:10px;font-weight:${isActive?"700":"500"};color:${isActive?fill:"var(--text4)"};font-family:'Barlow Condensed',sans-serif">${label}</span></button>`;
     }).join("");
   }
 }
@@ -982,25 +877,23 @@ function updateStats(){
   const ac=getActiveCards();
   const g=ac.filter(c=>c.pct>=0).length,l=ac.filter(c=>c.pct<0).length;
   const avg=ac.length?(ac.reduce((s,c)=>s+c.pct,0)/ac.length).toFixed(1):"0.0";
-  document.getElementById("stat-gl").innerHTML=`<span style="color:${UP}">▲${g}</span><span style="color:var(--border3)">/</span><span style="color:${DN}">▼${l}</span>`;
-  document.getElementById("stat-avg").innerHTML=`<span style="color:var(--text5)">AVG </span><span style="color:${+avg>=0?UP:DN}">${+avg>=0?"+":""}${avg}%</span>`;
+  document.getElementById("stat-gl").innerHTML=`<span style="color:${UP}">&#9650;${g}</span><span style="color:var(--text4)"> / </span><span style="color:${DN}">&#9660;${l}</span>`;
+  document.getElementById("stat-avg").innerHTML=`<span style="color:var(--text3)">AVG </span><span style="color:${+avg>=0?UP:DN}">${+avg>=0?"+":""}${avg}%</span>`;
   const sv=document.getElementById("stat-val");
   sv.style.display="none";
-  const mc={"market":"MARKET","watchlist":watchlist.length?`★ WATCH (${watchlist.length})`:"★ WATCH"};
+  const mc={"market":"MARKET","watchlist":watchlist.length?`★ WATCH (${watchlist.length})`:"WATCH"};
   const modeShort={"market":"MKT","watchlist":"WATCH"};
   Object.entries(mc).forEach(([id,lbl])=>{
     const b=document.getElementById(`btn-${id}`);if(!b)return;
     b.textContent=lbl;
-    const cols={market:UP,watchlist:"#ffd700"};
-    b.style.borderColor=mode===id?cols[id]:`${cols[id]}44`;
-    b.style.background=mode===id?`${cols[id]}18`:"transparent";
-    b.style.color=mode===id?cols[id]:`${cols[id]}88`;
+    b.style.borderColor=mode===id?"var(--text)":"var(--border2)";
+    b.style.background=mode===id?"var(--text)":"transparent";
+    b.style.color=mode===id?"var(--bg)":"var(--text3)";
   });
   const fm=document.getElementById("fab-mode");
   if(fm)fm.textContent=modeShort[mode]||"MKT";
   const hs=document.getElementById("hdr-sub");
-  const poolLbl=poolSize>0?` &middot; <span style='color:var(--text5)'>${poolSize} CARDS</span>`:'';
-  if(hs)hs.innerHTML=`TCGPlayer &middot; ${tf}${poolLbl} &middot; <span id='live-dot' style='display:inline-flex;align-items:center;gap:4px'></span>`; updateLiveDot();
+  if(hs)hs.innerHTML=`TCGPlayer &middot; ${tf} &middot; <span id='live-dot' style='display:inline-flex;align-items:center;gap:4px'></span>`; updateLiveDot();
 }
 
 function updateEmptyState(){
@@ -1015,7 +908,6 @@ function updateEmptyState(){
 function refresh(){
   const ac=getActiveCards();
   buildFilters();
-  buildQuickFilters();
   updateStats();
   initPhysics(ac);
 }
@@ -1025,19 +917,17 @@ function setMode(m){
   closeDetail();
   if(sheetOpen)toggleSheet();
   gaEvent("mode_switch",{mode:m});
-  const modeColors={market:"#00e676",watchlist:"#ffd700"};
   const modeLabels={market:"MKT",watchlist:"WATCH"};
   const fm=document.getElementById("fab-mode");
-  if(fm){fm.textContent=modeLabels[m]||"MKT";fm.style.color=modeColors[m]||"var(--fab-color)";}
+  if(fm){fm.textContent=modeLabels[m]||"MKT";fm.style.color="var(--fab-color)";}
   refresh();
 }
-
+function clearCollection(){if(!collection.length)return;if(confirm("Clear your entire collection?")){collection=[];saveCol();setMode("market");}}
 function cycleMode(){
   const modes=["market","watchlist"];
   const next=modes[(modes.indexOf(mode)+1)%modes.length];
   setMode(next);
 }
-
 function setFmt(f){fmt=f;gaEvent("filter_format",{format:f});refresh();}
 function setCardLimit(v){cardLimit=parseInt(v);document.getElementById("card-limit-lbl").textContent=v+" cards";refresh();}
 function setColorFilter(v){colorFilter=v;gaEvent("filter_color",{color:v});buildFilters();initPhysics(getActiveCards());}
@@ -1066,14 +956,12 @@ function openCard(id){
   currentCard=n; valMode="single";
   const det=document.getElementById("detail");
   det.style.display="block";
-  det.style.borderTop=`2px solid ${bStroke(n.colors&&n.colors.length?n.colors:['C'])}`;
-  det.style.boxShadow=`0 -24px 64px ${bGlow(n.colors&&n.colors.length?n.colors:['C'])}22`;
+  det.style.borderTop="1px solid var(--border2)";
+  det.style.boxShadow="0 -8px 40px rgba(0,0,0,.4)";
   document.getElementById("det-name").textContent=n.name;
-  var edhStr=n.edhrecRank?` &middot; <span style="color:#7b8cde" title="EDHREC rank">#${n.edhrecRank.toLocaleString()} EDHREC</span>`:'';
-  document.getElementById("det-meta").innerHTML=`<span style="color:${RC[n.rarity]||'#c084fc'}">${n.rarity.toUpperCase()}</span> &middot; <span style="color:var(--text2)">[${n.requestedSet||n.set}]</span> &middot; ${n.formats.join(" &middot; ")}${edhStr}`;
+  document.getElementById("det-meta").innerHTML=`<span style="color:var(--text3)">${n.rarity.toUpperCase()}&nbsp;·&nbsp;[${n.requestedSet||n.set}]&nbsp;·&nbsp;${n.formats.slice(0,3).join(" · ")}</span>`;
   const cc=document.getElementById("det-colors");
-  cc.innerHTML=`<span style="font-size:9px;color:var(--text4)" class="mono">IDENTITY:</span>`+
-    n.colors.map(c=>`<div class="color-pip" style="background:${(MC[c]||MC.C).f}22;border:1px solid ${(MC[c]||MC.C).s}"><svg width="7" height="7"><circle cx="3.5" cy="3.5" r="3.5" fill="${(MC[c]||MC.C).f}"/></svg><span style="color:${(MC[c]||MC.C).f}">${(MC[c]||MC.C).l}</span></div>`).join("");
+  cc.innerHTML=n.colors.map(c=>`<div class="color-pip" style="background:${(MC[c]||MC.C).f}28;border:1px solid ${(MC[c]||MC.C).f}66"><svg width="8" height="8"><circle cx="4" cy="4" r="4" fill="${(MC[c]||MC.C).f}"/></svg><span style="color:var(--text2);font-size:10px">${(MC[c]||MC.C).l}</span></div>`).join("");
   document.getElementById("det-val-toggle").style.display="none";
   updateWatchBtn();
   renderDetail();
@@ -1081,25 +969,76 @@ function openCard(id){
 
 function renderDetail(){
   if(!currentCard)return;
-  const n=currentCard,isTotal=valMode==="total"&&(n.qty||1)>1;
-  const dp=isTotal?n.price*n.qty:n.price, dpr=isTotal?n.prev*n.qty:n.prev;
-  document.getElementById("det-price-lbl").textContent=isTotal?"TOTAL VALUE":"CURRENT";
-  document.getElementById("det-price").textContent=`$${dp.toFixed(2)}`;
-  document.getElementById("det-pct-lbl").textContent=`${tf} CHG`;
-  document.getElementById("det-pct").style.color=n.pct>=0?UP:DN;
-  document.getElementById("det-pct").textContent=`${n.pct>=0?"+":""}${n.pct.toFixed(2)}%`;
-  document.getElementById("st-prev").textContent=`$${dpr.toFixed(2)}`;
-  document.getElementById("st-prev").style.color="#7a7a9a";
-  document.getElementById("st-delta").textContent=`${n.pct>=0?"+":"-"}$${Math.abs(dp-dpr).toFixed(2)}`;
-  document.getElementById("st-delta").style.color=n.pct>=0?UP:DN;
+  const n=currentCard;
+  const dp=n.price, dpr=n.prev;
+  // TCG price + change
+  document.getElementById("det-price").textContent="$"+dp.toFixed(2);
+  const pc=n.pct>=0?UP:DN;
+  document.getElementById("det-pct").textContent=(n.pct>=0?"+":"")+n.pct.toFixed(2)+"%";
+  document.getElementById("det-pct").style.color=pc;
+  document.getElementById("det-pct-lbl").textContent=tf+" CHANGE";
+  // Prev / delta / rarity
+  document.getElementById("st-prev").textContent="$"+dpr.toFixed(2);
+  document.getElementById("st-delta").textContent=(n.pct>=0?"+":"-")+"$"+Math.abs(dp-dpr).toFixed(2);
+  document.getElementById("st-delta").style.color=pc;
   document.getElementById("st-rar").textContent=n.rarity;
-  document.getElementById("st-rar").style.color=RC[n.rarity]||"#c084fc";
-  document.getElementById("buy-link").href=tcgUrl(n.name,n.tcgplayerId);
-  document.getElementById("tog-single").className="tog-btn"+(valMode==="single"?" act":"");
-  document.getElementById("tog-total").className="tog-btn"+(valMode==="total"?" act":"");
+  document.getElementById("st-rar").style.color="var(--text)";
+  // Buy link
+  document.getElementById("buy-link").href=tcgUrl(n.name);
+  // Sparkline
   drawSparkline(n.hist,n.pct>=0?UP:DN);
-}
 
+  // ── CK Buylist + Spread ────────────────────────────────────────────────
+  const ckEl=document.getElementById("ck-price");
+  const spreadPctEl=document.getElementById("spread-pct");
+  const spreadSignalEl=document.getElementById("spread-signal");
+  const spreadArrowEl=document.getElementById("spread-arrow");
+  const verdictEl=document.getElementById("spread-verdict");
+
+  if(n.ckBuylist!=null&&n.ckBuylist>0){
+    ckEl.textContent="$"+n.ckBuylist.toFixed(2);
+    // Spread = TCG - CK (positive = TCG higher = normal/sell, small/negative = shortage/buy)
+    const spreadAmt=dp-n.ckBuylist;
+    const spreadPct=dp>0?(spreadAmt/dp*100):0;
+    spreadPctEl.textContent=(spreadPct>=0?"+":"")+spreadPct.toFixed(0)+"%";
+
+    let sigColor, sigLabel, verdictText, verdictBg, verdictBorder;
+    if(spreadPct<10){
+      sigColor="#ff6d00"; sigLabel="BUY";
+      verdictText="Small spread — CK near market price. Possible shortage or high demand.";
+      verdictBg="rgba(255,109,0,.12)"; verdictBorder="rgba(255,109,0,.35)";
+    } else if(spreadPct<25){
+      sigColor="#ffd600"; sigLabel="WATCH";
+      verdictText="Moderate spread — healthy market. Monitor for movement.";
+      verdictBg="rgba(255,214,0,.10)"; verdictBorder="rgba(255,214,0,.30)";
+    } else if(spreadPct<50){
+      sigColor="#00e676"; sigLabel="SELL";
+      verdictText="Wide spread — TCG market price significantly above CK buylist.";
+      verdictBg="rgba(0,230,118,.10)"; verdictBorder="rgba(0,230,118,.30)";
+    } else {
+      sigColor="#00e676"; sigLabel="SELL";
+      verdictText="Large gap — strong sell signal on TCGPlayer. CK buyout rate low.";
+      verdictBg="rgba(0,230,118,.12)"; verdictBorder="rgba(0,230,118,.32)";
+    }
+    spreadPctEl.style.color=sigColor;
+    spreadSignalEl.textContent=sigLabel;
+    spreadSignalEl.style.color=sigColor;
+    spreadArrowEl.style.color=sigColor;
+    verdictEl.style.display="block";
+    verdictEl.style.background=verdictBg;
+    verdictEl.style.border="1px solid "+verdictBorder;
+    verdictEl.style.color=sigColor;
+    verdictEl.textContent="$"+spreadAmt.toFixed(2)+" SPREAD  ·  "+verdictText;
+  } else {
+    ckEl.textContent="—";
+    ckEl.style.color="var(--text3)";
+    spreadPctEl.textContent="N/A";
+    spreadPctEl.style.color="var(--text4)";
+    spreadSignalEl.textContent="";
+    spreadArrowEl.style.color="var(--text4)";
+    verdictEl.style.display="none";
+  }
+}
 function setValMode(v){valMode=v;renderDetail();}
 
 function drawSparkline(data,color){
@@ -1133,6 +1072,9 @@ function showOverlay(id){document.getElementById(id).style.display="flex";}
 function hideOverlay(id){document.getElementById(id).style.display="none";}
 
 // ── Import ────────────────────────────────────────────────────────────────────
+
+
+// ── Watchlist panel ───────────────────────────────────────────────────────────
 function updateWatchSearch(){
   const q=document.getElementById("watch-search").value.toLowerCase().trim();
   const res=q?CARDS.filter(c=>c.name.toLowerCase().includes(q)||c.set.toLowerCase().includes(q)).slice(0,8):[];
@@ -1261,7 +1203,7 @@ try{
     document.getElementById("disc-overlay").style.display="none";
   }
 }catch(e){}
-loadLiveData().then(async function(ok){ if(ok) await clientEnrichColors(); refresh(); });
+loadLiveData().then(function(){ refresh(); });
 </script>
 </body>
 </html>
