@@ -373,7 +373,7 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <div class="sheet-row" style="padding-top:2px;padding-bottom:6px">
       <span class="sheet-label"></span>
       <button onclick="showOverlay('import-overlay')" style="padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:11px" class="mono">+ IMPORT COLLECTION</button>
-      <button onclick="clearCollection()" style="padding:4px 11px;border-radius:20px;border:1px solid #ff174444;background:transparent;color:#ff4444;font-size:11px" class="mono">✕ CLEAR</button>
+      
     </div>
 
     <div class="sheet-divider"></div>
@@ -845,14 +845,25 @@ function renderBubbles(nodes){
     const py=showName?(pf*0.66):(pf*0.32);
     const pry=py+nf*1.3;
 
-    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py.toFixed(1)}" font-size="${pf.toFixed(1)}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 5px ${pcshadow})">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
+    // Text colors adapt to dark/light mode for guaranteed contrast on any bubble color.
+    // Strategy: use a strong outline-shadow that's always the opposite of the text color.
+    // In dark mode: white text + black shadow. In light mode: near-black text + white shadow.
+    const txtFill     = isDark ? "rgba(255,255,255,.97)" : "rgba(8,8,28,.92)";
+    const txtShadow   = isDark ? "drop-shadow(0 0 3px rgba(0,0,0,1)) drop-shadow(0 1px 4px rgba(0,0,0,.9))"
+                               : "drop-shadow(0 0 3px rgba(255,255,255,1)) drop-shadow(0 1px 3px rgba(255,255,255,.8))";
+    const priceFill   = isDark ? "rgba(255,255,255,.7)"  : "rgba(8,8,28,.65)";
+    // pct color stays green/red but gets a contrasting shadow
+    const pctShadow   = isDark ? `drop-shadow(0 0 4px rgba(0,0,0,.95)) drop-shadow(0 1px 5px ${pcshadow})`
+                               : `drop-shadow(0 0 3px rgba(255,255,255,.9)) drop-shadow(0 1px 3px rgba(0,0,0,.4))`;
+
+    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py.toFixed(1)}" font-size="${pf.toFixed(1)}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:${pctShadow}">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
 
     const nameT=showName
-      ?`<text text-anchor="middle" dominant-baseline="middle" y="${ny.toFixed(1)}" font-size="${nf.toFixed(1)}" font-weight="700" fill="rgba(255,255,255,.9)" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.7))">${n.name.length>13?n.name.slice(0,12)+"\u2026":n.name}</text>`
+      ?`<text text-anchor="middle" dominant-baseline="middle" y="${ny.toFixed(1)}" font-size="${nf.toFixed(1)}" font-weight="700" fill="${txtFill}" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:${txtShadow}">${n.name.length>13?n.name.slice(0,12)+"\u2026":n.name}</text>`
       :`<title>${n.name}</title>`;
 
     const priceT=showPrice
-      ?`<text text-anchor="middle" dominant-baseline="middle" y="${pry.toFixed(1)}" font-size="${(nf*0.85).toFixed(1)}" fill="rgba(255,255,255,.55)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">$${(n.displayPrice||n.price).toFixed(2)}</text>`
+      ?`<text text-anchor="middle" dominant-baseline="middle" y="${pry.toFixed(1)}" font-size="${(nf*0.85).toFixed(1)}" fill="${priceFill}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:${txtShadow}">$${(n.displayPrice||n.price).toFixed(2)}</text>`
       :``;
 
     const star=inW
@@ -908,7 +919,7 @@ function initStarfield() {
 
 // ── Quick Filters (top-right corner) ─────────────────────────────────────────
 function buildQuickFilters() {
-  const colorDefs = [
+  var colorDefs = [
     ["All","#aaaacc","ALL"],
     ["W","#e8d48a","W"],
     ["U","#4488cc","U"],
@@ -918,27 +929,33 @@ function buildQuickFilters() {
     ["C","#7a8e9e","C"],
     ["Multi","#ffd700","*"]
   ];
-  const cr = document.getElementById("qf-color-row");
+  var cr = document.getElementById("qf-color-row");
   if (cr) {
     cr.innerHTML = colorDefs.map(function(d) {
-      const active = colorFilter === d[0];
-      return '<button class="qf-btn' + (active ? ' active' : '') + '" onclick="setColorFilter('' + d[0] + '')" title="' + d[2] + '" style="border-color:' + (active ? d[1] : 'transparent') + ';background:' + (active ? d[1] + '33' : 'transparent') + '">'
-        + '<svg width="12" height="12"><circle cx="6" cy="6" r="5" fill="' + d[1] + '" opacity="' + (active ? 1 : 0.55) + '"/></svg>'
-        + '</button>';
+      var active = colorFilter === d[0];
+      var borderCol = active ? d[1] : "transparent";
+      var bgCol = active ? d[1] + "33" : "transparent";
+      var opacity = active ? 1 : 0.55;
+      return "<button class=\"qf-btn" + (active ? " active" : "") + "\" onclick=\"setColorFilter('" + d[0] + "')\" title=\"" + d[2] + "\" style=\"border-color:" + borderCol + ";background:" + bgCol + "\">"
+        + "<svg width=\"12\" height=\"12\"><circle cx=\"6\" cy=\"6\" r=\"5\" fill=\"" + d[1] + "\" opacity=\"" + opacity + "\"/></svg>"
+        + "</button>";
     }).join("");
   }
-  const rarDefs = [
+  var rarDefs = [
     ["All","#aaaacc","ALL"],
     ["Mythic","#ff6d00","M"],
     ["Rare","#ffd600","R"],
     ["Uncommon","#b0bec5","U"],
     ["Common","#90a4ae","C"]
   ];
-  const rr = document.getElementById("qf-rar-row");
+  var rr = document.getElementById("qf-rar-row");
   if (rr) {
     rr.innerHTML = rarDefs.map(function(d) {
-      const active = rar === d[0];
-      return '<button class="qf-rar-btn" onclick="setRar('' + d[0] + '')" style="color:' + (active ? d[1] : 'var(--text4)') + ';border-color:' + (active ? d[1] : 'transparent') + ';background:' + (active ? d[1] + '22' : 'transparent') + '">' + d[2] + '</button>';
+      var active = rar === d[0];
+      var col = active ? d[1] : "var(--text4)";
+      var borderCol = active ? d[1] : "transparent";
+      var bgCol = active ? d[1] + "22" : "transparent";
+      return "<button class=\"qf-rar-btn\" onclick=\"setRar('" + d[0] + "')\" style=\"color:" + col + ";border-color:" + borderCol + ";background:" + bgCol + "\">" + d[2] + "</button>";
     }).join("");
   }
 }
@@ -969,7 +986,7 @@ function updateStats(){
   document.getElementById("stat-avg").innerHTML=`<span style="color:var(--text5)">AVG </span><span style="color:${+avg>=0?UP:DN}">${+avg>=0?"+":""}${avg}%</span>`;
   const sv=document.getElementById("stat-val");
   sv.style.display="none";
-  const mc={"market":"MARKET","collection":collection.length?`MY CARDS (${collection.length})`:"MY CARDS","watchlist":watchlist.length?`★ WATCH (${watchlist.length})`:"★ WATCH"};
+  const mc={"market":"MARKET","watchlist":watchlist.length?`★ WATCH (${watchlist.length})`:"★ WATCH"};
   const modeShort={"market":"MKT","watchlist":"WATCH"};
   Object.entries(mc).forEach(([id,lbl])=>{
     const b=document.getElementById(`btn-${id}`);if(!b)return;
