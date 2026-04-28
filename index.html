@@ -456,7 +456,7 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <!-- TCGPlayer side -->
     <div style="flex:1;padding:9px 11px">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">
-        <div id="tcg-live-dot" style="width:6px;height:6px;border-radius:50%;background:#e8a800;flex-shrink:0"></div>
+        <div id="tcg-live-dot" style="width:6px;height:6px;border-radius:50%;background:#e8a800;flex-shrink:0;animation:pg 2.6s ease-in-out infinite"></div>
         <span style="font-size:9px;color:#e8a800;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.8px">TCGPLAYER</span>
         <span style="font-size:8px;color:var(--text4);font-family:'JetBrains Mono',monospace">MKT</span>
       </div>
@@ -480,9 +480,9 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <!-- Card Kingdom side -->
     <div style="flex:1;padding:9px 11px">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">
-        <div id="ck-live-dot" style="width:6px;height:6px;border-radius:50%;background:#4aa8e8;flex-shrink:0"></div>
+        <div id="ck-live-dot" style="width:6px;height:6px;border-radius:50%;background:#4aa8e8;flex-shrink:0;animation:pg 2.6s ease-in-out infinite;animation-delay:.4s"></div>
         <span style="font-size:9px;color:#4aa8e8;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.8px">CARD KINGDOM</span>
-        <span style="font-size:8px;color:var(--text4);font-family:'JetBrains Mono',monospace">BUY</span>
+        <span style="font-size:8px;color:var(--text4);font-family:'JetBrains Mono',monospace">BUYLIST</span>
       </div>
       <!-- Cash / Credit toggle -->
       <div style="display:flex;gap:4px;margin-bottom:5px">
@@ -579,11 +579,11 @@ const API_URL="https://mtg-market-pulse-api-production.up.railway.app";
 let CARDS=[];
 const NM={},NSM={};
 const FALLBACK=[
-  {id:1,name:"Dockside Extortionist",set:"C21",setName:"Commander 2021",rarity:"Mythic",colors:["R"],formats:["Commander","Legacy"],price:89.99,prev:68.20,pct:31.95,absPct:31.95,hist:[68.20,71.00,74.50,77.00,79.50,81.00,83.00,85.00,86.50,87.50,88.00,88.80,89.50,89.99],tcgplayerId:null},
-  {id:2,name:"Smothering Tithe",set:"RNA",setName:"Ravnica Allegiance",rarity:"Rare",colors:["W"],formats:["Commander"],price:28.50,prev:22.10,pct:28.96,absPct:28.96,hist:[22.10,23.00,24.00,25.00,25.80,26.50,27.00,27.40,27.70,28.00,28.20,28.35,28.45,28.50],tcgplayerId:null},
-  {id:3,name:"Rhystic Study",set:"PCY",setName:"Prophecy",rarity:"Common",colors:["U"],formats:["Commander","Legacy","Vintage"],price:34.00,prev:29.50,pct:15.25,absPct:15.25,hist:[29.50,30.00,30.50,31.00,31.50,32.00,32.50,33.00,33.30,33.50,33.70,33.85,33.95,34.00],tcgplayerId:null},
-  {id:4,name:"Cyclonic Rift",set:"RTR",setName:"Return to Ravnica",rarity:"Rare",colors:["U"],formats:["Commander","Legacy"],price:14.75,prev:18.20,pct:-18.96,absPct:18.96,hist:[18.20,17.80,17.40,17.00,16.60,16.20,15.80,15.50,15.30,15.10,14.95,14.85,14.78,14.75],tcgplayerId:null},
-  {id:5,name:"Sol Ring",set:"M13",setName:"Magic 2013",rarity:"Uncommon",colors:["C"],formats:["Commander"],price:3.50,prev:2.80,pct:25.00,absPct:25.00,hist:[2.80,2.90,2.95,3.00,3.10,3.15,3.20,3.28,3.32,3.37,3.42,3.45,3.48,3.50],tcgplayerId:null}
+  {id:1,name:"Dockside Extortionist",set:"C21",setName:"Commander 2021",rarity:"Mythic",colors:["R"],formats:["Commander","Legacy"],price:89.99,prev:68.20,pct:31.95,absPct:31.95,hist:[68.20,71.00,74.50,77.00,79.50,81.00,83.00,85.00,86.50,87.50,88.00,88.80,89.50,89.99],tcgplayerId:null,ck_buy_cash:52.00,ck_buy_credit:67.60,ck_retail:94.99,ck_buying:true},
+  {id:2,name:"Smothering Tithe",set:"RNA",setName:"Ravnica Allegiance",rarity:"Rare",colors:["W"],formats:["Commander"],price:28.50,prev:22.10,pct:28.96,absPct:28.96,hist:[22.10,23.00,24.00,25.00,25.80,26.50,27.00,27.40,27.70,28.00,28.20,28.35,28.45,28.50],tcgplayerId:null,ck_buy_cash:18.00,ck_buy_credit:23.40,ck_retail:29.99,ck_buying:true},
+  {id:3,name:"Rhystic Study",set:"PCY",setName:"Prophecy",rarity:"Common",colors:["U"],formats:["Commander","Legacy","Vintage"],price:34.00,prev:29.50,pct:15.25,absPct:15.25,hist:[29.50,30.00,30.50,31.00,31.50,32.00,32.50,33.00,33.30,33.50,33.70,33.85,33.95,34.00],tcgplayerId:null,ck_buy_cash:22.00,ck_buy_credit:28.60,ck_retail:35.99,ck_buying:true},
+  {id:4,name:"Cyclonic Rift",set:"RTR",setName:"Return to Ravnica",rarity:"Rare",colors:["U"],formats:["Commander","Legacy"],price:14.75,prev:18.20,pct:-18.96,absPct:18.96,hist:[18.20,17.80,17.40,17.00,16.60,16.20,15.80,15.50,15.30,15.10,14.95,14.85,14.78,14.75],tcgplayerId:null,ck_buy_cash:null,ck_buy_credit:null,ck_retail:15.99,ck_buying:false},
+  {id:5,name:"Sol Ring",set:"M13",setName:"Magic 2013",rarity:"Uncommon",colors:["C"],formats:["Commander"],price:3.50,prev:2.80,pct:25.00,absPct:25.00,hist:[2.80,2.90,2.95,3.00,3.10,3.15,3.20,3.28,3.32,3.37,3.42,3.45,3.48,3.50],tcgplayerId:null,ck_buy_cash:1.75,ck_buy_credit:2.28,ck_retail:3.99,ck_buying:true}
 ];
 async function loadLiveData(){
   const hs=document.getElementById("hdr-sub");
@@ -616,9 +616,12 @@ let collection=[], watchlist=[], currentCard=null;
 let parsedImport=[];
 // Load watchlist
 try{const s=localStorage.getItem("mtgwl");if(s)watchlist=JSON.parse(s);}catch{}
+// Load collection
+try{const s=localStorage.getItem("mtgcol");if(s)collection=JSON.parse(s);}catch{}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function saveWl(){try{localStorage.setItem("mtgwl",JSON.stringify(watchlist));}catch{}}
+function saveCol(){try{localStorage.setItem("mtgcol",JSON.stringify(collection));}catch{}}
 function matchCard(name,set){const n=name.toLowerCase().trim(),s=set?.toLowerCase().trim();if(s){const e=NSM[`${n}|${s}`];if(e)return e;}return NM[n]||null;}
 function bGlow(c){if(!c||!c.length)return MC.C.f;return c.length>1?GG:(MC[c[0]]||MC.C).f;}
 function bStroke(c){if(!c||!c.length)return MC.C.s;return c.length>1?GS:(MC[c[0]]||MC.C).s;}
@@ -1044,7 +1047,7 @@ function renderDetail(){
     document.getElementById("ck-pct-mkt").style.color=spreadColor;
     document.getElementById("ck-retail-val").textContent=ckRetail?`$${ckRetail.toFixed(2)}`:"—";
     document.getElementById("ck-retail-row").style.display="flex";
-    document.getElementById("ck-not-buying").style.display=n.ck_buying===false?"":"none";
+    document.getElementById("ck-not-buying").style.display=(n.ck_buying===false)?"inline":"none";
     document.getElementById("btn-ck-price").textContent=`$${(ckVal||0).toFixed(2)}`;
     document.getElementById("ck-sell-link").href=`https://www.cardkingdom.com/catalog/buylist?search=${encodeURIComponent(n.name)}&utm_source=mtgmarketpulse&utm_medium=affiliate`;
     document.getElementById("ck-sell-link").style.opacity="1";
@@ -1082,7 +1085,7 @@ function setCkValMode(v){ckValMode=v;renderDetail();}
 function setValMode(v){valMode=v;renderDetail();}
 
 function drawSparkline(data,color){
-  const svg=document.getElementById("spark-svg"),W=120,H=40;
+  const svg=document.getElementById("spark-svg"),W=110,H=34;
   const mn=Math.min(...data),mx=Math.max(...data),rng=mx-mn||.01;
   const pts=data.map((v,i)=>`${((i/(data.length-1))*W).toFixed(1)},${(H-((v-mn)/rng)*H*.88-H*.06).toFixed(1)}`).join(" ");
   const[lx,ly]=pts.split(" ").pop().split(",").map(Number);
@@ -1129,6 +1132,7 @@ function updateImportPreview(){
 function loadCollection(){
   if(!parsedImport.length)return;
   collection=parsedImport; parsedImport=[];
+  saveCol();
   document.getElementById("import-txt").value="";
   document.getElementById("import-preview").style.display="none";
   hideOverlay("import-overlay");
