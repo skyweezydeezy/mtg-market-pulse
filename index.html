@@ -364,10 +364,10 @@ body.light .overlay{background:rgba(240,240,248,.97)}
     <!-- Card count slider -->
     <div class="sheet-row" style="align-items:center;gap:10px;flex-wrap:nowrap">
       <span class="sheet-label">SHOW</span>
-      <input type="range" id="card-limit-slider" min="25" max="1000" step="25" value="250"
+      <input type="range" id="card-limit-slider" min="10" max="100" step="5" value="50"
         oninput="setCardLimit(this.value)"
         style="flex:1;accent-color:#00e676;cursor:pointer;height:4px">
-      <span id="card-limit-lbl" class="mono" style="font-size:12px;font-weight:700;color:#00e676;min-width:44px;text-align:right">250 cards</span>
+      <span id="card-limit-lbl" class="mono" style="font-size:12px;font-weight:700;color:#00e676;min-width:44px;text-align:right">50 cards</span>
     </div>
 
     <div class="sheet-divider"></div>
@@ -509,7 +509,7 @@ const GG="#ffd700",GS="#c8a000",UP="#00e676",DN="#ff1744";
 const RC={Mythic:"#ff6d00",Rare:"#ffd600",Uncommon:"#b0bec5",Common:"#90a4ae"};
 const FMTS=["All","Commander","Modern","Standard","Pioneer","Legacy"];
 const RARS=["All","Mythic","Rare","Uncommon","Common"];
-const tcgUrl=(n)=>`https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${encodeURIComponent(n)}&view=grid&utm_source=mtgmarketpulse&utm_medium=affiliate`;
+const tcgUrl=(n,id)=>id?`https://www.tcgplayer.com/product/${id}?utm_source=mtgmarketpulse&utm_medium=affiliate`:`https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${encodeURIComponent(n)}&view=grid&utm_source=mtgmarketpulse&utm_medium=affiliate`;
 
 const API_URL="https://mtg-market-pulse-api-production.up.railway.app";
 let CARDS=[];
@@ -564,7 +564,7 @@ async function clientEnrichColors(){
   var chunks=[];
   for(var i=0;i<identifiers.length;i+=75) chunks.push(identifiers.slice(i,i+75));
 
-  var colorMap={};
+  var enrichMap={};
   for(var ci=0;ci<chunks.length;ci++){
     try{
       var r=await fetch(SF+"/cards/collection",{
@@ -576,7 +576,11 @@ async function clientEnrichColors(){
       var d=await r.json();
       (d.data||[]).forEach(function(card){
         var ci2=card.color_identity;
-        colorMap[card.name.toLowerCase()]=(ci2&&ci2.length)?ci2:["C"];
+        enrichMap[card.name.toLowerCase()]={
+          colors:(ci2&&ci2.length)?ci2:["C"],
+          edhrecRank:card.edhrec_rank||null,
+          tcgplayerId:card.tcgplayer_id?String(card.tcgplayer_id):null
+        };
       });
       // Be polite to Scryfall rate limits
       if(ci<chunks.length-1) await new Promise(function(res){setTimeout(res,120);});
@@ -585,22 +589,22 @@ async function clientEnrichColors(){
     }
   }
 
-  if(!Object.keys(colorMap).length) return;
+  if(!Object.keys(enrichMap).length) return;
   // Patch CARDS array in place
   CARDS=CARDS.map(function(c){
-    var enriched=colorMap[c.name.toLowerCase()];
-    return enriched?Object.assign({},c,{colors:enriched}):c;
+    var enriched=enrichMap[c.name.toLowerCase()];
+    return enriched?Object.assign({},c,enriched):c;
   });
   // Rebuild name maps
   CARDS.forEach(function(c){
     NM[c.name.toLowerCase()]=c;
     NSM[(c.name.toLowerCase()+"|"+(c.set||"").toLowerCase())]=c;
   });
-  console.log("[MTG] Client enrichment done. Patched "+Object.keys(colorMap).length+" cards.");
+  console.log("[MTG] Client enrichment done. Patched "+Object.keys(enrichMap).length+" cards.");
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=250, priceFilter="all", colorFilter="All", isLive=false;
+let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50, priceFilter="all", colorFilter="All", isLive=false;
 let poolSize=0;
 function updateLiveDot(){var d=document.getElementById("live-dot");if(!d)return;d.innerHTML=isLive?'<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#00e676;box-shadow:0 0 6px #00e676;display:inline-block"></span><span style="color:#00e676;font-weight:700">LIVE</span></span>':'<span style="color:var(--text3)">Demo Mode</span>';}
 let collection=[], watchlist=[], currentCard=null;
@@ -645,36 +649,39 @@ let phyNodes=[], raf=null;
 function initPhysics(cards){
   if(raf)cancelAnimationFrame(raf);
   const area=document.getElementById("bubble-area");
-  const W=area.clientWidth||390, H=area.clientHeight||460;
+  const W=area.clientWidth||390, H=area.clientHeight||700;
   const svg=document.getElementById("bubble-svg");
   svg.setAttribute("width",W); svg.setAttribute("height",H);
   if(!cards.length){renderBubbles([]);updateEmptyState();return;}
-  const maxAbs=Math.max(...cards.map(c=>c.absPct),1);
-  // Linear scale anchored at 0 — 0% change = smallest bubble, biggest mover = largest.
-  // Shrink max radius as pool grows so bubbles remain legible at 250 cards
-  const MIN_R=8, MAX_R=Math.min(W,H)*Math.max(0.06,0.15-Math.log10(Math.max(poolSize||50,10))*0.025);
-  const rs=d3.scaleLinear().domain([0,maxAbs]).range([MIN_R,MAX_R]).clamp(true);
+
+  // Score-based sqrt radius: most bubbles mid-size, top movers clearly larger
+  const maxScore=Math.max(...cards.map(c=>c.score||c.absPct),1);
+  const MIN_R=16, MAX_R=Math.min(W,H)*0.13;
   phyNodes=cards.map((c,i)=>{
-    const a=(i/cards.length)*Math.PI*2,sp=Math.min(W,H)*.26;
-    const nd={...c,r:Math.max(rs(c.absPct),MIN_R),x:W/2+Math.cos(a)*sp,y:H/2+Math.sin(a)*sp,vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5};
-    nd.mass=nd.r*nd.r; return nd;
+    const t=Math.sqrt((c.score||c.absPct)/maxScore);
+    const r=Math.max(MIN_R, MIN_R+(MAX_R-MIN_R)*t);
+    // Spawn in a loose ring so bubbles drift inward naturally
+    const a=(i/cards.length)*Math.PI*2, sp=Math.min(W,H)*0.28;
+    return {...c, r,
+      x: W/2+Math.cos(a)*sp*(0.7+Math.random()*0.6),
+      y: H/2+Math.sin(a)*sp*(0.7+Math.random()*0.6),
+      vx:(Math.random()-.5)*0.8, vy:(Math.random()-.5)*0.8,
+      mass:r*r};
   });
   renderBubbles(phyNodes);
   updateEmptyState();
-  // Physics: edges touch, zero overlap
-  // GAP=1 gives a hair of visual breathing room without visible space
-  const GAP   = 1;     // 1px visual gap — edges appear to touch
-  const DAMP  = 0.88;  // strong drag — settles fast
-  const GRAV  = 0.006; // stronger gravity packs bubbles toward centre
-  const MAX_V = 1.0;   // slow drift
-  const NOISE = 0.012; // micro-jitter
-  const REPEL = 0.28;  // firm push — resolves overlaps decisively
-  const WALL_K= 0.10;  // wall spring
+
+  // Buoyancy physics — float freely, never overlap
+  const GAP   = 6;     // visible breathing room between bubbles
+  const DAMP  = 0.94;  // high damping = slow, dreamy drift
+  const GRAV  = 0.0018;// gentle pull to centre
+  const MAX_V = 0.9;
+  const NOISE = 0.018; // random drift = buoyancy feel
+  const REPEL = 0.32;
+  const WALL_K= 0.07;
 
   function tick(){
     const W2=area.clientWidth||W, H2=area.clientHeight||H;
-
-    // ── Integrate each bubble ─────────────────────────────────────────────
     for(const n of phyNodes){
       n.vx+=(Math.random()-.5)*NOISE;
       n.vy+=(Math.random()-.5)*NOISE;
@@ -684,42 +691,33 @@ function initPhysics(cards){
       const sp=Math.hypot(n.vx,n.vy);
       if(sp>MAX_V){n.vx=n.vx/sp*MAX_V;n.vy=n.vy/sp*MAX_V;}
       n.x+=n.vx; n.y+=n.vy;
-      // Soft wall springs
       const pad=n.r+GAP;
-      if(n.x<pad)      n.vx+=(pad-n.x)*WALL_K;
-      if(n.x>W2-pad)   n.vx-=(n.x-(W2-pad))*WALL_K;
-      if(n.y<pad)      n.vy+=(pad-n.y)*WALL_K;
-      if(n.y>H2-pad)   n.vy-=(n.y-(H2-pad))*WALL_K;
-      // Hard clamp — never exit screen
-      n.x=Math.max(n.r+1,Math.min(W2-n.r-1,n.x));
-      n.y=Math.max(n.r+1,Math.min(H2-n.r-1,n.y));
+      if(n.x<pad)    n.vx+=(pad-n.x)*WALL_K;
+      if(n.x>W2-pad) n.vx-=(n.x-(W2-pad))*WALL_K;
+      if(n.y<pad)    n.vy+=(pad-n.y)*WALL_K;
+      if(n.y>H2-pad) n.vy-=(n.y-(H2-pad))*WALL_K;
+      n.x=Math.max(n.r+2,Math.min(W2-n.r-2,n.x));
+      n.y=Math.max(n.r+2,Math.min(H2-n.r-2,n.y));
     }
-
-    // ── Bubble-bubble separation — 6 iterations guarantees full resolution ──
-    for(let iter=0;iter<6;iter++){
+    // Full-resolution separation — 8 iterations for clean gaps
+    for(let iter=0;iter<8;iter++){
       for(let i=0;i<phyNodes.length;i++){
         for(let j=i+1;j<phyNodes.length;j++){
           const a=phyNodes[i],b=phyNodes[j];
           const dx=b.x-a.x, dy=b.y-a.y;
           const dist2=dx*dx+dy*dy;
-          // Target distance = sum of radii + gap
           const target=a.r+b.r+GAP;
-          if(dist2>=target*target||dist2<0.0001) continue;
+          if(dist2>=target*target||dist2<0.0001)continue;
           const dist=Math.sqrt(dist2);
           const nx=dx/dist, ny=dy/dist;
           const overlap=target-dist;
           const tm=a.mass+b.mass;
-          // FULL positional correction — push apart completely this frame
-          const ca=overlap*(b.mass/tm);
-          const cb=overlap*(a.mass/tm);
+          const ca=overlap*(b.mass/tm), cb=overlap*(a.mass/tm);
           a.x-=nx*ca; a.y-=ny*ca;
           b.x+=nx*cb; b.y+=ny*cb;
-          // Apply a gentle velocity push proportional to overlap
           const force=REPEL*(overlap/target);
-          a.vx-=nx*force*(b.mass/tm);
-          a.vy-=ny*force*(b.mass/tm);
-          b.vx+=nx*force*(a.mass/tm);
-          b.vy+=ny*force*(a.mass/tm);
+          a.vx-=nx*force*(b.mass/tm); a.vy-=ny*force*(b.mass/tm);
+          b.vx+=nx*force*(a.mass/tm); b.vy+=ny*force*(a.mass/tm);
         }
       }
     }
@@ -734,140 +732,143 @@ function initPhysics(cards){
 
 function renderBubbles(nodes){
   const svg=document.getElementById("bubble-svg");
-  const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||460;
+  const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||700;
 
-  // Per-color light/dark variants for 3D sphere effect
-  const MCL={W:"#fffbe8",U:"#66aaee",B:"#cc88ff",R:"#ff7777",G:"#66cc66",C:"#ccdde8"};
-  const MCD={W:"#7a6e20",U:"#071830",B:"#1a0535",R:"#300505",G:"#051505",C:"#0e1820"};
+  // Iridescent tint colors per MTG color identity
+  // Each color gets a primary tint and two iridescent shimmer colors
+  const BUBBLE={
+    W:{tint:"#e8d48a", iris1:"#aaddff", iris2:"#ffe8aa", stroke:"#d4b840"},
+    U:{tint:"#4488cc", iris1:"#cc88ff", iris2:"#44ffee", stroke:"#2266aa"},
+    B:{tint:"#9955cc", iris1:"#ff88cc", iris2:"#6644ff", stroke:"#6633aa"},
+    R:{tint:"#dd4444", iris1:"#ffaa44", iris2:"#ff44aa", stroke:"#aa2222"},
+    G:{tint:"#44aa55", iris1:"#44ffaa", iris2:"#aaff44", stroke:"#228833"},
+    C:{tint:"#88aabb", iris1:"#aaddff", iris2:"#ddeeff", stroke:"#6699aa"},
+    Multi:{tint:"#ddbb44", iris1:"#ff88aa", iris2:"#88ddff", stroke:"#bb9922"}
+  };
 
-  // Gradient defs are now inline per-bubble (see inlineDefs below).
+  const bg=`<rect width="${W}" height="${H}" fill="${isDark?"#040408":"#eeeef8"}"/>`;
 
-  // Minimal shared defs: only dot pattern + glow filter.
-  // Gradient IDs are scoped per-bubble below to avoid url(#id) cross-reference
-  // failures in Blink/WebKit when SVG content is written via innerHTML.
-  const sharedDefs=[
-    `<defs>`,
-    `<pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">`,
-    `<circle cx="1" cy="1" r=".7" fill="var(--dot)"/></pattern>`,
-    `<filter id="glow" x="-60%" y="-60%" width="220%" height="220%">`,
-    `<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>`,
-    `<feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge>`,
-    `</filter>`,
-    `</defs>`
-  ].join("");
-  const bg=`<rect width="${W}" height="${H}" fill="${isDark?"#07070f":"#f2f2f8"}"/>`+
-           `<rect width="${W}" height="${H}" fill="url(#dots)" opacity="${isDark?1:0}"/>`;
+  // Subtle dot grid
+  const dotGrid=isDark
+    ?`<rect width="${W}" height="${H}" fill="url(#dots)"/>`
+    :``;
+
+  const sharedDefs=`<defs>
+    <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r=".5" fill="#ffffff" opacity=".06"/>
+    </pattern>
+    <filter id="softglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>`;
 
   const bubbles=nodes.map(n=>{
     const pc=n.pct>=0?UP:DN;
+    const pcshadow=n.pct>=0?"rgba(0,230,118,.6)":"rgba(255,23,68,.6)";
     const colors=n.colors&&n.colors.length?n.colors:["C"];
-    const st=bStroke(colors), gw=bGlow(colors);
-    const isM=colors.length>1, big=n.absPct>15;
-    const ck=isM?"Multi":(MC[colors[0]]?colors[0]:"C");
-
-    // Resolve gradient palette for this bubble
-    const baseColor=isM?GG:(MC[ck]||MC.C).f;
-    const lightColor=isM?"#fffbe0":(MCL[ck]||"#ffffff");
-    const darkColor=isM?"#3a2800":(MCD[ck]||"#050510");
-
-    // Unique IDs scoped to this bubble
-    const gid=`bg${n.id}`;
-    const sid=`sg${n.id}`;
-    const rid=`rg${n.id}`;
-
-    // Inline defs with gradients for this bubble only
-    const inlineDefs=[
-      `<defs>`,
-      `<radialGradient id="${gid}" cx="36%" cy="28%" r="75%" fx="34%" fy="24%">`,
-      `<stop offset="0%" stop-color="${lightColor}" stop-opacity=".92"/>`,
-      `<stop offset="18%" stop-color="${baseColor}" stop-opacity="1"/>`,
-      `<stop offset="55%" stop-color="${baseColor}" stop-opacity="1"/>`,
-      `<stop offset="82%" stop-color="${darkColor}" stop-opacity="1"/>`,
-      `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
-      `</radialGradient>`,
-      `<radialGradient id="${sid}" cx="32%" cy="22%" r="44%" fx="28%" fy="16%">`,
-      `<stop offset="0%" stop-color="#fff" stop-opacity=".92"/>`,
-      `<stop offset="35%" stop-color="#fff" stop-opacity=".38"/>`,
-      `<stop offset="70%" stop-color="#fff" stop-opacity=".06"/>`,
-      `<stop offset="100%" stop-color="#fff" stop-opacity="0"/>`,
-      `</radialGradient>`,
-      `<radialGradient id="${rid}" cx="50%" cy="92%" r="48%">`,
-      `<stop offset="0%" stop-color="#fff" stop-opacity=".22"/>`,
-      `<stop offset="100%" stop-color="#fff" stop-opacity="0"/>`,
-      `</radialGradient>`,
-      `</defs>`
-    ].join("");
-
-    // Text sizing
-    const sn=n.r>26, ss=n.r>42, sl=n.r>55;
-    const nf=Math.max(6,Math.min(n.r*.24,12));
-    const pf=Math.max(7,Math.min(n.r*.3,15));
-    const ny=sn?-(pf*.75):0, py=sn?(pf*.72):(pf*.38), sy=py+nf*1.25;
-
+    const isM=colors.length>1;
+    const bk=isM?"Multi":(BUBBLE[colors[0]]?colors[0]:"C");
+    const {tint,iris1,iris2,stroke}=BUBBLE[bk]||BUBBLE.C;
     const inW=watchlist.some(w=>w.id===n.id);
-    const ds=n.requestedSet||n.set;
+    const r=n.r;
 
-    // Outer glow — large blurred circle
-    const outerGlow=`<circle r="${n.r*1.55}" fill="none" stroke="${gw}" stroke-width="${n.r*.55}" opacity="${big?.28:.16}" style="filter:blur(${(n.r*.4).toFixed(0)}px)"/>`;
+    // Unique gradient IDs per bubble
+    const gid=`bg${n.id}`, rid=`ri${n.id}`, sid=`sp${n.id}`, s2=`s2${n.id}`, od=`og${n.id}`;
 
-    // Pulse rings for big movers
-    const halos=big
-      ?`<circle class="pulse" r="${n.r+10}" fill="none" stroke="${gw}" stroke-width="1.2" opacity=".45"/><circle class="pulse2" r="${n.r+22}" fill="none" stroke="${gw}" stroke-width=".7" opacity=".2"/>`
-      :``;
+    // Inline defs — soap bubble look:
+    // 1. Very transparent tinted fill (inner)
+    // 2. Iridescent rim gradient (the "soap film" color shift)
+    // 3. Primary specular — large soft highlight upper-left
+    // 4. Secondary specular — tiny bright point
+    const inlineDefs=`<defs>
+      <radialGradient id="${gid}" cx="42%" cy="38%" r="72%" fx="38%" fy="30%">
+        <stop offset="0%"   stop-color="#ffffff" stop-opacity=".04"/>
+        <stop offset="40%"  stop-color="${tint}"  stop-opacity=".07"/>
+        <stop offset="75%"  stop-color="${iris1}" stop-opacity=".18"/>
+        <stop offset="90%"  stop-color="${iris2}" stop-opacity=".28"/>
+        <stop offset="100%" stop-color="${tint}"  stop-opacity=".45"/>
+      </radialGradient>
+      <radialGradient id="${rid}" cx="50%" cy="50%" r="50%">
+        <stop offset="55%"  stop-color="${tint}"  stop-opacity="0"/>
+        <stop offset="80%"  stop-color="${iris1}" stop-opacity=".22"/>
+        <stop offset="92%"  stop-color="${iris2}" stop-opacity=".35"/>
+        <stop offset="100%" stop-color="${stroke}" stop-opacity=".55"/>
+      </radialGradient>
+      <radialGradient id="${sid}" cx="34%" cy="26%" r="38%" fx="28%" fy="18%">
+        <stop offset="0%"   stop-color="#ffffff" stop-opacity=".82"/>
+        <stop offset="45%"  stop-color="#ffffff" stop-opacity=".22"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="${s2}" cx="62%" cy="72%" r="18%">
+        <stop offset="0%"   stop-color="#ffffff" stop-opacity=".35"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="${od}" cx="50%" cy="50%" r="50%">
+        <stop offset="60%"  stop-color="${tint}"  stop-opacity="0"/>
+        <stop offset="100%" stop-color="${tint}"  stop-opacity=".4"/>
+      </radialGradient>
+    </defs>`;
 
-    // Multi-color pie slices as base before gradient overlay
-    let sliceBase=``;
+    // Outer ambient glow — soft, large, no hard edges
+    const outerGlow=`<circle r="${(r*1.45).toFixed(1)}" fill="url(#${od})" opacity=".7"/>`;
+
+    // Multi-color identity — thin arc segments at rim only
+    let rimSlices=``;
     if(isM){
       colors.forEach((c,i)=>{
-        const nc=n.colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
-        const x1=(Math.cos(sa)*n.r).toFixed(1),y1=(Math.sin(sa)*n.r).toFixed(1);
-        const x2=(Math.cos(ea)*n.r).toFixed(1),y2=(Math.sin(ea)*n.r).toFixed(1);
-        sliceBase+=`<path d="M0 0L${x1} ${y1}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2} ${y2}Z" fill="${(MC[c]||MC.C).f}" opacity=".7"/>`;
+        const nc=colors.length, sa=(i/nc)*2*Math.PI-Math.PI/2, ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
+        const ox=(Math.cos(sa)*r).toFixed(1), oy=(Math.sin(sa)*r).toFixed(1);
+        const ex=(Math.cos(ea)*r).toFixed(1), ey=(Math.sin(ea)*r).toFixed(1);
+        rimSlices+=`<path d="M${ox} ${oy}A${r} ${r} 0 ${ea-sa>Math.PI?1:0} 1 ${ex} ${ey}" fill="none" stroke="${(BUBBLE[c]||BUBBLE.C).tint}" stroke-width="3" opacity=".6"/>`;
       });
     }
 
-    // Watchlist star
-    const star=inW?`<text x="${n.r*.58}" y="${-n.r*.58}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.2)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">&#9733;</text>`:``;
+    // Text sizing — generous since max 50 bubbles
+    const showName=r>22, showPrice=r>44;
+    const pf=Math.max(8, Math.min(r*0.28, 14));
+    const nf=Math.max(7, Math.min(r*0.22, 11));
+    const ny=showName?-(pf*0.72):0;
+    const py=showName?(pf*0.66):(pf*0.32);
+    const pry=py+nf*1.3;
 
-    // Price change % text
-    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py}" font-size="${pf}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.9))">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
+    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py.toFixed(1)}" font-size="${pf.toFixed(1)}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 5px ${pcshadow})">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
 
-    // Card name
-    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny}" font-size="${nf}" font-weight="700" fill="#ffffff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9))">${n.name.length>14?n.name.slice(0,13)+"…":n.name}</text>`:
-      `<title>${n.name}</title>`;
+    const nameT=showName
+      ?`<text text-anchor="middle" dominant-baseline="middle" y="${ny.toFixed(1)}" font-size="${nf.toFixed(1)}" font-weight="700" fill="rgba(255,255,255,.9)" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.7))">${n.name.length>13?n.name.slice(0,12)+"\u2026":n.name}</text>`
+      :`<title>${n.name}</title>`;
 
-    // Price text for large bubbles
-    const priceT=sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.82).toFixed(1)}" fill="rgba(255,255,255,.75)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))">$${n.price.toFixed(2)}</text>`:``;
+    const priceT=showPrice
+      ?`<text text-anchor="middle" dominant-baseline="middle" y="${pry.toFixed(1)}" font-size="${(nf*0.85).toFixed(1)}" fill="rgba(255,255,255,.55)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">$${(n.displayPrice||n.price).toFixed(2)}</text>`
+      :``;
 
-    // Set badge for medium+ bubbles
-    const setT=ss&&!sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.75).toFixed(1)}" fill="rgba(255,255,255,.5)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>`:``;
+    const star=inW
+      ?`<text x="${(r*0.54).toFixed(1)}" y="${(-r*0.54).toFixed(1)}" font-size="${Math.max(8,r*0.22).toFixed(1)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 0 4px #ffd700)">&#9733;</text>`
+      :``;
 
     return [
       `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">`,
-      outerGlow,
-      halos,
-      // Deep dark base
-      `<circle r="${n.r}" fill="#04040e"/>`,
-      // Color pie slices for multi
-      sliceBase,
       inlineDefs,
-      // Main 3D sphere gradient (locally scoped id)
-      `<circle r="${n.r}" fill="url(#${gid})"/>`,
-      // Rim light bottom (locally scoped id)
-      `<circle r="${n.r}" fill="url(#${rid})"/>`,
-      // Specular highlight top-left (locally scoped id)
-      `<circle r="${n.r}" fill="url(#${sid})"/>`,
-      // Colored border stroke
-      `<circle r="${n.r}" fill="none" stroke="${st}" stroke-width="${big?2.2:1.5}" opacity=".95"/>`,
-      // Gold inner ring for multi
-      isM?`<circle r="${n.r-2.5}" fill="none" stroke="${GG}" stroke-width=".7" opacity=".4"/>`:``,
-      // Text layers
-      pctT, nameT, priceT, setT, star,
+      outerGlow,
+      // Transparent base — lets background show through like real soap film
+      `<circle r="${r}" fill="url(#${gid})"/>`,
+      // Iridescent rim
+      `<circle r="${r}" fill="url(#${rid})"/>`,
+      // Rim arc slices for multi-color
+      rimSlices,
+      // Thin colored stroke — the "surface tension" edge
+      `<circle r="${r}" fill="none" stroke="${stroke}" stroke-width="1.2" opacity=".7"/>`,
+      // Primary specular highlight — large soft blob upper-left
+      `<circle r="${r}" fill="url(#${sid})"/>`,
+      // Secondary tiny specular — lower-right for depth
+      `<circle r="${r}" fill="url(#${s2})"/>`,
+      // Text
+      pctT, nameT, priceT, star,
       `</g>`
     ].join("");
   }).join("");
 
-  svg.innerHTML=sharedDefs+bg+bubbles;
+  svg.innerHTML=sharedDefs+bg+dotGrid+bubbles;
 }
 
 // ── UI ────────────────────────────────────────────────────────────────────────
@@ -984,7 +985,8 @@ function openCard(id){
   det.style.borderTop=`2px solid ${bStroke(n.colors&&n.colors.length?n.colors:['C'])}`;
   det.style.boxShadow=`0 -24px 64px ${bGlow(n.colors&&n.colors.length?n.colors:['C'])}22`;
   document.getElementById("det-name").textContent=n.name;
-  document.getElementById("det-meta").innerHTML=`<span style="color:${RC[n.rarity]||'#c084fc'}">${n.rarity.toUpperCase()}</span> · <span style="color:var(--text2)">[${n.requestedSet||n.set}]</span> · ${n.formats.join(" · ")}`;
+  var edhStr=n.edhrecRank?` &middot; <span style="color:#7b8cde" title="EDHREC rank">#${n.edhrecRank.toLocaleString()} EDHREC</span>`:'';
+  document.getElementById("det-meta").innerHTML=`<span style="color:${RC[n.rarity]||'#c084fc'}">${n.rarity.toUpperCase()}</span> &middot; <span style="color:var(--text2)">[${n.requestedSet||n.set}]</span> &middot; ${n.formats.join(" &middot; ")}${edhStr}`;
   const cc=document.getElementById("det-colors");
   cc.innerHTML=`<span style="font-size:9px;color:var(--text4)" class="mono">IDENTITY:</span>`+
     n.colors.map(c=>`<div class="color-pip" style="background:${(MC[c]||MC.C).f}22;border:1px solid ${(MC[c]||MC.C).s}"><svg width="7" height="7"><circle cx="3.5" cy="3.5" r="3.5" fill="${(MC[c]||MC.C).f}"/></svg><span style="color:${(MC[c]||MC.C).f}">${(MC[c]||MC.C).l}</span></div>`).join("")+
@@ -1011,7 +1013,7 @@ function renderDetail(){
   document.getElementById("st-delta").style.color=n.pct>=0?UP:DN;
   document.getElementById("st-rar").textContent=n.rarity;
   document.getElementById("st-rar").style.color=RC[n.rarity]||"#c084fc";
-  document.getElementById("buy-link").href=tcgUrl(n.name);
+  document.getElementById("buy-link").href=tcgUrl(n.name,n.tcgplayerId);
   document.getElementById("tog-single").className="tog-btn"+(valMode==="single"?" act":"");
   document.getElementById("tog-total").className="tog-btn"+(valMode==="total"?" act":"");
   drawSparkline(n.hist,n.pct>=0?UP:DN);
