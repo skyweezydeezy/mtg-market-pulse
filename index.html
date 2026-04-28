@@ -545,6 +545,58 @@ async function loadLiveData(){
   }
 }
 
+// ── Client-side Scryfall color enrichment ────────────────────────────────────
+// Runs after loadLiveData() when the server Scryfall enrichment failed silently
+// (detectable because >40% of cards come back as colorless ["C"]).
+async function clientEnrichColors(){
+  if(!CARDS.length) return;
+  const colorless=CARDS.filter(function(c){
+    return !c.colors||!c.colors.length||(c.colors.length===1&&c.colors[0]==="C");
+  }).length;
+  // Only enrich if a suspicious majority are colorless
+  if(colorless < CARDS.length*0.4) return;
+  console.log("[MTG] Client enriching colors: "+colorless+"/"+CARDS.length+" cards colorless");
+
+  var SF="https://api.scryfall.com";
+  var identifiers=CARDS.map(function(c){ return {name:c.name}; });
+  var chunks=[];
+  for(var i=0;i<identifiers.length;i+=75) chunks.push(identifiers.slice(i,i+75));
+
+  var colorMap={};
+  for(var ci=0;ci<chunks.length;ci++){
+    try{
+      var r=await fetch(SF+"/cards/collection",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({identifiers:chunks[ci]})
+      });
+      if(!r.ok) continue;
+      var d=await r.json();
+      (d.data||[]).forEach(function(card){
+        var ci2=card.color_identity;
+        colorMap[card.name.toLowerCase()]=(ci2&&ci2.length)?ci2:["C"];
+      });
+      // Be polite to Scryfall rate limits
+      if(ci<chunks.length-1) await new Promise(function(res){setTimeout(res,120);});
+    }catch(e){
+      console.error("[MTG] Scryfall client enrich chunk "+ci+" failed:",e.message);
+    }
+  }
+
+  if(!Object.keys(colorMap).length) return;
+  // Patch CARDS array in place
+  CARDS=CARDS.map(function(c){
+    var enriched=colorMap[c.name.toLowerCase()];
+    return enriched?Object.assign({},c,{colors:enriched}):c;
+  });
+  // Rebuild name maps
+  CARDS.forEach(function(c){
+    NM[c.name.toLowerCase()]=c;
+    NSM[(c.name.toLowerCase()+"|"+(c.set||"").toLowerCase())]=c;
+  });
+  console.log("[MTG] Client enrichment done. Patched "+Object.keys(colorMap).length+" cards.");
+}
+
 // ── State ─────────────────────────────────────────────────────────────────────
 let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=50, priceFilter="all", colorFilter="All", isLive=false;
 function updateLiveDot(){var d=document.getElementById("live-dot");if(!d)return;d.innerHTML=isLive?'<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#00e676;box-shadow:0 0 6px #00e676;display:inline-block"></span><span style="color:#00e676;font-weight:700">LIVE</span></span>':'<span style="color:var(--text3)">Demo Mode</span>';}
@@ -1145,7 +1197,7 @@ try{
     document.getElementById("disc-overlay").style.display="none";
   }
 }catch(e){}
-loadLiveData().then(function(){ refresh(); });
+loadLiveData().then(async function(ok){ if(ok) await clientEnrichColors(); refresh(); });
 </script>
 </body>
 </html>
