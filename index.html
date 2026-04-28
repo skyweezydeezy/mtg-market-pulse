@@ -431,44 +431,83 @@ body.light .overlay{background:rgba(240,240,248,.97)}
 
 <!-- DETAIL PANEL -->
 <div id="detail" style="display:none" onclick="event.stopPropagation()">
+  <!-- Header row -->
   <div style="display:flex;justify-content:space-between;align-items:flex-start">
     <div style="flex:1;min-width:0">
       <div id="det-name" style="font-size:20px;font-weight:700;color:var(--title);line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
       <div id="det-meta" style="font-size:11px;color:var(--text3);margin-top:3px" class="mono"></div>
     </div>
     <div style="display:flex;gap:5px;align-items:center;padding-left:8px">
-      <button id="det-watch-btn" onclick="toggleWatchCurrent()" style="background:none;border:1px solid #2a2a2a;border-radius:16px;padding:3px 8px;color:#484848;font-size:13px">☆</button>
-      <button onclick="closeDetail()" style="background:none;border:none;color:#363654;font-size:26px;line-height:1">×</button>
+      <button id="det-watch-btn" onclick="toggleWatchCurrent()" style="background:none;border:1px solid #2a2a2a;border-radius:16px;padding:3px 8px;color:#484848;font-size:13px">&#9734;</button>
+      <button onclick="closeDetail()" style="background:none;border:none;color:#363654;font-size:26px;line-height:1">&#215;</button>
     </div>
   </div>
   <div id="det-colors" style="display:flex;gap:5px;margin-top:7px;align-items:center;flex-wrap:wrap"></div>
-  <div id="det-val-toggle" style="display:none;gap:6px;margin-top:8px;align-items:center">
+  <div id="det-val-toggle" style="display:none;gap:6px;margin-top:6px;align-items:center">
     <span style="font-size:9px;color:#363654" class="mono">SHOW:</span>
     <button class="tog-btn act" id="tog-single" onclick="setValMode('single')"></button>
     <button class="tog-btn" id="tog-total" onclick="setValMode('total')"></button>
   </div>
+
+  <!-- Price row -->
   <div style="display:flex;gap:20px;margin-top:10px;align-items:flex-end">
     <div><div id="det-price-lbl" style="font-size:10px;color:var(--text3)" class="mono">CURRENT</div><div id="det-price" style="font-size:28px;font-weight:700;color:var(--title);line-height:1" class="mono"></div></div>
     <div><div id="det-pct-lbl" style="font-size:10px;color:var(--text3)" class="mono"></div><div id="det-pct" style="font-size:22px;font-weight:700;line-height:1" class="mono"></div></div>
     <div style="margin-left:auto"><svg id="spark-svg" width="120" height="40" style="overflow:visible"></svg></div>
   </div>
+
+  <!-- Stat tiles -->
   <div style="display:flex;gap:8px;margin-top:10px">
     <div class="stat-tile"><div class="stat-lbl">PREV</div><div class="stat-val" id="st-prev"></div></div>
     <div class="stat-tile"><div class="stat-lbl">DELTA</div><div class="stat-val" id="st-delta"></div></div>
     <div class="stat-tile"><div class="stat-lbl">RARITY</div><div class="stat-val" id="st-rar"></div></div>
   </div>
-  <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer" class="buy-btn" onclick="event.stopPropagation();trackBuyClick()">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    BUY ON TCGPLAYER · AFFILIATE LINK
+
+  <!-- ── DUAL ACTION BUTTONS ─────────────────────────────────────────────── -->
+  <!-- TCGPlayer BUY — large, most eye-catching -->
+  <a id="buy-link" href="#" target="_blank" rel="noopener noreferrer"
+    onclick="event.stopPropagation();trackBuyClick('tcg')"
+    style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:18px 14px;border-radius:12px;border:none;background:linear-gradient(135deg,#ffcc00,#e8a800,#c47a00);color:#1a0e00;font-weight:900;font-size:20px;text-decoration:none;margin-top:12px;letter-spacing:2px;touch-action:manipulation;cursor:pointer;box-shadow:0 0 32px #e8a80066,0 4px 16px rgba(0,0,0,.4);position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.18) 0%,transparent 60%);pointer-events:none"></div>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    BUY ON TCGPLAYER
+    <span id="btn-tcg-price" style="font-size:14px;opacity:.85"></span>
   </a>
-  <div id="buy-instruction" style="font-size:11px;color:#ffffff;text-align:center;margin-top:5px;line-height:1.7;font-weight:700;letter-spacing:.4px" class="mono"></div>
-  <script>
-    (function(){
-      var isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      var el=document.getElementById("buy-instruction");
-      if(el)el.textContent=isMobile?"Tap & hold → Open in Browser · Purchases via this link support MTG Market Pulse":"Click the button to open TCGPlayer in a new tab · Purchases via this link support MTG Market Pulse";
-    })();
-  </script>
+
+  <!-- Card Kingdom SELL row — shown when CK data available -->
+  <div id="ck-row" style="display:none;margin-top:8px;background:#0a1824;border:1px solid #1a4f7a;border-radius:10px;padding:10px 12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:7px;height:7px;border-radius:50%;background:#66aaee"></div>
+        <span style="font-size:10px;color:#66aaee;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:1px">CARD KINGDOM BUYLIST</span>
+      </div>
+      <!-- Cash / Credit toggle -->
+      <div style="display:flex;gap:4px">
+        <button id="ck-cash-btn" onclick="setCkMode('cash')"
+          style="padding:2px 9px;border-radius:4px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;border:1px solid #3388cc;background:#3388cc22;color:#66aaee;cursor:pointer">CASH</button>
+        <button id="ck-credit-btn" onclick="setCkMode('credit')"
+          style="padding:2px 9px;border-radius:4px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;border:1px solid #1a4f7a;background:transparent;color:#3a6a9a;cursor:pointer">CREDIT</button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div>
+        <div style="font-size:10px;color:#3a6a9a;font-family:'JetBrains Mono',monospace">THEY PAY YOU</div>
+        <div id="ck-price-display" style="font-size:24px;font-weight:700;color:#ffffff;font-family:'JetBrains Mono',monospace;line-height:1.1"></div>
+        <div id="ck-pct-mkt" style="font-size:10px;font-family:'JetBrains Mono',monospace;margin-top:2px"></div>
+      </div>
+      <a id="ck-sell-link" href="#" target="_blank" rel="noopener noreferrer"
+        onclick="event.stopPropagation();trackBuyClick('ck')"
+        style="margin-left:auto;display:flex;align-items:center;justify-content:center;gap:5px;padding:12px 16px;border-radius:10px;background:linear-gradient(135deg,#1a6faa,#0e4f7a);color:#e0f0ff;font-weight:800;font-size:13px;letter-spacing:1.5px;text-decoration:none;box-shadow:0 0 18px #1a6faa44;border:1px solid #2a7fbb;touch-action:manipulation">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        SELL TO CK
+      </a>
+    </div>
+    <div id="ck-not-buying" style="display:none;font-size:11px;color:#ff4444;font-family:'JetBrains Mono',monospace;margin-top:4px">&#9888; NOT CURRENTLY BUYING</div>
+  </div>
+
+  <div style="font-size:9px;color:var(--text4);text-align:center;margin-top:6px;line-height:1.7;font-family:'JetBrains Mono',monospace">
+    &#9888; Both links are affiliate links &#183; Purchases support MTG Market Pulse
+  </div>
 </div>
 
 <!-- IMPORT OVERLAY -->
@@ -504,7 +543,7 @@ body.light .overlay{background:rgba(240,240,248,.97)}
 
 <script>
 // ── Data ──────────────────────────────────────────────────────────────────────
-const MC={W:{f:"#e8d48a",s:"#c4a030",l:"White"},U:{f:"#2e6db0",s:"#1a4f8a",l:"Blue"},B:{f:"#5a2e90",s:"#3a1a68",l:"Black"},R:{f:"#c03030",s:"#8a1818",l:"Red"},G:{f:"#2a7a2a",s:"#185018",l:"Green"},C:{f:"#7a8e9e",s:"#4a5e6e",l:"Colorless"}};
+const MC={W:{f:"#f0d060",s:"#c4a030",l:"White"},U:{f:"#3388ee",s:"#1a5fcc",l:"Blue"},B:{f:"#9944cc",s:"#6622aa",l:"Black"},R:{f:"#ee4422",s:"#cc2200",l:"Red"},G:{f:"#22bb44",s:"#0a8030",l:"Green"},C:{f:"#99aabb",s:"#556677",l:"Colorless"}};
 const GG="#ffd700",GS="#c8a000",UP="#00e676",DN="#ff1744";
 const RC={Mythic:"#ff6d00",Rare:"#ffd600",Uncommon:"#b0bec5",Common:"#90a4ae"};
 const FMTS=["All","Commander","Modern","Standard","Pioneer","Legacy"];
@@ -546,7 +585,7 @@ async function loadLiveData(){
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let mode="market", fmt="All", rar="All", tf="7D", valMode="single", cardLimit=75, priceFilter="all", colorFilter="All", isLive=false;
+let mode="market", fmt="All", rar="All", tf="7D", valMode="single", ckValMode="cash", cardLimit=75, priceFilter="all", colorFilter="All", isLive=false;
 function updateLiveDot(){var d=document.getElementById("live-dot");if(!d)return;d.innerHTML=isLive?'<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#00e676;box-shadow:0 0 6px #00e676;display:inline-block"></span><span style="color:#00e676;font-weight:700">LIVE</span></span>':'<span style="color:var(--text3)">Demo Mode</span>';}
 let collection=[], watchlist=[], currentCard=null;
 let parsedImport=[];
@@ -694,146 +733,116 @@ function renderBubbles(nodes){
   const svg=document.getElementById("bubble-svg");
   const W=parseInt(svg.getAttribute("width"))||390, H=parseInt(svg.getAttribute("height"))||460;
 
-  // Explicit hex so CSS vars don't need to resolve inside SVG innerHTML
-  const svgBg   = isDark ? '#07070f' : '#f2f2f8';
-  const dotFill  = isDark ? '#161628' : '#d0d0e8';
+  // Explicit hex — never CSS vars inside innerHTML-set SVG
+  const svgBg  = isDark ? '#07070f' : '#f2f2f8';
+  const dotFill = isDark ? '#161628' : '#d0d0e8';
 
-  // Per-color light/dark variants — vivid for strong 3D sphere pop
-  const MCL={W:"#fff5a0",U:"#99ddff",B:"#ee88ff",R:"#ff7755",G:"#88ff99",C:"#cce8ff"};
-  const MCD={W:"#4a3e00",U:"#020c1e",B:"#13022a",R:"#1e0202",G:"#021404",C:"#060c18"};
+  // ── 3 universal gradients — NO per-color gradients needed ──────────────────
+  // gs  = specular highlight top-left  (white, all bubbles share it)
+  // gr  = rim light bottom            (white, all bubbles share it)
+  // gd  = edge vignette               (black fade at edges for 3D depth)
+  const defs=[
+    '<defs>',
+    `<pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="${dotFill}"/></pattern>`,
+    // Specular
+    '<radialGradient id="gs" cx="30%" cy="20%" r="44%" fx="25%" fy="14%">',
+    '<stop offset="0%"   stop-color="#ffffff" stop-opacity=".95"/>',
+    '<stop offset="30%"  stop-color="#ffffff" stop-opacity=".38"/>',
+    '<stop offset="70%"  stop-color="#ffffff" stop-opacity=".06"/>',
+    '<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>',
+    '</radialGradient>',
+    // Rim
+    '<radialGradient id="gr" cx="50%" cy="94%" r="50%">',
+    '<stop offset="0%"   stop-color="#ffffff" stop-opacity=".24"/>',
+    '<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>',
+    '</radialGradient>',
+    // Edge vignette (dark at perimeter → 3D sphere depth)
+    '<radialGradient id="gd" cx="50%" cy="50%" r="50%">',
+    '<stop offset="48%"  stop-color="#000" stop-opacity="0"/>',
+    '<stop offset="100%" stop-color="#000" stop-opacity=".72"/>',
+    '</radialGradient>',
+    // Glow blur filter
+    '<filter id="glow" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">',
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/>',
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge>',
+    '</filter>',
+    '</defs>'
+  ].join('');
 
-  // Build per-color sphere gradients — deep 3D look
-  const colorGrads=Object.entries(MC).map(([k,{f}])=>{
-    const fl=MCL[k]||"#ffffff", fd=MCD[k]||"#050510";
-    return [
-      `<radialGradient id="g-${k}" cx="34%" cy="26%" r="72%" fx="30%" fy="20%">`,
-      `<stop offset="0%"  stop-color="${fl}" stop-opacity="1"/>`,
-      `<stop offset="14%" stop-color="${f}"  stop-opacity="1"/>`,
-      `<stop offset="52%" stop-color="${f}"  stop-opacity="1"/>`,
-      `<stop offset="80%" stop-color="${fd}" stop-opacity="1"/>`,
-      `<stop offset="100%" stop-color="#000" stop-opacity="1"/>`,
-      `</radialGradient>`,
-      `<radialGradient id="gw-${k}" cx="50%" cy="50%" r="50%">`,
-      `<stop offset="55%" stop-color="${f}" stop-opacity="0"/>`,
-      `<stop offset="100%" stop-color="${f}" stop-opacity=".65"/>`,
-      `</radialGradient>`
-    ].join("");
-  }).join("");
-
-  // Multi-color sphere gradient
-  const multiGrad=[
-    `<radialGradient id="g-Multi" cx="34%" cy="26%" r="72%" fx="30%" fy="20%">`,
-    `<stop offset="0%"  stop-color="#ffffc0" stop-opacity="1"/>`,
-    `<stop offset="16%" stop-color="${GG}"   stop-opacity="1"/>`,
-    `<stop offset="58%" stop-color="${GG}"   stop-opacity="1"/>`,
-    `<stop offset="82%" stop-color="#2e1e00" stop-opacity="1"/>`,
-    `<stop offset="100%" stop-color="#000"   stop-opacity="1"/>`,
-    `</radialGradient>`
-  ].join("");
-
-  // Specular highlight — sharp bright spot upper-left
-  const specGrad=[
-    `<radialGradient id="gs" cx="30%" cy="20%" r="42%" fx="26%" fy="14%">`,
-    `<stop offset="0%"   stop-color="#ffffff" stop-opacity=".96"/>`,
-    `<stop offset="28%"  stop-color="#ffffff" stop-opacity=".42"/>`,
-    `<stop offset="65%"  stop-color="#ffffff" stop-opacity=".07"/>`,
-    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
-    `</radialGradient>`
-  ].join("");
-
-  // Rim light bottom — warm glow
-  const rimGrad=[
-    `<radialGradient id="gr" cx="50%" cy="94%" r="50%">`,
-    `<stop offset="0%"   stop-color="#ffffff" stop-opacity=".26"/>`,
-    `<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>`,
-    `</radialGradient>`
-  ].join("");
-
-  // Glow blur filter
-  const glowFilter=[
-    `<filter id="glow" x="-60%" y="-60%" width="220%" height="220%">`,
-    `<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>`,
-    `<feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge>`,
-    `</filter>`
-  ].join("");
-
-  const defs=`<defs><pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="${dotFill}"/></pattern>${colorGrads}${multiGrad}${specGrad}${rimGrad}${glowFilter}</defs>`;
   const bg=`<rect width="${W}" height="${H}" fill="${svgBg}"/><rect width="${W}" height="${H}" fill="url(#dots)" opacity="${isDark?1:0}"/>`;
 
   const bubbles=nodes.map(n=>{
-    const pc=n.pct>=0?UP:DN;
-    const colors=n.colors&&n.colors.length?n.colors:["C"];
-    const st=bStroke(colors), gw=bGlow(colors);
-    const isM=colors.length>1, big=n.absPct>15;
-    const gradId=isM?"Multi":(MC[colors[0]]?colors[0]:"C");
+    const pc    = n.pct>=0 ? UP : DN;
+    const colors= n.colors&&n.colors.length ? n.colors : ['C'];
+    const isM   = colors.length>1;
+    const big   = n.absPct>15;
+
+    // ── Direct color values — NO url(#gradient) for color ──────────────────
+    const mainColor   = isM ? GG : (MC[colors[0]]||MC.C).f;
+    const strokeColor = isM ? GS : (MC[colors[0]]||MC.C).s;
+    // glow halo color
+    const glowColor   = mainColor;
 
     // Text sizing
     const sn=n.r>26, ss=n.r>42, sl=n.r>55;
     const nf=Math.max(6,Math.min(n.r*.24,12));
     const pf=Math.max(7,Math.min(n.r*.3,15));
     const ny=sn?-(pf*.75):0, py=sn?(pf*.72):(pf*.38), sy=py+nf*1.25;
-
     const inW=watchlist.some(w=>w.id===n.id);
-    const ds=n.requestedSet||n.set;
+    const ds =n.requestedSet||n.set;
 
-    // Outer glow — large blurred circle
-    const outerGlow=`<circle r="${n.r*1.55}" fill="none" stroke="${gw}" stroke-width="${n.r*.55}" opacity="${big?.28:.16}" style="filter:blur(${(n.r*.4).toFixed(0)}px)"/>`;
+    // Outer glow — blurred colored ring behind bubble
+    const outerGlow=`<circle r="${(n.r*1.5).toFixed(1)}" fill="${glowColor}" opacity="${big?.22:.13}" filter="url(#glow)"/>`;
 
     // Pulse rings for big movers
     const halos=big
-      ?`<circle class="pulse" r="${n.r+10}" fill="none" stroke="${gw}" stroke-width="1.2" opacity=".45"/><circle class="pulse2" r="${n.r+22}" fill="none" stroke="${gw}" stroke-width=".7" opacity=".2"/>`
-      :``;
+      ?`<circle class="pulse"  r="${n.r+10}" fill="none" stroke="${glowColor}" stroke-width="1.2" opacity=".4"/>`
+       +`<circle class="pulse2" r="${n.r+22}" fill="none" stroke="${glowColor}" stroke-width=".7"  opacity=".18"/>`
+      :'';
 
-    // Multi-color pie slices as base before gradient overlay
-    let sliceBase=``;
+    // Multi-color pie slices (rendered as solid fills — always visible)
+    let sliceBase='';
     if(isM){
       colors.forEach((c,i)=>{
-        const nc=n.colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
+        const nc=colors.length,sa=(i/nc)*2*Math.PI-Math.PI/2,ea=((i+1)/nc)*2*Math.PI-Math.PI/2;
         const x1=(Math.cos(sa)*n.r).toFixed(1),y1=(Math.sin(sa)*n.r).toFixed(1);
         const x2=(Math.cos(ea)*n.r).toFixed(1),y2=(Math.sin(ea)*n.r).toFixed(1);
-        sliceBase+=`<path d="M0 0L${x1} ${y1}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2} ${y2}Z" fill="${(MC[c]||MC.C).f}" opacity=".7"/>`;
+        sliceBase+=`<path d="M0 0L${x1} ${y1}A${n.r} ${n.r} 0 ${ea-sa>Math.PI?1:0} 1 ${x2} ${y2}Z" fill="${(MC[c]||MC.C).f}"/>`;
       });
     }
 
     // Watchlist star
-    const star=inW?`<text x="${n.r*.58}" y="${-n.r*.58}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.2)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">★</text>`:``;
+    const star=inW?`<text x="${(n.r*.55).toFixed(1)}" y="${(-n.r*.55).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${Math.max(8,n.r*.22).toFixed(1)}" fill="#ffd700" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9))">&#9733;</text>`:'';
 
-    // Price change % text
-    const pctT=`<text text-anchor="middle" dominant-baseline="middle" y="${py}" font-size="${pf}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.9))">${n.pct>=0?"+":""}${n.pct.toFixed(1)}%</text>`;
-
-    // Card name
-    const nameT=sn?`<text text-anchor="middle" dominant-baseline="middle" y="${ny}" font-size="${nf}" font-weight="700" fill="#ffffff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9))">${n.name.length>14?n.name.slice(0,13)+"…":n.name}</text>`:
-      `<title>${n.name}</title>`;
-
-    // Price text for large bubbles
-    const priceT=sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.82).toFixed(1)}" fill="rgba(255,255,255,.75)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))">$${n.price.toFixed(2)}</text>`:``;
-
-    // Set badge for medium+ bubbles
-    const setT=ss&&!sl?`<text text-anchor="middle" dominant-baseline="middle" y="${sy}" font-size="${(nf*.75).toFixed(1)}" fill="rgba(255,255,255,.5)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>`:``;
+    // Text layers
+    const pctT =`<text text-anchor="middle" dominant-baseline="middle" y="${py.toFixed(1)}" font-size="${pf.toFixed(1)}" font-weight="700" fill="${pc}" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.95))">${n.pct>=0?'+':''}${n.pct.toFixed(1)}%</text>`;
+    const nameT= sn ? `<text text-anchor="middle" dominant-baseline="middle" y="${ny.toFixed(1)}" font-size="${nf.toFixed(1)}" font-weight="700" fill="#ffffff" font-family="Barlow Condensed,sans-serif" style="pointer-events:none;user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.95))">${n.name.length>14?n.name.slice(0,13)+'\u2026':n.name}</text>`
+                    : `<title>${n.name}</title>`;
+    const priceT= sl ? `<text text-anchor="middle" dominant-baseline="middle" y="${sy.toFixed(1)}" font-size="${(nf*.82).toFixed(1)}" fill="rgba(255,255,255,.8)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">$${n.price.toFixed(2)}</text>` : '';
+    const setT  = ss&&!sl ? `<text text-anchor="middle" dominant-baseline="middle" y="${sy.toFixed(1)}" font-size="${(nf*.75).toFixed(1)}" fill="rgba(255,255,255,.5)" font-family="JetBrains Mono,monospace" style="pointer-events:none;user-select:none">[${ds}]</text>` : '';
 
     return [
       `<g data-id="b${n.id}" transform="translate(${n.x.toFixed(1)},${n.y.toFixed(1)})" style="cursor:pointer" onclick="event.stopPropagation();openCard(${n.id})">`,
-      outerGlow,
-      halos,
-      // Deep dark base
-      `<circle r="${n.r}" fill="#04040e"/>`,
-      // Color pie slices for multi
-      sliceBase,
-      // Main 3D sphere gradient
-      `<circle r="${n.r}" fill="url(#g-${gradId})"/>`,
-      // Rim light bottom
+      outerGlow, halos,
+      // ① Black base (depth shadow)
+      `<circle r="${n.r}" fill="#030308"/>`,
+      // ② Solid color fill — this is what makes the bubble colorful
+      //    Single color: direct hex. Multi: slices above + gold overlay below.
+      isM ? sliceBase : `<circle r="${n.r}" fill="${mainColor}"/>`,
+      // ③ Edge vignette — gives sphere depth without needing per-color gradients
+      `<circle r="${n.r}" fill="url(#gd)"/>`,
+      // ④ Rim light bottom
       `<circle r="${n.r}" fill="url(#gr)"/>`,
-      // Specular highlight top-left
+      // ⑤ Specular highlight top-left
       `<circle r="${n.r}" fill="url(#gs)"/>`,
-      // Colored border stroke
-      `<circle r="${n.r}" fill="none" stroke="${st}" stroke-width="${big?2.2:1.5}" opacity=".95"/>`,
-      // Gold inner ring for multi
-      isM?`<circle r="${n.r-2.5}" fill="none" stroke="${GG}" stroke-width=".7" opacity=".4"/>`:``,
-      // Text layers
+      // ⑥ Colored border
+      `<circle r="${n.r}" fill="none" stroke="${strokeColor}" stroke-width="${big?2.2:1.5}" opacity=".9"/>`,
+      // ⑦ Gold inner ring for multi
+      isM ? `<circle r="${(n.r-2).toFixed(1)}" fill="url(#gd)"/><circle r="${(n.r-2).toFixed(1)}" fill="url(#gr)"/><circle r="${(n.r-2).toFixed(1)}" fill="url(#gs)"/><circle r="${(n.r-2).toFixed(1)}" fill="none" stroke="${GG}" stroke-width=".7" opacity=".5"/>` : '',
       pctT, nameT, priceT, setT, star,
-      `</g>`
-    ].join("");
-  }).join("");
+      '</g>'
+    ].join('');
+  }).join('');
 
   svg.innerHTML=defs+bg+bubbles;
 }
@@ -938,8 +947,16 @@ function setRar(r){rar=r;gaEvent("filter_rarity",{rarity:r});refresh();}
 function setTf(btn,t){tf=t;document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("act"));btn.classList.add("act");updateStats();}
 
 // ── Card Detail ───────────────────────────────────────────────────────────────
-function trackBuyClick(){
-  if(currentCard) gaEvent("buy_click",{card_name:currentCard.name,card_price:currentCard.price,card_pct:currentCard.pct,card_rarity:currentCard.rarity,value:currentCard.price});
+function trackBuyClick(src){
+  if(currentCard) gaEvent("buy_click",{source:src||'tcg',card_name:currentCard.name,card_price:currentCard.price,card_rarity:currentCard.rarity});
+}
+function setCkMode(m){
+  ckValMode=m;
+  var cashBtn=document.getElementById('ck-cash-btn');
+  var credBtn=document.getElementById('ck-credit-btn');
+  if(cashBtn){cashBtn.style.borderColor=m==='cash'?'#3388cc':'#1a4f7a';cashBtn.style.background=m==='cash'?'#3388cc22':'transparent';cashBtn.style.color=m==='cash'?'#66aaee':'#3a6a9a';}
+  if(credBtn){credBtn.style.borderColor=m==='credit'?'#3388cc':'#1a4f7a';credBtn.style.background=m==='credit'?'#3388cc22':'transparent';credBtn.style.color=m==='credit'?'#66aaee':'#3a6a9a';}
+  renderDetail();
 }
 function openCard(id){
   const _c=CARDS.find(x=>x.id===id)||phyNodes.find(x=>x.id===id);
@@ -978,9 +995,33 @@ function renderDetail(){
   document.getElementById("st-delta").style.color=n.pct>=0?UP:DN;
   document.getElementById("st-rar").textContent=n.rarity;
   document.getElementById("st-rar").style.color=RC[n.rarity]||"#c084fc";
+  // TCGPlayer buy button
   document.getElementById("buy-link").href=tcgUrl(n.name);
+  const tpEl=document.getElementById("btn-tcg-price");
+  if(tpEl)tpEl.textContent=`· $${n.price.toFixed(2)}`;
+  // Toggle buttons
   document.getElementById("tog-single").className="tog-btn"+(valMode==="single"?" act":"");
   document.getElementById("tog-total").className="tog-btn"+(valMode==="total"?" act":"");
+  // CK row
+  const ckRow=document.getElementById("ck-row");
+  if(ckRow){
+    const hasCk=n.ckCash!=null;
+    ckRow.style.display=hasCk?"block":"none";
+    if(hasCk){
+      const ckVal=ckValMode==="credit"?n.ckCredit:n.ckCash;
+      document.getElementById("ck-price-display").textContent=`$${ckVal.toFixed(2)}`;
+      const pctMkt=n.price>0?Math.round(ckVal/n.price*100):0;
+      const pctEl=document.getElementById("ck-pct-mkt");
+      if(pctEl){
+        pctEl.textContent=`${pctMkt}% of market`;
+        pctEl.style.color=pctMkt>=55?"#00e676":pctMkt>=40?"#ffd700":pctMkt>=25?"#ff9800":"#ff4444";
+      }
+      const ckSell=document.getElementById("ck-sell-link");
+      if(ckSell)ckSell.href=`https://www.cardkingdom.com/catalog/search?search=mtg_advanced&filter[name]=${encodeURIComponent(n.name)}&utm_source=mtgmarketpulse&utm_medium=affiliate`;
+      const notBuying=document.getElementById("ck-not-buying");
+      if(notBuying)notBuying.style.display=n.ckBuying===false?"block":"none";
+    }
+  }
   drawSparkline(n.hist,n.pct>=0?UP:DN);
 }
 
